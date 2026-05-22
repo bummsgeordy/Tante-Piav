@@ -22,7 +22,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
           onClick={() => onFiltersChange(defaultFilters)}
           type="button"
         >
-          Zuruecksetzen
+          Zurücksetzen
         </button>
       </div>
 
@@ -49,14 +49,14 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
         />
 
         <label className="block text-sm font-medium text-clinical-ink">
-          Haeufigkeit
+          Häufigkeit
           <select
             className="mt-1 w-full rounded-md border border-clinical-line bg-white px-3 py-2 text-sm text-clinical-text outline-none focus:border-clinical-accent focus:ring-2 focus:ring-teal-100"
             onChange={(event) => update("frequency", event.target.value as Frequency | "all")}
             value={filters.frequency}
           >
             <option value="all">Alle</option>
-            <option value="haeufig">haeufig</option>
+            <option value="haeufig">häufig</option>
             <option value="relevant">relevant</option>
             <option value="selten">selten</option>
           </select>
@@ -86,7 +86,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
           <span>
             <span className="block font-semibold">Nur Ursachen mit relevanten Red Flags</span>
             <span className="mt-1 block text-red-800">
-              MVP-Filter fuer notfallnahe oder zeitkritische Konstellationen.
+              MVP-Filter für notfallnahe oder zeitkritische Konstellationen.
             </span>
           </span>
         </label>

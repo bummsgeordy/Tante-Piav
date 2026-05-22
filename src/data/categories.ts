@@ -5,9 +5,9 @@ export const categories: Category[] = [
     id: "trauma",
     acronym: "T",
     title: "Trauma",
-    subtitle: "Mechanische, thermische oder iatrogene Schaeden",
+    subtitle: "Mechanische, thermische oder iatrogene Schäden",
     description:
-      "Akute oder wiederholte Einwirkungen von aussen, inklusive iatrogener und nicht-akzidenteller Verletzungen."
+      "Akute oder wiederholte Einwirkungen von außen, inklusive iatrogener und nicht-akzidenteller Verletzungen."
   },
   {
     id: "autoimmun",
@@ -15,7 +15,7 @@ export const categories: Category[] = [
     title: "Autoimmun",
     subtitle: "Fehlgeleitete Immunreaktionen",
     description:
-      "Organbezogene und systemische Autoimmunerkrankungen als Erklaerung fuer Beschwerden, Entzuendung und Funktionsstoerungen."
+      "Organbezogene und systemische Autoimmunerkrankungen als Erklärung für Beschwerden, Entzündung und Funktionsstörungen."
   },
   {
     id: "neoplastisch",
@@ -23,15 +23,15 @@ export const categories: Category[] = [
     title: "Neoplastisch",
     subtitle: "Tumorerkrankungen und paraneoplastische Muster",
     description:
-      "Solide und haematologische Neoplasien sowie tumorassoziierte systemische Zeichen."
+      "Solide und hämatologische Neoplasien sowie tumorassoziierte systemische Zeichen."
   },
   {
     id: "toxisch-medikamentoes",
     acronym: "T",
-    title: "Toxisch-medikamentoes",
+    title: "Toxisch-medikamentös",
     subtitle: "Substanzen, Medikamente, Interaktionen",
     description:
-      "Nebenwirkungen, Intoxikationen, Interaktionen und Umwelt- oder Berufstoxine als haeufig uebersehene Ursachen."
+      "Nebenwirkungen, Intoxikationen, Interaktionen und Umwelt- oder Berufstoxine als häufig übersehene Ursachen."
   },
   {
     id: "endokrin-metabolisch",
@@ -39,7 +39,7 @@ export const categories: Category[] = [
     title: "Endokrin-metabolisch",
     subtitle: "Hormone, Stoffwechsel, Elektrolyte",
     description:
-      "Diabetes, Schilddruese, Elektrolyte, Nierenfunktion, Ernaehrung und weitere metabolische Ursachen."
+      "Diabetes, Schilddrüse, Elektrolyte, Nierenfunktion, Ernährung und weitere metabolische Ursachen."
   },
   {
     id: "psychosomatisch-psychiatrisch",
@@ -47,7 +47,7 @@ export const categories: Category[] = [
     title: "Psychosomatisch/psychiatrisch",
     subtitle: "Gleichwertige diagnostische Perspektive",
     description:
-      "Psychische und psychosomatische Stoerungen als eigenstaendige Perspektive, ohne somatische Red Flags zu uebersehen."
+      "Psychische und psychosomatische Störungen als eigenständige Perspektive, ohne somatische Red Flags zu übersehen."
   },
   {
     id: "infektion",
@@ -55,22 +55,22 @@ export const categories: Category[] = [
     title: "Infektion",
     subtitle: "Lokal, systemisch, akut oder chronisch",
     description:
-      "Haeufige Infektionen, invasive Verlaeufe, Reise- und opportunistische Infektionen strukturiert mitdenken."
+      "Häufige Infektionen, invasive Verläufe, Reise- und opportunistische Infektionen strukturiert mitdenken."
   },
   {
     id: "angeboren",
     acronym: "A",
     title: "Angeboren",
-    subtitle: "Genetisch, familiaer, entwicklungsbedingt",
+    subtitle: "Genetisch, familiär, entwicklungsbedingt",
     description:
-      "Angeborene und genetische Ursachen, die auch im Erwachsenenalter klinisch relevant werden koennen."
+      "Angeborene und genetische Ursachen, die auch im Erwachsenenalter klinisch relevant werden können."
   },
   {
     id: "vaskulaer-kardiovaskulaer",
     acronym: "V",
-    title: "Vaskulaer/kardiovaskulaer",
-    subtitle: "Ischaemie, Embolie, Herz-Kreislauf",
+    title: "Vaskulär/kardiovaskulär",
+    subtitle: "Ischämie, Embolie, Herz-Kreislauf",
     description:
-      "Akute und chronische vaskulaere sowie kardiale Ursachen mit besonderem Blick auf zeitkritische Muster."
+      "Akute und chronische vaskuläre sowie kardiale Ursachen mit besonderem Blick auf zeitkritische Muster."
   }
 ];

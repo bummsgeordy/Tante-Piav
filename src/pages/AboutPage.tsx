@@ -5,12 +5,12 @@ export function AboutPage() {
   return (
     <main className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
       <div className="max-w-3xl">
-        <h1 className="text-3xl font-bold text-clinical-ink">Ueber das Projekt</h1>
+        <h1 className="text-3xl font-bold text-clinical-ink">Über das Projekt</h1>
         <p className="mt-4 text-lg leading-8 text-clinical-muted">
-          tante-piav ist ein unabhaengiges, nicht-kommerzielles
-          Open-Source-Webprojekt fuer GitHub Pages. Es soll Aerztinnen, Aerzten
+          tante-piav ist ein unabhängiges, nicht-kommerzielles
+          Open-Source-Webprojekt für GitHub Pages. Es soll Ärztinnen, Ärzten
           und medizinisch Lernenden helfen, bei Beschwerden, Befunden und
-          medizinischen Phaenomenen typische Ursachen strukturiert mitzudenken.
+          medizinischen Phänomenen typische Ursachen strukturiert mitzudenken.
         </p>
       </div>
 
@@ -24,7 +24,7 @@ export function AboutPage() {
         <p className="mt-3 leading-7 text-clinical-muted">
           Der Begriff TANTE PIAV wird hier nicht als eigene Erfindung des
           Projekts dargestellt. Die Anwendung ist eine praktische, offene
-          Ergaenzung und Hommage an die didaktische Arbeit von Dres. Ingo Krenz
+          Ergänzung und Hommage an die didaktische Arbeit von Dres. Ingo Krenz
           und Andreas Klinge im Podcast Denkfabrik Medizin.
         </p>
       </section>
@@ -32,11 +32,11 @@ export function AboutPage() {
       <section className="mt-5 rounded-lg border border-clinical-line bg-white p-5 shadow-sm">
         <h2 className="text-xl font-semibold text-clinical-ink">Inhalte und Beitragssystem</h2>
         <p className="mt-3 leading-7 text-clinical-muted">
-          Medizinische Inhalte liegen strukturiert in TypeScript-Daten. Spaeter
-          koennen ausfuehrlichere MDX-Seiten, eine symptomorientierte
-          Einstiegsebene, PWA-Funktionen und Exportwege ergaenzt werden.
+          Medizinische Inhalte liegen strukturiert in TypeScript-Daten. Später
+          können ausführlichere MDX-Seiten, eine symptomorientierte
+          Einstiegsebene, PWA-Funktionen und Exportwege ergänzt werden.
           Pull Requests sollten medizinische Quellen nennen und fachlich
-          geprueft werden.
+          geprüft werden.
         </p>
       </section>
     </main>

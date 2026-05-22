@@ -13,7 +13,7 @@ export const getSpecialtyLabel = (specialty: Specialty) =>
 
 export const getFrequencyLabel = (frequency: Frequency) => {
   const labels: Record<Frequency, string> = {
-    haeufig: "haeufig",
+    haeufig: "häufig",
     relevant: "relevant",
     selten: "selten"
   };

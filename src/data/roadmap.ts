@@ -10,18 +10,18 @@ export const roadmap: RoadmapPhase[] = [
       "Offline-Caching der statischen Inhalte",
       "Installierbarkeit auf Smartphone/Desktop",
       "Offline-Hinweis in der UI",
-      "Keine externen Laufzeit-Abhaengigkeiten"
+      "Keine externen Laufzeit-Abhängigkeiten"
     ]
   },
   {
     phase: "Phase 2",
     title: "Red-Flags-Filter",
     items: [
-      "Eigener Filter fuer Ursachen mit Red Flags",
+      "Eigener Filter für Ursachen mit Red Flags",
       "Filter Notfall / zeitkritisch",
-      "Visuelle Hervorhebung gefaehrlicher Konstellationen",
-      "Optionale Red-Flags-Uebersichtsseite",
-      "Fachgebietsuebergreifende Red-Flag-Suche"
+      "Visuelle Hervorhebung gefährlicher Konstellationen",
+      "Optionale Red-Flags-Übersichtsseite",
+      "Fachgebietsübergreifende Red-Flag-Suche"
     ]
   },
   {
@@ -31,19 +31,19 @@ export const roadmap: RoadmapPhase[] = [
       "Export einzelner Kategorien als Markdown",
       "Export einzelner Ursachen als Markdown",
       "Export der aktuellen Such-/Filteransicht als Markdown",
-      "PDF-Export ueber Browser-Print oder Library",
+      "PDF-Export über Browser-Print oder Library",
       "Saubere Druckansicht per CSS"
     ]
   },
   {
     phase: "Phase 4",
-    title: "Markdown/MDX fuer ausfuehrlichere Detailseiten",
+    title: "Markdown/MDX für ausführlichere Detailseiten",
     items: [
       "Inhalte aus MDX-Dateien laden",
       "Kurze Cause Cards bleiben datenbasiert",
-      "Ausfuehrliche Hintergrundseiten als MDX",
+      "Ausführliche Hintergrundseiten als MDX",
       "Quellenabschnitt am Ende jeder Detailseite",
-      "Beitragssystem fuer Pull Requests erleichtern"
+      "Beitragssystem für Pull Requests erleichtern"
     ]
   }
 ];

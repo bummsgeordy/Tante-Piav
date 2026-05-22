@@ -36,7 +36,7 @@ export function CauseDetail({ cause, onClose, onSelectCause }: CauseDetailProps)
           </p>
         </div>
         <button
-          aria-label="Detailansicht schliessen"
+          aria-label="Detailansicht schließen"
           className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-clinical-line text-clinical-muted hover:bg-slate-100"
           onClick={onClose}
           type="button"
@@ -53,7 +53,7 @@ export function CauseDetail({ cause, onClose, onSelectCause }: CauseDetailProps)
 
       <dl className="mt-5 grid gap-3 rounded-lg bg-clinical-surface p-4 text-sm sm:grid-cols-3">
         <div>
-          <dt className="font-semibold text-clinical-ink">Haeufigkeit</dt>
+          <dt className="font-semibold text-clinical-ink">Häufigkeit</dt>
           <dd className="mt-1 text-clinical-muted">{getFrequencyLabel(cause.frequency)}</dd>
         </div>
         <div>

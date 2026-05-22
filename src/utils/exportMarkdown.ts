@@ -12,7 +12,7 @@ const list = (items: string[]) => items.map((item) => `- ${item}`).join("\n");
 export const causeToMarkdown = (cause: Cause) => `# ${cause.title}
 
 Kategorie: ${getCategoryLabel(cause.category)}
-Haeufigkeit: ${getFrequencyLabel(cause.frequency)}
+Häufigkeit: ${getFrequencyLabel(cause.frequency)}
 Dringlichkeit: ${getUrgencyLabel(cause.urgency)}
 Fachgebiete: ${cause.specialties.map(getSpecialtyLabel).join(", ")}
 
@@ -35,7 +35,7 @@ ${list(cause.relatedSymptoms)}
 ${cause.sources.map((source) => `- [${source.title}](${source.url})`).join("\n")}
 
 ## Hinweis
-Diese Gedankenstuetze ersetzt keine aerztliche Beurteilung, keine Leitlinie und keine individuelle Diagnostik- oder Therapieentscheidung.
+Diese Gedankenstütze ersetzt keine ärztliche Beurteilung, keine Leitlinie und keine individuelle Diagnostik- oder Therapieentscheidung.
 `;
 
 export const categoryToMarkdown = (category: PiavCategory) => {

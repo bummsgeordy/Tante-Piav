@@ -33,7 +33,7 @@ export function RedFlagBadge({ major }: { major: boolean }) {
   if (!major) {
     return (
       <span className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-medium text-clinical-muted">
-        Red Flags pruefen
+        Red Flags prüfen
       </span>
     );
   }

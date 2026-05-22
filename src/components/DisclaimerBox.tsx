@@ -8,12 +8,12 @@ export function DisclaimerBox() {
         <div>
           <h2 className="font-semibold">Medizinischer Hinweis</h2>
           <p className="mt-1 leading-6">
-            Diese App ist eine Gedankenstuetze, kein Medizinprodukt. Sie ersetzt
-            keine aerztliche Beurteilung, keine Leitlinie und keine
-            individuelle Diagnostik- oder Therapieempfehlung. Inhalte koennen
-            unvollstaendig oder veraltet sein und muessen fachlich geprueft
+            Diese App ist eine Gedankenstütze, kein Medizinprodukt. Sie ersetzt
+            keine ärztliche Beurteilung, keine Leitlinie und keine
+            individuelle Diagnostik- oder Therapieempfehlung. Inhalte können
+            unvollständig oder veraltet sein und müssen fachlich geprüft
             werden. Bei Notfallsymptomen ist unmittelbare medizinische
-            Abklaerung erforderlich.
+            Abklärung erforderlich.
           </p>
         </div>
       </div>

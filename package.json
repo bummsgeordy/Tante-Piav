@@ -2,7 +2,7 @@
   "name": "tante-piav",
   "version": "0.1.0",
   "private": true,
-  "description": "Statische medizinische Gedankenstuetze fuer Differentialdiagnosen anhand des Akronyms TANTE PIAV.",
+  "description": "Statische medizinische Gedankenstütze für Differentialdiagnosen anhand des Akronyms TANTE PIAV.",
   "type": "module",
   "scripts": {
     "dev": "vite",

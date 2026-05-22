@@ -13,10 +13,10 @@ export const specialties: SpecialtyOption[] = [
   { id: "rheumatologie", label: "Rheumatologie" },
   { id: "onkologie", label: "Onkologie" },
   { id: "psychiatrie", label: "Psychiatrie" },
-  { id: "paediatrie", label: "Paediatrie" },
-  { id: "gynaekologie", label: "Gynaekologie" },
+  { id: "paediatrie", label: "Pädiatrie" },
+  { id: "gynaekologie", label: "Gynäkologie" },
   { id: "urologie", label: "Urologie" },
   { id: "dermatologie", label: "Dermatologie" },
-  { id: "orthopaedie", label: "Orthopaedie" },
+  { id: "orthopaedie", label: "Orthopädie" },
   { id: "infektiologie", label: "Infektiologie" }
 ];

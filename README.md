@@ -1,40 +1,27 @@
 # tante-piav
 
-Statische, schnelle und uebersichtliche Web-App als medizinische Gedankenstuetze fuer Differentialdiagnosen anhand des Akronyms **TANTE PIAV**.
+Statische, schnelle und übersichtliche Web-App als medizinische Gedankenstütze für Differentialdiagnosen anhand des Akronyms **TANTE PIAV**.
 
-Die App richtet sich an Aerztinnen, Aerzte und medizinisch Lernende. Sie ist kein Lehrbuch, sondern eine klinisch nutzbare Denkhilfe: Ursachen werden entlang der aetiologischen Hauptstruktur sortiert, koennen lokal durchsucht und nach Kategorie, Fachgebiet, Haeufigkeit, Dringlichkeit und Red-Flag-Relevanz gefiltert werden.
+Die App richtet sich an Ärztinnen, Ärzte und medizinisch Lernende. Sie ist kein Lehrbuch, sondern eine klinisch nutzbare Denkhilfe: Ursachen werden entlang der ätiologischen Hauptstruktur sortiert, können lokal durchsucht und nach Kategorie, Fachgebiet, Häufigkeit, Dringlichkeit und Red-Flag-Relevanz gefiltert werden.
 
-## Wuerdigung und Attribution
+## Würdigung und Attribution
 
-Das Akronym TANTE PIAV wurde durch Dres. Ingo Krenz und Andreas Klinge im Podcast Denkfabrik Medizin bekannt gemacht und didaktisch ausgearbeitet. Dieses Projekt versteht sich als ergaenzende, offene Gedankenstuetze und als Dank an die Kollegen und ihren Podcast. Es ersetzt keine aerztliche Beurteilung, keine Leitlinie und keine individuelle Diagnostik- oder Therapieentscheidung.
+Das Akronym TANTE PIAV wurde durch Dres. Ingo Krenz und Andreas Klinge im Podcast Denkfabrik Medizin bekannt gemacht und didaktisch ausgearbeitet. Dieses Projekt versteht sich als ergänzende, offene Gedankenstütze und als Dank an die Kollegen und ihren Podcast. Es ersetzt keine ärztliche Beurteilung, keine Leitlinie und keine individuelle Diagnostik- oder Therapieentscheidung.
 
 - Podcast: [Denkfabrik Medizin](https://denkfabrikmedizin.de/)
-- Einordnung: unabhaengiges, nicht-kommerzielles Open-Source-Projekt
+- Einordnung: unabhängiges, nicht-kommerzielles Open-Source-Projekt
 - Der Begriff TANTE PIAV wird nicht als eigene Erfindung dieses Projekts dargestellt.
 
 ## Disclaimer
 
-Diese App ist eine Gedankenstuetze.
+Diese App ist eine Gedankenstütze.
 
 - Sie ist kein Medizinprodukt.
-- Sie ersetzt keine aerztliche Beurteilung.
+- Sie ersetzt keine ärztliche Beurteilung.
 - Sie ersetzt keine Leitlinien.
 - Sie gibt keine individuelle Diagnostik- oder Therapieempfehlung.
-- Inhalte koennen unvollstaendig oder veraltet sein und muessen fachlich geprueft werden.
-- Bei Notfallsymptomen ist unmittelbare medizinische Abklaerung erforderlich.
-
-## Funktionen im MVP
-
-- 9 TANTE-PIAV-Kategorien
-- mindestens 45 strukturierte Ursachen
-- lokale Suche mit Fuse.js
-- Filter nach Kategorie, Fachgebiet, Haeufigkeit, Dringlichkeit und Red Flags
-- Cause Cards mit Kurzbeschreibung, Fachgebieten, Red Flags, Tags und Quellen
-- Detailansicht fuer jede Ursache
-- Markdown-Export fuer einzelne Ursachen und Kategorien
-- sichtbare Attribution und Disclaimer
-- GitHub Pages Deployment per GitHub Actions
-- keine Datenbank, kein Backend, keine externen API-Abhaengigkeiten zur Laufzeit
+- Inhalte können unvollständig oder veraltet sein und müssen fachlich geprüft werden.
+- Bei Notfallsymptomen ist unmittelbare medizinische Abklärung erforderlich.
 
 ## Technologie
 
@@ -58,7 +45,7 @@ npm install
 npm run dev
 ```
 
-Danach die lokale Vite-Adresse im Browser oeffnen.
+Danach die lokale Vite-Adresse im Browser öffnen.
 
 ## Build
 
@@ -67,35 +54,6 @@ npm run build
 ```
 
 Der Build erzeugt `dist/`. Dieser Ordner wird nicht versioniert, weil GitHub Pages aus GitHub Actions deployt.
-
-## Deployment mit GitHub Pages
-
-Das Deployment ist in `.github/workflows/deploy.yml` vorbereitet.
-
-1. Repository zu GitHub pushen.
-2. In GitHub unter `Settings > Pages` die Quelle `GitHub Actions` auswaehlen.
-3. Auf `main` pushen.
-4. Workflow `Deploy to GitHub Pages` pruefen.
-5. Die veroeffentlichte Pages-URL oeffnen.
-
-## Arbeiten mit GitHub Desktop
-
-1. Repository in GitHub Desktop oeffnen
-2. Aenderungen pruefen
-3. aussagekraeftige Commit Message schreiben
-4. Commit to main
-5. Push origin
-6. GitHub Actions pruefen
-7. veroeffentlichte GitHub-Pages-Seite oeffnen
-
-Empfohlene Commit Messages:
-
-- `initial project scaffold`
-- `add TANTE PIAV data model`
-- `add search and filters`
-- `add attribution and disclaimer`
-- `add GitHub Pages deployment`
-- `add roadmap`
 
 ## Datenmodell
 
@@ -124,11 +82,11 @@ export type Frequency = "haeufig" | "relevant" | "selten";
 export type Urgency = "ambulant" | "zeitnah" | "notfall";
 ```
 
-`relatedSymptoms`, `tags` und `mdxSlug` sind bewusst vorbereitet, damit spaeter eine symptomorientierte Einstiegsebene und ausfuehrlichere MDX-Detailseiten ergaenzt werden koennen.
+`relatedSymptoms`, `tags` und `mdxSlug` sind bewusst vorbereitet, damit später eine symptomorientierte Einstiegsebene und ausführlichere MDX-Detailseiten ergänzt werden können.
 
 ## Quellen
 
-Quellen werden nur verlinkt. Es werden keine geschuetzten Inhalte aus Leitlinien, Handbuechern oder kommerziellen Quellen kopiert.
+Quellen werden nur verlinkt. Es werden keine geschützten Inhalte aus Leitlinien, Handbüchern oder kommerziellen Quellen kopiert.
 
 Geeignete offene Quellen und Orientierungen:
 
@@ -146,7 +104,7 @@ Geeignete offene Quellen und Orientierungen:
 - [DGK](https://dgk.org/)
 - [DGN](https://dgn.org/)
 
-AMBOSS, UpToDate und andere geschuetzte Quellen sollen nicht als Datenquelle kopiert werden. Sie koennen hoechstens als nicht-verlinkte fachliche Orientierung fuer Autorinnen und Autoren dienen.
+AMBOSS, UpToDate und andere geschützte Quellen sollen nicht als Datenquelle kopiert werden. Sie können höchstens als nicht-verlinkte fachliche Orientierung für Autorinnen und Autoren dienen.
 
 ## Roadmap
 
@@ -157,44 +115,44 @@ AMBOSS, UpToDate und andere geschuetzte Quellen sollen nicht als Datenquelle kop
 - Offline-Caching der statischen Inhalte
 - Installierbarkeit auf Smartphone/Desktop
 - Offline-Hinweis in der UI
-- keine externen Laufzeit-Abhaengigkeiten, damit Offline-Modus sinnvoll funktioniert
+- keine externen Laufzeit-Abhängigkeiten, damit Offline-Modus sinnvoll funktioniert
 
 ### Phase 2: Red-Flags-Filter
 
-- eigener Filter fuer Ursachen mit Red Flags
+- eigener Filter für Ursachen mit Red Flags
 - Filter `Notfall / zeitkritisch`
-- visuelle Hervorhebung gefaehrlicher Konstellationen
-- optional eigene Red-Flags-Uebersichtsseite
-- Moeglichkeit, Red Flags fachgebietsuebergreifend zu durchsuchen
+- visuelle Hervorhebung gefährlicher Konstellationen
+- optional eigene Red-Flags-Übersichtsseite
+- Möglichkeit, Red Flags fachgebietsübergreifend zu durchsuchen
 
 ### Phase 3: Export als PDF/Markdown
 
 - Export einzelner Kategorien als Markdown
 - Export einzelner Ursachen als Markdown
 - Export der aktuellen Such-/Filteransicht als Markdown
-- spaeter PDF-Export ueber Browser-Print oder Library
+- später PDF-Export über Browser-Print oder Library
 - saubere Druckansicht per CSS
-- moeglichst keine schwere PDF-Library im MVP
+- möglichst keine schwere PDF-Library im MVP
 
-### Phase 4: Markdown/MDX fuer ausfuehrlichere Detailseiten
+### Phase 4: Markdown/MDX für ausführlichere Detailseiten
 
 - Inhalte aus MDX-Dateien laden
 - kurze Cause Cards bleiben datenbasiert
-- ausfuehrliche Hintergrundseiten als MDX
+- ausführliche Hintergrundseiten als MDX
 - Quellenabschnitt am Ende jeder Detailseite
-- Beitragssystem fuer Pull Requests erleichtern
+- Beitragssystem für Pull Requests erleichtern
 - `mdxSlug` im Datenmodell bereits vorbereitet
 
 ## Contributions
 
-Beitraege sind willkommen, sollten aber medizinisch sorgfaeltig und quellenbasiert erfolgen.
+Beiträge sind willkommen, sollten aber medizinisch sorgfältig und quellenbasiert erfolgen.
 
-- Medizinische Inhalte fachlich pruefen lassen.
+- Medizinische Inhalte fachlich prüfen lassen.
 - Quellenlinks angeben.
-- Keine Inhalte aus geschuetzten Quellen kopieren.
+- Keine Inhalte aus geschützten Quellen kopieren.
 - Red Flags klar und knapp benennen.
 - Psychosomatisch/psychiatrisch als gleichwertige Perspektive behandeln, nicht als Restekategorie.
-- Daten in `src/data/` pflegen, UI-Komponenten nicht mit medizinischen Inhalten fuellen.
+- Daten in `src/data/` pflegen, UI-Komponenten nicht mit medizinischen Inhalten füllen.
 
 ## Lizenz
 

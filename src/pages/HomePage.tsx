@@ -57,13 +57,13 @@ export function HomePage({
               Differentialdiagnosen strukturiert mitdenken
             </p>
             <h1 className="mt-3 max-w-4xl text-4xl font-bold leading-tight text-clinical-ink sm:text-5xl">
-              TANTE PIAV als schnelle klinische Gedankenstuetze.
+              TANTE PIAV als schnelle klinische Gedankenstütze.
             </h1>
             <p className="mt-5 max-w-3xl text-lg leading-8 text-clinical-muted">
-              Die App ordnet Ursachen entlang der aetiologischen Hauptstruktur
-              Trauma, Autoimmun, Neoplastisch, Toxisch-medikamentoes,
+              Die App ordnet Ursachen entlang der ätiologischen Hauptstruktur
+              Trauma, Autoimmun, Neoplastisch, Toxisch-medikamentös,
               Endokrin-metabolisch, Psychosomatisch/psychiatrisch, Infektion,
-              Angeboren und Vaskulaer/kardiovaskulaer. Fachgebiete bleiben
+              Angeboren und Vaskulär/kardiovaskulär. Fachgebiete bleiben
               eine zweite Filterachse.
             </p>
             <div className="mt-6">
@@ -82,7 +82,7 @@ export function HomePage({
           <div>
             <h2 className="text-2xl font-bold text-clinical-ink">TANTE-PIAV-Kategorien</h2>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-clinical-muted">
-              Haeufige und klinisch relevante Ursachen stehen in den Listen
+              Häufige und klinisch relevante Ursachen stehen in den Listen
               zuerst. Seltenere Ursachen sind im Datenmodell vorbereitet.
             </p>
           </div>

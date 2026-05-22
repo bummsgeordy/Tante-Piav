@@ -8,7 +8,7 @@ interface HeaderProps {
 
 const navItems: Array<{ id: PageId; label: string }> = [
   { id: "home", label: "App" },
-  { id: "about", label: "Ueber" },
+  { id: "about", label: "Über" },
   { id: "roadmap", label: "Roadmap" }
 ];
 
@@ -27,7 +27,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
           <span>
             <span className="block text-lg font-bold text-clinical-ink">TANTE PIAV</span>
             <span className="block text-sm text-clinical-muted">
-              Offene Differentialdiagnosen-Gedankenstuetze
+              Offene Differentialdiagnosen-Gedankenstütze
             </span>
           </span>
         </button>

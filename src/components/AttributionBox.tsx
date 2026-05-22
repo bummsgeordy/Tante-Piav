@@ -4,14 +4,14 @@ export function AttributionBox() {
   return (
     <section className="rounded-lg border border-teal-200 bg-teal-50 p-4 text-sm text-clinical-text shadow-sm">
       <h2 className="text-base font-semibold text-clinical-ink">
-        Wuerdigung und Attribution
+        Würdigung und Attribution
       </h2>
       <p className="mt-2 leading-6">
         Das Akronym TANTE PIAV wurde durch Dres. Ingo Krenz und Andreas Klinge
         im Podcast Denkfabrik Medizin bekannt gemacht und didaktisch
-        ausgearbeitet. Dieses Projekt versteht sich als ergaenzende, offene
-        Gedankenstuetze und als Dank an die Kollegen und ihren Podcast. Es
-        ersetzt keine aerztliche Beurteilung, keine Leitlinie und keine
+        ausgearbeitet. Dieses Projekt versteht sich als ergänzende, offene
+        Gedankenstütze und als Dank an die Kollegen und ihren Podcast. Es
+        ersetzt keine ärztliche Beurteilung, keine Leitlinie und keine
         individuelle Diagnostik- oder Therapieentscheidung.
       </p>
       <a

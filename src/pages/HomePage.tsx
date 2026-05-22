@@ -50,29 +50,50 @@ export function HomePage({
   const activeFilterCount = getActiveFilterCount(filters);
 
   useEffect(() => {
-    const sections = categories
-      .map((category) => document.getElementById(`section-${category.id}`))
-      .filter((section): section is HTMLElement => Boolean(section));
+    let frame = 0;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visibleEntry = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    const updateActiveCategory = () => {
+      frame = 0;
+      const markerY = window.innerWidth < 1024 ? Math.min(420, window.innerHeight * 0.48) : 150;
+      const sections = categories
+        .map((category) => ({
+          id: category.id,
+          top: document.getElementById(`section-${category.id}`)?.getBoundingClientRect().top
+        }))
+        .filter((section): section is { id: PiavCategory; top: number } =>
+          typeof section.top === "number"
+        );
 
-        const id = visibleEntry?.target.id.replace("section-", "") as PiavCategory | undefined;
-        if (id) {
-          setActiveCategory(id);
-        }
-      },
-      {
-        rootMargin: "-30% 0px -55% 0px",
-        threshold: [0.1, 0.25, 0.5]
+      const currentSection =
+        sections
+          .filter((section) => section.top <= markerY)
+          .sort((a, b) => b.top - a.top)[0] ?? sections[0];
+
+      if (currentSection) {
+        setActiveCategory(currentSection.id);
       }
-    );
+    };
 
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
+    const scheduleUpdate = () => {
+      if (frame !== 0) {
+        return;
+      }
+
+      frame = window.requestAnimationFrame(updateActiveCategory);
+    };
+
+    updateActiveCategory();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      if (frame !== 0) {
+        window.cancelAnimationFrame(frame);
+      }
+
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
   }, [visibleCauses.length]);
 
   useEffect(() => {

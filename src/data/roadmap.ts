@@ -15,6 +15,17 @@ export const roadmap: RoadmapPhase[] = [
   },
   {
     phase: "Phase 2",
+    title: "Mehr Symptome, Befunde und Erkrankungen einpflegen",
+    items: [
+      "Symptomorientierte Einstiegsebene ergänzen",
+      "Weitere häufige Beratungsanlässe und Leitsymptome einpflegen",
+      "Mehr krankheits- und befundbezogene Suchbegriffe ergänzen",
+      "Synonyme, Umgangssprache und deutsche Schreibvarianten ausbauen",
+      "Medizinische Inhalte quellenbasiert fachlich prüfen"
+    ]
+  },
+  {
+    phase: "Phase 3",
     title: "Red-Flags-Filter",
     items: [
       "Eigener Filter für Ursachen mit Red Flags",
@@ -25,7 +36,7 @@ export const roadmap: RoadmapPhase[] = [
     ]
   },
   {
-    phase: "Phase 3",
+    phase: "Phase 4",
     title: "Export als PDF/Markdown",
     items: [
       "Export einzelner Kategorien als Markdown",
@@ -33,17 +44,6 @@ export const roadmap: RoadmapPhase[] = [
       "Export der aktuellen Such-/Filteransicht als Markdown",
       "PDF-Export über Browser-Print oder Library",
       "Saubere Druckansicht per CSS"
-    ]
-  },
-  {
-    phase: "Phase 4",
-    title: "Markdown/MDX für ausführlichere Detailseiten",
-    items: [
-      "Inhalte aus MDX-Dateien laden",
-      "Kurze Cause Cards bleiben datenbasiert",
-      "Ausführliche Hintergrundseiten als MDX",
-      "Quellenabschnitt am Ende jeder Detailseite",
-      "Beitragssystem für Pull Requests erleichtern"
     ]
   }
 ];

@@ -15,9 +15,9 @@ const navItems: Array<{ id: PageId; label: string }> = [
 export function Header({ currentPage, onNavigate }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-clinical-line bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
         <button
-          className="flex items-center gap-3 text-left"
+          className="flex shrink-0 items-center gap-3 text-left"
           onClick={() => onNavigate("home")}
           type="button"
         >
@@ -31,6 +31,12 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
             </span>
           </span>
         </button>
+
+        <img
+          alt="TANTE PIAV Akronym-Illustration"
+          className="hidden h-12 min-w-0 flex-1 object-contain object-center lg:block xl:h-14"
+          src="/tante-piav-header.png"
+        />
 
         <nav aria-label="Hauptnavigation" className="flex flex-wrap items-center gap-2">
           {navItems.map((item) => (

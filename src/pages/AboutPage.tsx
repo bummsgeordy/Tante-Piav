@@ -28,17 +28,6 @@ export function AboutPage() {
           und Andreas Klinge im Podcast Denkfabrik Medizin.
         </p>
       </section>
-
-      <section className="mt-5 rounded-lg border border-clinical-line bg-white p-5 shadow-sm">
-        <h2 className="text-xl font-semibold text-clinical-ink">Inhalte und Beitragssystem</h2>
-        <p className="mt-3 leading-7 text-clinical-muted">
-          Medizinische Inhalte liegen strukturiert in TypeScript-Daten. Später
-          können ausführlichere MDX-Seiten, eine symptomorientierte
-          Einstiegsebene, PWA-Funktionen und Exportwege ergänzt werden.
-          Pull Requests sollten medizinische Quellen nennen und fachlich
-          geprüft werden.
-        </p>
-      </section>
     </main>
   );
 }

@@ -117,7 +117,15 @@ AMBOSS, UpToDate und andere geschützte Quellen sollen nicht als Datenquelle kop
 - Offline-Hinweis in der UI
 - keine externen Laufzeit-Abhängigkeiten, damit Offline-Modus sinnvoll funktioniert
 
-### Phase 2: Red-Flags-Filter
+### Phase 2: Mehr Symptome, Befunde und Erkrankungen einpflegen
+
+- symptomorientierte Einstiegsebene ergänzen
+- weitere häufige Beratungsanlässe und Leitsymptome einpflegen
+- mehr krankheits- und befundbezogene Suchbegriffe ergänzen
+- Synonyme, Umgangssprache und deutsche Schreibvarianten ausbauen
+- medizinische Inhalte quellenbasiert fachlich prüfen
+
+### Phase 3: Red-Flags-Filter
 
 - eigener Filter für Ursachen mit Red Flags
 - Filter `Notfall / zeitkritisch`
@@ -125,7 +133,7 @@ AMBOSS, UpToDate und andere geschützte Quellen sollen nicht als Datenquelle kop
 - optional eigene Red-Flags-Übersichtsseite
 - Möglichkeit, Red Flags fachgebietsübergreifend zu durchsuchen
 
-### Phase 3: Export als PDF/Markdown
+### Phase 4: Export als PDF/Markdown
 
 - Export einzelner Kategorien als Markdown
 - Export einzelner Ursachen als Markdown
@@ -133,15 +141,6 @@ AMBOSS, UpToDate und andere geschützte Quellen sollen nicht als Datenquelle kop
 - später PDF-Export über Browser-Print oder Library
 - saubere Druckansicht per CSS
 - möglichst keine schwere PDF-Library im MVP
-
-### Phase 4: Markdown/MDX für ausführlichere Detailseiten
-
-- Inhalte aus MDX-Dateien laden
-- kurze Cause Cards bleiben datenbasiert
-- ausführliche Hintergrundseiten als MDX
-- Quellenabschnitt am Ende jeder Detailseite
-- Beitragssystem für Pull Requests erleichtern
-- `mdxSlug` im Datenmodell bereits vorbereitet
 
 ## Contributions
 

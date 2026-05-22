@@ -74,6 +74,7 @@ export interface RoadmapPhase {
   phase: string;
   title: string;
   items: string[];
+  completed?: boolean;
 }
 
 export interface CauseFilters {

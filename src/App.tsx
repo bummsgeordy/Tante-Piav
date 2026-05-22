@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
+import { OfflineBanner } from "./components/OfflineBanner";
 import { defaultFilters } from "./utils/filterCauses";
 import type { Cause, CauseFilters } from "./types/medical";
 import type { PageId } from "./types/navigation";
@@ -56,6 +57,7 @@ export default function App() {
   return (
     <div className="flex min-h-screen flex-col bg-white text-clinical-text">
       <Header currentPage={page} onNavigate={navigate} />
+      <OfflineBanner />
       <div className="flex-1">
         {page === "about" ? (
           <AboutPage />

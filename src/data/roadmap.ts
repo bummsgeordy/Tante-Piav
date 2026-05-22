@@ -4,6 +4,7 @@ export const roadmap: RoadmapPhase[] = [
   {
     phase: "Phase 1",
     title: "PWA-Modus / offline nutzbar",
+    completed: true,
     items: [
       "Service Worker",
       "Web App Manifest",

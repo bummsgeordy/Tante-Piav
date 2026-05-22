@@ -55,6 +55,14 @@ npm run build
 
 Der Build erzeugt `dist/`. Dieser Ordner wird nicht versioniert, weil GitHub Pages aus GitHub Actions deployt.
 
+## PWA und Offline-Nutzung
+
+Phase 1 der Roadmap ist umgesetzt: Die App enthält ein Web App Manifest,
+PWA-Icons, einen Service Worker und einen kompakten Offline-Hinweis in der UI.
+Nach dem ersten erfolgreichen Online-Laden bleiben die gespeicherten statischen
+Inhalte auch offline nutzbar. Die Offline-Funktion ersetzt keine fachliche
+Aktualitätsprüfung der medizinischen Inhalte.
+
 ## Datenmodell
 
 Medizinische Inhalte liegen getrennt vom UI-Code in `src/data/`.
@@ -108,7 +116,7 @@ AMBOSS, UpToDate und andere geschützte Quellen sollen nicht als Datenquelle kop
 
 ## Roadmap
 
-### Phase 1: PWA-Modus / offline nutzbar
+### Phase 1: PWA-Modus / offline nutzbar ✅
 
 - Service Worker
 - Web App Manifest

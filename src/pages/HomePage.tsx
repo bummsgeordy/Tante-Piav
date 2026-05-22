@@ -295,6 +295,7 @@ export function HomePage({
             categories={categories}
             causesByCategory={causesByCategory}
             onSelectCause={onSelectCause}
+            onSelectSymptom={selectSymptom}
           />
         </div>
       </section>

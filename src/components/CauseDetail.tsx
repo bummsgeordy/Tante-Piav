@@ -1,6 +1,5 @@
 import { ExternalLink } from "lucide-react";
 import { causes } from "../data/causes";
-import { symptomEntries } from "../data/symptoms";
 import type { Cause } from "../types/medical";
 import {
   getCategoryLabel,
@@ -8,6 +7,7 @@ import {
   getSpecialtyLabel,
   getUrgencyLabel
 } from "../utils/getCategoryLabel";
+import { getLinkedSymptomsForCause } from "../utils/getLinkedSymptomsForCause";
 import { FrequencyBadge, RedFlagBadge, UrgencyBadge } from "./Badges";
 
 interface CauseDetailProps {
@@ -19,13 +19,7 @@ export function CauseDetail({ cause, onSelectCause }: CauseDetailProps) {
   const related = (cause.relatedCauses ?? [])
     .map((id) => causes.find((item) => item.id === id))
     .filter((item): item is Cause => Boolean(item));
-  const linkedSymptoms = symptomEntries.filter(
-    (entry) =>
-      cause.symptomEntryIds?.includes(entry.id) ||
-      entry.commonCauseIds.includes(cause.id) ||
-      entry.importantCauseIds.includes(cause.id) ||
-      entry.rareButImportantCauseIds.includes(cause.id)
-  );
+  const linkedSymptoms = getLinkedSymptomsForCause(cause);
 
   return (
     <section className="rounded-lg border border-clinical-line bg-white p-4 shadow-soft sm:p-5">

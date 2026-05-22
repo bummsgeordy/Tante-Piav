@@ -1,16 +1,19 @@
 import type { Category, Cause } from "../types/medical";
+import type { SymptomEntry } from "../types/symptom";
 import { CauseCard } from "./CauseCard";
 
 interface GroupedCauseListProps {
   categories: Category[];
   causesByCategory: Map<string, Cause[]>;
   onSelectCause: (cause: Cause) => void;
+  onSelectSymptom?: (entry: SymptomEntry) => void;
 }
 
 export function GroupedCauseList({
   categories,
   causesByCategory,
-  onSelectCause
+  onSelectCause,
+  onSelectSymptom
 }: GroupedCauseListProps) {
   return (
     <div className="grid min-w-0 gap-2.5">
@@ -40,7 +43,12 @@ export function GroupedCauseList({
             {categoryCauses.length > 0 ? (
               <div className="grid min-w-0 gap-2">
                 {categoryCauses.map((cause) => (
-                  <CauseCard cause={cause} key={cause.id} onSelect={onSelectCause} />
+                  <CauseCard
+                    cause={cause}
+                    key={cause.id}
+                    onSelect={onSelectCause}
+                    onSelectSymptom={onSelectSymptom}
+                  />
                 ))}
               </div>
             ) : (

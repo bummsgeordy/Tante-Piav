@@ -20,13 +20,13 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
       <div className="mx-auto grid max-w-7xl gap-2 px-3 py-1 sm:grid-cols-[minmax(220px,1fr)_auto] sm:items-center sm:px-5 lg:grid-cols-[minmax(420px,1fr)_auto] lg:gap-4 lg:px-6">
         <button
           aria-label="Zur App-Startseite"
-          className="min-w-0 justify-self-start"
+          className="min-w-0 justify-self-stretch sm:justify-self-start"
           onClick={() => onNavigate("home")}
           type="button"
         >
           <img
             alt="TANTE PIAV Akronym-Illustration"
-            className="h-20 w-[min(100%,52vw)] max-w-[640px] object-contain object-left sm:h-24 sm:w-[min(52vw,700px)] lg:h-28 lg:w-[min(58vw,820px)]"
+            className="h-20 w-full object-contain object-left sm:h-24 sm:w-[min(52vw,700px)] lg:h-28 lg:w-[min(58vw,820px)]"
             src={headerImageSrc}
           />
         </button>

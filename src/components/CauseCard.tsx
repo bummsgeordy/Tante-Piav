@@ -1,14 +1,18 @@
 import { ChevronRight } from "lucide-react";
 import type { Cause } from "../types/medical";
+import type { SymptomEntry } from "../types/symptom";
+import { getLinkedSymptomsForCause } from "../utils/getLinkedSymptomsForCause";
 import { getCategoryAcronym, getCategoryLabel } from "../utils/getCategoryLabel";
 
 interface CauseCardProps {
   cause: Cause;
   onSelect: (cause: Cause) => void;
+  onSelectSymptom?: (entry: SymptomEntry) => void;
 }
 
-export function CauseCard({ cause, onSelect }: CauseCardProps) {
+export function CauseCard({ cause, onSelect, onSelectSymptom }: CauseCardProps) {
   const hasRedFlags = cause.redFlags.length > 0;
+  const linkedSymptoms = getLinkedSymptomsForCause(cause).slice(0, 4);
 
   return (
     <article className="min-w-0 overflow-hidden rounded-lg border border-clinical-line bg-white p-2.5 shadow-sm">
@@ -40,6 +44,24 @@ export function CauseCard({ cause, onSelect }: CauseCardProps) {
           <p className="mt-1.5 break-words text-sm leading-5 text-clinical-muted">
             {cause.shortDescription}
           </p>
+
+          {linkedSymptoms.length > 0 ? (
+            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-1.5">
+              <span className="text-xs font-semibold uppercase tracking-wide text-clinical-muted">
+                Symptome/Befunde
+              </span>
+              {linkedSymptoms.map((entry) => (
+                <button
+                  className="rounded-full bg-teal-50 px-2 py-0.5 text-xs font-semibold text-clinical-accent hover:bg-teal-100"
+                  key={entry.id}
+                  onClick={() => onSelectSymptom?.(entry)}
+                  type="button"
+                >
+                  {entry.title}
+                </button>
+              ))}
+            </div>
+          ) : null}
         </div>
 
         {hasRedFlags ? (

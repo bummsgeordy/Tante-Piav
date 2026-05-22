@@ -1,6 +1,7 @@
+import { symptomEntries } from "../data/symptoms";
 import { normalizeSearchTerm } from "./normalizeSearchTerm";
 
-export const synonymGroups = [
+const manualSynonymGroups = [
   ["thoraxschmerz", "brustschmerz", "retrosternaler schmerz", "herzschmerz"],
   ["dyspnoe", "atemnot", "luftnot", "kurzatmigkeit"],
   ["hypertonie", "hoher blutdruck", "bluthochdruck", "arterielle hypertonie"],
@@ -30,6 +31,16 @@ export const synonymGroups = [
   ["zoeliakie", "gluten", "malabsorption"],
   ["angst", "panik", "panikattacke", "hyperventilation"]
 ];
+
+const symptomSynonymGroups = symptomEntries
+  .map((entry) =>
+    Array.from(new Set([entry.id, entry.title, ...entry.synonyms, ...entry.tags])).filter(
+      (term) => term.trim().length >= 3
+    )
+  )
+  .filter((group) => group.length >= 2);
+
+export const synonymGroups = [...manualSynonymGroups, ...symptomSynonymGroups];
 
 export const expandSearchQuery = (query: string) => {
   const normalizedQuery = normalizeSearchTerm(query);

@@ -13,29 +13,24 @@ export function GroupedCauseList({
   onSelectCause
 }: GroupedCauseListProps) {
   return (
-    <div className="grid min-w-0 gap-3">
+    <div className="grid min-w-0 gap-2.5">
       {categories.map((category) => {
         const categoryCauses = causesByCategory.get(category.id) ?? [];
 
         return (
           <section
-            className="min-w-0 scroll-mt-32 rounded-lg border border-clinical-line bg-white p-3 shadow-sm lg:scroll-mt-28"
+            className="min-w-0 scroll-mt-32 rounded-lg border border-clinical-line bg-white p-2.5 shadow-sm lg:scroll-mt-28"
             id={`section-${category.id}`}
             key={category.id}
           >
             <header className="mb-2 flex min-w-0 flex-col gap-2 border-b border-clinical-line pb-2 sm:flex-row sm:items-start sm:justify-between">
-              <div className="flex min-w-0 gap-3">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-clinical-ink text-xl font-black text-white">
-                  {category.acronym}
-                </span>
-                <div className="min-w-0">
-                  <h2 className="break-words text-lg font-bold text-clinical-ink">
-                    {category.title}
-                  </h2>
-                  <p className="break-words text-sm leading-5 text-clinical-muted">
-                    {category.description}
-                  </p>
-                </div>
+              <div className="min-w-0">
+                <h2 className="break-words text-lg font-bold leading-6 text-clinical-ink">
+                  {category.title}
+                </h2>
+                <p className="break-words text-sm leading-5 text-clinical-muted">
+                  {category.description}
+                </p>
               </div>
               <span className="shrink-0 rounded-full bg-clinical-surface px-2.5 py-1 text-xs font-bold text-clinical-muted">
                 {categoryCauses.length} Treffer
@@ -43,7 +38,7 @@ export function GroupedCauseList({
             </header>
 
             {categoryCauses.length > 0 ? (
-              <div className="grid min-w-0 gap-2 xl:grid-cols-2">
+              <div className="grid min-w-0 gap-2">
                 {categoryCauses.map((cause) => (
                   <CauseCard cause={cause} key={cause.id} onSelect={onSelectCause} />
                 ))}

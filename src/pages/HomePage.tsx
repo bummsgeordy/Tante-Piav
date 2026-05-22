@@ -125,7 +125,10 @@ export function HomePage({
 
   return (
     <main>
-      <section className="border-b border-clinical-line bg-clinical-surface" id="app-start">
+      <section
+        className="overflow-hidden border-b border-clinical-line bg-clinical-surface"
+        id="app-start"
+      >
         <div className="mx-auto grid max-w-7xl gap-3 px-3 py-3 sm:px-5 lg:grid-cols-[minmax(360px,1fr)_280px] lg:px-6">
           <div className="grid gap-3 lg:relative">
             <SearchBar

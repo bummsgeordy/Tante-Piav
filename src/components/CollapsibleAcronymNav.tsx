@@ -17,9 +17,9 @@ export function CollapsibleAcronymNav({
   return (
     <section
       aria-label="TANTE PIAV ausgeschrieben"
-      className={`rounded-lg border border-clinical-line bg-white shadow-sm transition-all duration-200 ${
+      className={`origin-top-left rounded-lg border border-clinical-line bg-white shadow-sm transition-all duration-300 ease-out ${
         isCollapsed
-          ? "pointer-events-none max-h-0 -translate-x-8 overflow-hidden opacity-0"
+          ? "pointer-events-none max-h-0 -translate-x-6 scale-95 overflow-hidden opacity-0"
           : "max-h-[860px] opacity-100"
       }`}
     >
@@ -74,18 +74,20 @@ export function CollapsedAcronymRail({
   return (
     <nav
       aria-label="TANTE PIAV reduzierte Abschnittsnavigation"
-      className={`${isDesktop ? "hidden lg:sticky lg:top-24 lg:z-20 lg:flex lg:w-14 lg:flex-col lg:gap-2" : "sticky top-[172px] z-30 -mx-3 flex gap-1 overflow-x-auto border-y border-clinical-line bg-white px-3 py-2 sm:-mx-5 sm:top-[124px] sm:px-5 lg:hidden"} transition-all duration-200 ${
+      className={`${isDesktop ? "hidden lg:fixed lg:top-24 lg:z-40 lg:flex lg:w-14 lg:flex-col lg:gap-2" : "sticky top-[172px] z-30 -mx-3 flex gap-1 overflow-x-auto border-y border-clinical-line bg-white px-3 py-2 sm:-mx-5 sm:top-[124px] sm:px-5 lg:hidden"} transition-all duration-300 ease-out motion-reduce:transition-none ${
         isVisible
-          ? "pointer-events-auto translate-x-0 opacity-100"
-          : "pointer-events-none -translate-y-2 opacity-0 lg:-translate-x-4 lg:translate-y-0"
+          ? "pointer-events-auto translate-x-0 scale-100 opacity-100"
+          : "pointer-events-none -translate-y-2 scale-95 opacity-0 lg:-translate-x-8 lg:translate-y-0"
       }`}
+      style={isDesktop ? { left: "max(1rem, calc((100vw - 80rem) / 2 + 1.5rem))" } : undefined}
     >
-      {categories.map((category) => (
+      {categories.map((category, index) => (
         <button
           aria-label={`Zu ${category.title} springen`}
-          className="shrink-0 rounded-lg focus:outline-none focus:ring-4 focus:ring-teal-100"
+          className="shrink-0 rounded-lg transition-transform duration-300 ease-out focus:outline-none focus:ring-4 focus:ring-teal-100 hover:scale-105 motion-reduce:transition-none"
           key={category.id}
           onClick={() => onSelect(category.id)}
+          style={{ transitionDelay: isVisible ? `${index * 18}ms` : "0ms" }}
           title={category.title}
           type="button"
         >

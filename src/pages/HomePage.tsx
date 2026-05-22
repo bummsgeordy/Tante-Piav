@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { categories } from "../data/categories";
 import { causes } from "../data/causes";
+import { symptomEntries } from "../data/symptoms";
 import type { Cause, CauseFilters, PiavCategory } from "../types/medical";
+import type { SymptomEntry } from "../types/symptom";
 import {
   CollapsedAcronymRail,
   CollapsibleAcronymNav
@@ -10,9 +12,12 @@ import { FilterPanel } from "../components/FilterPanel";
 import { GroupedCauseList } from "../components/GroupedCauseList";
 import { SearchBar } from "../components/SearchBar";
 import { SearchContextBar } from "../components/SearchContextBar";
+import { SymptomCard } from "../components/SymptomCard";
+import { SymptomDetail } from "../components/SymptomDetail";
 import { defaultFilters, filterCauses } from "../utils/filterCauses";
 import { getSearchSuggestions } from "../utils/searchSuggestions";
 import { searchCauses } from "../utils/searchCauses";
+import { searchSymptoms } from "../utils/searchSymptoms";
 
 interface HomePageProps {
   query: string;
@@ -31,11 +36,18 @@ export function HomePage({
 }: HomePageProps) {
   const [activeCategory, setActiveCategory] = useState<PiavCategory>(categories[0].id);
   const [isAcronymCollapsed, setIsAcronymCollapsed] = useState(false);
+  const [selectedSymptomId, setSelectedSymptomId] = useState<string | null>(null);
 
   const visibleCauses = useMemo(() => {
     const searched = searchCauses(causes, query);
     return sortByClinicalPriority(filterCauses(searched, filters));
   }, [filters, query]);
+
+  const visibleSymptoms = useMemo(() => searchSymptoms(symptomEntries, query), [query]);
+
+  const selectedSymptom =
+    visibleSymptoms.find((entry) => entry.id === selectedSymptomId) ??
+    (query.trim() ? visibleSymptoms[0] : null);
 
   const causesByCategory = useMemo(() => {
     const grouped = new Map<PiavCategory, Cause[]>();
@@ -147,6 +159,15 @@ export function HomePage({
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
+  const selectSymptom = (entry: SymptomEntry) => {
+    setSelectedSymptomId(entry.id);
+    window.setTimeout(() => {
+      document
+        .getElementById("symptom-detail")
+        ?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }, 0);
+  };
+
   const focusResults = () => {
     window.setTimeout(() => {
       const results = document.getElementById("causes");
@@ -158,6 +179,7 @@ export function HomePage({
   const clearSearchAndFilters = () => {
     onQueryChange("");
     onFiltersChange(defaultFilters);
+    setSelectedSymptomId(null);
     window.setTimeout(() => {
       document.getElementById("app-start")?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 0);
@@ -228,6 +250,46 @@ export function HomePage({
             resultCount={visibleCauses.length}
             totalCount={causes.length}
           />
+
+          <section className="mb-3 rounded-lg border border-clinical-line bg-white p-2.5 shadow-sm">
+            <header className="mb-2 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <h2 className="text-lg font-bold text-clinical-ink">Symptome & Befunde</h2>
+                <p className="text-sm leading-5 text-clinical-muted">
+                  Symptomorientierte Einstiegsebene als Denkhilfe, fachlich zu prüfen.
+                </p>
+              </div>
+              <span className="text-xs font-semibold text-clinical-muted">
+                {visibleSymptoms.length} Einträge
+              </span>
+            </header>
+            {visibleSymptoms.length > 0 ? (
+              <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+                {visibleSymptoms.map((entry) => (
+                  <SymptomCard
+                    entry={entry}
+                    isActive={selectedSymptom?.id === entry.id}
+                    key={entry.id}
+                    onSelect={selectSymptom}
+                  />
+                ))}
+              </div>
+            ) : (
+              <p className="rounded-md bg-clinical-surface p-3 text-sm text-clinical-muted">
+                Keine passenden Symptome oder Befunde für die aktuelle Suche.
+              </p>
+            )}
+
+            {selectedSymptom ? (
+              <div className="mt-2" id="symptom-detail">
+                <SymptomDetail
+                  entry={selectedSymptom}
+                  onSelectCategory={scrollToCategory}
+                  onSelectCause={onSelectCause}
+                />
+              </div>
+            ) : null}
+          </section>
 
           <GroupedCauseList
             categories={categories}

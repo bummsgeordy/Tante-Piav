@@ -1,5 +1,6 @@
 import { ExternalLink } from "lucide-react";
 import { causes } from "../data/causes";
+import { symptomEntries } from "../data/symptoms";
 import type { Cause } from "../types/medical";
 import {
   getCategoryLabel,
@@ -18,6 +19,13 @@ export function CauseDetail({ cause, onSelectCause }: CauseDetailProps) {
   const related = (cause.relatedCauses ?? [])
     .map((id) => causes.find((item) => item.id === id))
     .filter((item): item is Cause => Boolean(item));
+  const linkedSymptoms = symptomEntries.filter(
+    (entry) =>
+      cause.symptomEntryIds?.includes(entry.id) ||
+      entry.commonCauseIds.includes(cause.id) ||
+      entry.importantCauseIds.includes(cause.id) ||
+      entry.rareButImportantCauseIds.includes(cause.id)
+  );
 
   return (
     <section className="rounded-lg border border-clinical-line bg-white p-4 shadow-soft sm:p-5">
@@ -76,6 +84,24 @@ export function CauseDetail({ cause, onSelectCause }: CauseDetailProps) {
           ))}
         </div>
       </section>
+
+      {linkedSymptoms.length > 0 ? (
+        <section className="mt-6 rounded-lg border border-clinical-line bg-clinical-surface p-4">
+          <h3 className="text-base font-semibold text-clinical-ink">
+            Verwandte Symptome & Befunde
+          </h3>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {linkedSymptoms.map((entry) => (
+              <span
+                className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-clinical-accent"
+                key={entry.id}
+              >
+                {entry.title}
+              </span>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section className="mt-6">
         <h3 className="text-base font-semibold text-clinical-ink">Quellen und Orientierung</h3>

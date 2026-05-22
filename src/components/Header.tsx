@@ -1,4 +1,4 @@
-import { Activity, Podcast } from "lucide-react";
+import { Podcast } from "lucide-react";
 import type { PageId } from "../types/navigation";
 
 interface HeaderProps {
@@ -17,32 +17,23 @@ const headerImageSrc = `${import.meta.env.BASE_URL}tante-piav-header.png`;
 export function Header({ currentPage, onNavigate }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-clinical-line bg-white/95 backdrop-blur">
-      <div className="mx-auto grid max-w-7xl gap-2 px-4 py-3 sm:grid-cols-[minmax(0,1fr)_minmax(180px,34vw)] sm:items-center sm:px-6 lg:grid-cols-[auto_minmax(260px,1fr)_auto] lg:gap-4 lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-2 px-3 py-1 sm:grid-cols-[minmax(220px,1fr)_auto] sm:items-center sm:px-5 lg:grid-cols-[minmax(420px,1fr)_auto] lg:gap-4 lg:px-6">
         <button
-          className="flex min-w-0 shrink-0 items-center gap-3 text-left"
+          aria-label="Zur App-Startseite"
+          className="min-w-0 justify-self-start"
           onClick={() => onNavigate("home")}
           type="button"
         >
-          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-clinical-accent text-white">
-            <Activity aria-hidden="true" size={22} />
-          </span>
-          <span>
-            <span className="block text-lg font-bold text-clinical-ink">TANTE PIAV</span>
-            <span className="block text-sm text-clinical-muted">
-              Offene Differentialdiagnosen-Gedankenstütze
-            </span>
-          </span>
+          <img
+            alt="TANTE PIAV Akronym-Illustration"
+            className="h-20 w-[min(100%,52vw)] max-w-[640px] object-contain object-left sm:h-24 sm:w-[min(52vw,700px)] lg:h-28 lg:w-[min(58vw,820px)]"
+            src={headerImageSrc}
+          />
         </button>
-
-        <img
-          alt="TANTE PIAV Akronym-Illustration"
-          className="hidden h-11 min-w-0 object-contain object-center sm:block lg:h-12 xl:h-14"
-          src={headerImageSrc}
-        />
 
         <nav
           aria-label="Hauptnavigation"
-          className="flex flex-wrap items-center gap-2 sm:col-span-2 lg:col-span-1 lg:justify-end"
+          className="flex flex-wrap items-center gap-2 sm:justify-end"
         >
           {navItems.map((item) => (
             <button

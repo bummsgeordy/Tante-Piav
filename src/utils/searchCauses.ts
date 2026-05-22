@@ -1,5 +1,6 @@
 import Fuse from "fuse.js";
 import { specialties } from "../data/specialties";
+import { symptomEntries } from "../data/symptoms";
 import type { Cause } from "../types/medical";
 import { getCategoryLabel } from "./getCategoryLabel";
 import { normalizeSearchTerm } from "./normalizeSearchTerm";
@@ -25,6 +26,9 @@ const enrichCause = (cause: Cause): SearchableCause => {
       searchSpecialties,
       cause.tags.join(" "),
       cause.relatedSymptoms.join(" "),
+      cause.searchBoostTerms?.join(" ") ?? "",
+      cause.symptomEntryIds?.join(" ") ?? "",
+      getLinkedSymptomTerms(cause).join(" "),
       cause.redFlags.join(" ")
     ].join(" ")
   );
@@ -49,6 +53,8 @@ const createFuse = (causes: Cause[]) =>
       { name: "searchSpecialties", weight: 0.1 },
       { name: "tags", weight: 0.16 },
       { name: "relatedSymptoms", weight: 0.12 },
+      { name: "searchBoostTerms", weight: 0.18 },
+      { name: "symptomEntryIds", weight: 0.08 },
       { name: "redFlags", weight: 0.08 },
       { name: "normalizedText", weight: 0.2 }
     ]
@@ -70,4 +76,12 @@ export const searchCauses = (causes: Cause[], query: string) => {
   });
 
   return Array.from(byId.values());
+};
+
+const getLinkedSymptomTerms = (cause: Cause) => {
+  const related = new Set([...(cause.symptomEntryIds ?? []), ...cause.relatedSymptoms]);
+
+  return symptomEntries
+    .filter((entry) => related.has(entry.id) || entry.commonCauseIds.includes(cause.id) || entry.importantCauseIds.includes(cause.id) || entry.rareButImportantCauseIds.includes(cause.id))
+    .flatMap((entry) => [entry.title, entry.kind, ...entry.synonyms, ...entry.tags, ...entry.redFlags]);
 };

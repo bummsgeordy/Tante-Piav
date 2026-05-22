@@ -1,6 +1,7 @@
 import { categories } from "../data/categories";
 import { causes } from "../data/causes";
 import { specialties } from "../data/specialties";
+import { symptomEntries } from "../data/symptoms";
 import { normalizeSearchTerm } from "./normalizeSearchTerm";
 import { synonymGroups } from "./searchSynonyms";
 
@@ -32,6 +33,14 @@ export const getSearchSuggestions = (query: string, limit = 8) => {
     cause.relatedSymptoms.forEach((symptom) => addTerm(terms, symptom));
     cause.redFlags.forEach((redFlag) => addTerm(terms, redFlag));
     cause.examples.forEach((example) => addTerm(terms, example));
+    cause.searchBoostTerms?.forEach((term) => addTerm(terms, term));
+  });
+
+  symptomEntries.forEach((entry) => {
+    addTerm(terms, entry.title);
+    entry.synonyms.forEach((synonym) => addTerm(terms, synonym));
+    entry.tags.forEach((tag) => addTerm(terms, tag));
+    entry.redFlags.forEach((redFlag) => addTerm(terms, redFlag));
   });
 
   synonymGroups.flat().forEach((synonym) => addTerm(terms, synonym));

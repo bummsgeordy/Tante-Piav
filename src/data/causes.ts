@@ -1,4 +1,5 @@
 import type { Cause, SourceLink } from "../types/medical";
+import { additionalCauseSeeds } from "./additionalCauses";
 
 const awmf: SourceLink = {
   title: "AWMF Leitlinienregister",
@@ -61,7 +62,7 @@ const dgn: SourceLink = {
   type: "leitlinie"
 };
 
-export const causes: Cause[] = [
+const baseCauses: Cause[] = [
   {
     id: "sturz-prellung-fraktur",
     title: "Sturz, Prellung, Fraktur",
@@ -873,3 +874,62 @@ export const causes: Cause[] = [
     hasMajorRedFlags: true
   }
 ];
+
+const mergeStringLists = (base: string[] | undefined, addition: string[] | undefined) =>
+  Array.from(new Set([...(base ?? []), ...(addition ?? [])]));
+
+const mergeSources = (base: SourceLink[] | undefined, addition: SourceLink[] | undefined) => {
+  const byUrl = new Map<string, SourceLink>();
+  [...(base ?? []), ...(addition ?? [])].forEach((source) => byUrl.set(source.url, source));
+  return Array.from(byUrl.values());
+};
+
+const mergeCause = (base: Cause, addition: Partial<Cause>): Cause => ({
+  ...base,
+  ...addition,
+  specialties: mergeStringLists(base.specialties, addition.specialties) as Cause["specialties"],
+  examples: mergeStringLists(base.examples, addition.examples),
+  typicalClues: mergeStringLists(base.typicalClues, addition.typicalClues),
+  redFlags: mergeStringLists(base.redFlags, addition.redFlags),
+  relatedSymptoms: mergeStringLists(base.relatedSymptoms, addition.relatedSymptoms),
+  relatedCauses: mergeStringLists(base.relatedCauses, addition.relatedCauses),
+  tags: mergeStringLists(base.tags, addition.tags),
+  sources: mergeSources(base.sources, addition.sources),
+  searchBoostTerms: mergeStringLists(base.searchBoostTerms, addition.searchBoostTerms),
+  symptomEntryIds: mergeStringLists(base.symptomEntryIds, addition.symptomEntryIds),
+  practicalNotes: mergeStringLists(base.practicalNotes, addition.practicalNotes)
+});
+
+const isCompleteCause = (cause: Partial<Cause>): cause is Cause =>
+  Boolean(
+    cause.id &&
+      cause.title &&
+      cause.category &&
+      cause.frequency &&
+      cause.urgency &&
+      cause.specialties &&
+      cause.shortDescription &&
+      cause.examples &&
+      cause.typicalClues &&
+      cause.redFlags &&
+      cause.relatedSymptoms &&
+      cause.sources &&
+      cause.tags &&
+      typeof cause.hasMajorRedFlags === "boolean"
+  );
+
+export const causes: Cause[] = additionalCauseSeeds.reduce<Cause[]>((items, seed) => {
+  const existingIndex = items.findIndex((cause) => cause.id === seed.id);
+
+  if (existingIndex >= 0) {
+    const nextItems = [...items];
+    nextItems[existingIndex] = mergeCause(nextItems[existingIndex], seed);
+    return nextItems;
+  }
+
+  if (isCompleteCause(seed)) {
+    return [...items, seed];
+  }
+
+  return items;
+}, baseCauses);

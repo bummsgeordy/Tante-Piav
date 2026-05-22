@@ -55,6 +55,9 @@ export interface Cause {
   tags: string[];
   hasMajorRedFlags: boolean;
   mdxSlug?: string;
+  searchBoostTerms?: string[];
+  symptomEntryIds?: string[];
+  practicalNotes?: string[];
 }
 
 export interface Category {

@@ -3,6 +3,12 @@ import { normalizeSearchTerm } from "./normalizeSearchTerm";
 export const synonymGroups = [
   ["thoraxschmerz", "brustschmerz", "retrosternaler schmerz", "herzschmerz"],
   ["dyspnoe", "atemnot", "luftnot", "kurzatmigkeit"],
+  ["hypertonie", "hoher blutdruck", "bluthochdruck", "arterielle hypertonie"],
+  ["oedeme", "ödeme", "wassereinlagerung", "beinoedeme", "beinödeme", "anasarka"],
+  ["uebelkeit", "übelkeit", "nausea", "erbrechen", "vomitus", "brechreiz"],
+  ["palpitationen", "herzrasen", "tachykardie", "herzstolpern", "arrhythmie"],
+  ["proteinurie", "albuminurie", "eiweiss im urin", "eiweiß im urin", "acr"],
+  ["egfr", "kreatinin", "niereninsuffizienz", "nierenschwaeche", "nierenschwäche", "aki", "ckd"],
   ["synkope", "ohnmacht", "kollaps", "bewusstlosigkeit"],
   ["muedigkeit", "fatigue", "erschoepfung", "leistungsknick"],
   ["gewichtsverlust", "abnahme", "ungewollter gewichtsverlust", "b-symptome"],

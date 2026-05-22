@@ -2,7 +2,7 @@
 
 Statische, schnelle und übersichtliche Web-App als medizinische Gedankenstütze für Differentialdiagnosen anhand des Akronyms **TANTE PIAV**.
 
-Die App richtet sich an Ärztinnen, Ärzte und medizinisch Lernende. Sie ist kein Lehrbuch, sondern eine klinisch nutzbare Denkhilfe: Ursachen werden entlang der ätiologischen Hauptstruktur sortiert, können lokal durchsucht und nach Kategorie, Fachgebiet, Häufigkeit, Dringlichkeit und Red-Flag-Relevanz gefiltert werden.
+Die App richtet sich an Ärztinnen, Ärzte und medizinisch Lernende. Sie ist kein Lehrbuch, sondern eine klinisch nutzbare Denkhilfe: Ursachen werden entlang der ätiologischen Hauptstruktur sortiert, können lokal durchsucht und nach Fachgebiet, Häufigkeit und Dringlichkeit gefiltert werden. Zusätzlich gibt es eine symptom- und befundorientierte Einstiegsebene.
 
 ## Würdigung und Attribution
 
@@ -69,10 +69,13 @@ Medizinische Inhalte liegen getrennt vom UI-Code in `src/data/`.
 
 - `src/data/categories.ts`: TANTE-PIAV-Hauptstruktur
 - `src/data/causes.ts`: strukturierte Ursachen
+- `src/data/additionalCauses.ts`: ergänzende Causes und Erweiterungen bestehender Causes
+- `src/data/symptoms.ts`: symptom-, befund- und labororientierte Einstiegsebene
+- `src/data/sourceRegistry.ts`: zentrale, wiederverwendbare Quellenlinks
 - `src/data/specialties.ts`: Fachgebietsfilter
 - `src/data/roadmap.ts`: Roadmap-Daten
 
-Zentrale Typen liegen in `src/types/medical.ts`.
+Zentrale Typen liegen in `src/types/medical.ts` und `src/types/symptom.ts`.
 
 ```ts
 export type PiavCategory =
@@ -90,7 +93,17 @@ export type Frequency = "haeufig" | "relevant" | "selten";
 export type Urgency = "ambulant" | "zeitnah" | "notfall";
 ```
 
-`relatedSymptoms`, `tags` und `mdxSlug` sind bewusst vorbereitet, damit später eine symptomorientierte Einstiegsebene und ausführlichere MDX-Detailseiten ergänzt werden können.
+`relatedSymptoms`, `tags`, `searchBoostTerms`, `symptomEntryIds`, `practicalNotes` und `mdxSlug` sind bewusst vorbereitet, damit Ursachen datenbasiert suchbar bleiben und später ausführlichere MDX-Detailseiten ergänzt werden können.
+
+### Symptomorientierte Datenebene
+
+`SymptomEntry` beschreibt häufige Symptome, Befunde, Laborwerte und Vitalparameter. Ein Eintrag enthält Synonyme, Red Flags, Basisabklärung, verknüpfte TANTE-PIAV-Kategorien und drei Ursache-Gruppen:
+
+- häufige Ursachen
+- wichtige Ursachen
+- selten, aber nicht verpassen
+
+Die Suche durchsucht Causes und SymptomEntries gemeinsam. Umlaute und einfache Schreibvarianten werden über Normalisierung, Synonymgruppen, Tags und `searchBoostTerms` abgefangen, z. B. `Hypertonie / hoher Blutdruck`, `Dyspnoe / Luftnot / Atemnot`, `Ödeme / Oedeme / Wassereinlagerung`, `Übelkeit / Uebelkeit / Nausea`.
 
 ## Quellen
 
@@ -114,6 +127,8 @@ Geeignete offene Quellen und Orientierungen:
 
 AMBOSS, UpToDate und andere geschützte Quellen sollen nicht als Datenquelle kopiert werden. Sie können höchstens als nicht-verlinkte fachliche Orientierung für Autorinnen und Autoren dienen.
 
+Medizinische Aussagen in `src/data/` sind knapp gehalten und müssen vor produktiver Nutzung fachlich geprüft, aktualisiert und quellenbasiert erweitert werden.
+
 ## Roadmap
 
 ### Phase 1: PWA-Modus / offline nutzbar ✅
@@ -127,6 +142,7 @@ AMBOSS, UpToDate und andere geschützte Quellen sollen nicht als Datenquelle kop
 
 ### Phase 2: Mehr Symptome, Befunde und Erkrankungen einpflegen
 
+- erste symptom- und befundorientierte Datenebene ist angelegt
 - symptomorientierte Einstiegsebene ergänzen
 - weitere häufige Beratungsanlässe und Leitsymptome einpflegen
 - mehr krankheits- und befundbezogene Suchbegriffe ergänzen
@@ -160,6 +176,26 @@ Beiträge sind willkommen, sollten aber medizinisch sorgfältig und quellenbasie
 - Red Flags klar und knapp benennen.
 - Psychosomatisch/psychiatrisch als gleichwertige Perspektive behandeln, nicht als Restekategorie.
 - Daten in `src/data/` pflegen, UI-Komponenten nicht mit medizinischen Inhalten füllen.
+
+## Arbeiten mit GitHub Desktop
+
+1. Repository in GitHub Desktop öffnen
+2. Änderungen prüfen
+3. aussagekräftige Commit Message schreiben
+4. Commit to main
+5. Push origin
+6. GitHub Actions prüfen
+7. veröffentlichte GitHub-Pages-Seite öffnen
+
+Empfohlene Commit Messages:
+
+- `initial project scaffold`
+- `add TANTE PIAV data model`
+- `add search and filters`
+- `add attribution and disclaimer`
+- `add GitHub Pages deployment`
+- `add roadmap`
+- `add symptom and findings data layer`
 
 ## Lizenz
 

@@ -55,7 +55,7 @@ export function SearchBar({
             }
           }}
           placeholder="Symptom, Befund, Ursache ..."
-          type="search"
+          type="text"
           value={query}
         />
         <button

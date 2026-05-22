@@ -1,5 +1,4 @@
-import { categories } from "../data/categories";
-import type { CauseFilters, Frequency, PiavCategory, Urgency } from "../types/medical";
+import type { CauseFilters, Frequency, Urgency } from "../types/medical";
 import { defaultFilters } from "../utils/filterCauses";
 import { SpecialtyFilter } from "./SpecialtyFilter";
 
@@ -26,23 +25,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
         </button>
       </div>
 
-      <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-        <label className="block text-sm font-medium text-clinical-ink">
-          TANTE-PIAV-Kategorie
-          <select
-            className="mt-1 w-full rounded-md border border-clinical-line bg-white px-3 py-2 text-sm text-clinical-text outline-none focus:border-clinical-accent focus:ring-2 focus:ring-teal-100"
-            onChange={(event) => update("category", event.target.value as PiavCategory | "all")}
-            value={filters.category}
-          >
-            <option value="all">Alle Kategorien</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.acronym} - {category.title}
-              </option>
-            ))}
-          </select>
-        </label>
-
+      <div className="mt-2 grid gap-2 md:grid-cols-3">
         <SpecialtyFilter
           onChange={(value) => update("specialty", value)}
           value={filters.specialty}
@@ -74,18 +57,6 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
             <option value="zeitnah">zeitnah</option>
             <option value="notfall">Notfall</option>
           </select>
-        </label>
-
-        <label className="flex items-center gap-2 rounded-md border border-red-100 bg-red-50 p-2 text-sm text-red-900">
-          <input
-            checked={filters.redFlagsOnly}
-            className="mt-1 h-4 w-4 rounded border-red-300 text-red-700 focus:ring-red-200"
-            onChange={(event) => update("redFlagsOnly", event.target.checked)}
-            type="checkbox"
-          />
-          <span>
-            <span className="block font-semibold">Nur Red-Flag-relevante Ursachen</span>
-          </span>
         </label>
       </div>
     </aside>

@@ -22,6 +22,7 @@ export function CollapsibleAcronymNav({
           ? "invisible pointer-events-none max-h-0 -translate-x-6 scale-95 overflow-hidden opacity-0"
           : "visible max-h-[860px] opacity-100"
       }`}
+      aria-hidden={isCollapsed}
     >
       <div className="grid divide-y divide-clinical-line">
         {categories.map((category) => (

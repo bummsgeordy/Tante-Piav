@@ -76,8 +76,8 @@ export function HomePage({
   }, [visibleCauses.length]);
 
   useEffect(() => {
-    const collapseAt = 180;
-    const expandAt = 80;
+    const collapseAt = 620;
+    const expandAt = 500;
     let frame = 0;
 
     const updateCollapsedState = () => {
@@ -153,7 +153,7 @@ export function HomePage({
         className="overflow-hidden border-b border-clinical-line bg-clinical-surface"
         id="app-start"
       >
-        <div className="mx-auto grid max-w-7xl gap-3 px-3 py-3 sm:px-5 lg:grid-cols-[minmax(360px,1fr)_280px] lg:px-6">
+        <div className="mx-auto grid max-w-7xl gap-3 px-3 py-3 sm:px-5 lg:grid-cols-[minmax(360px,0.85fr)_minmax(520px,1.15fr)] lg:px-6">
           <div className="grid gap-3 lg:relative">
             <SearchBar
               onQueryChange={onQueryChange}
@@ -240,10 +240,8 @@ function sortByClinicalPriority(items: Cause[]) {
 
 function getActiveFilterCount(filters: CauseFilters) {
   return [
-    filters.category !== "all",
     filters.specialty !== "all",
     filters.frequency !== "all",
-    filters.urgency !== "all",
-    filters.redFlagsOnly
+    filters.urgency !== "all"
   ].filter(Boolean).length;
 }

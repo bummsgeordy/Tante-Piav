@@ -3,6 +3,7 @@ import { specialties } from "../data/specialties";
 import type { Cause } from "../types/medical";
 import { getCategoryLabel } from "./getCategoryLabel";
 import { normalizeSearchTerm } from "./normalizeSearchTerm";
+import { expandSearchQuery } from "./searchSynonyms";
 
 interface SearchableCause extends Cause {
   searchCategory: string;
@@ -60,13 +61,12 @@ export const searchCauses = (causes: Cause[], query: string) => {
   }
 
   const fuse = createFuse(causes);
-  const normalizedQuery = normalizeSearchTerm(trimmed);
-  const results = fuse.search(trimmed);
-  const normalizedResults = fuse.search(normalizedQuery);
   const byId = new Map<string, Cause>();
 
-  [...results, ...normalizedResults].forEach((result) => {
-    byId.set(result.item.id, result.item);
+  expandSearchQuery(trimmed).forEach((queryVariant) => {
+    fuse.search(queryVariant).forEach((result) => {
+      byId.set(result.item.id, result.item);
+    });
   });
 
   return Array.from(byId.values());

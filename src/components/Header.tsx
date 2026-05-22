@@ -12,12 +12,14 @@ const navItems: Array<{ id: PageId; label: string }> = [
   { id: "roadmap", label: "Roadmap" }
 ];
 
+const headerImageSrc = `${import.meta.env.BASE_URL}tante-piav-header.png`;
+
 export function Header({ currentPage, onNavigate }: HeaderProps) {
   return (
     <header className="sticky top-0 z-30 border-b border-clinical-line bg-white/95 backdrop-blur">
-      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center lg:justify-between lg:px-8">
+      <div className="mx-auto grid max-w-7xl gap-2 px-4 py-3 sm:grid-cols-[minmax(0,1fr)_minmax(180px,34vw)] sm:items-center sm:px-6 lg:grid-cols-[auto_minmax(260px,1fr)_auto] lg:gap-4 lg:px-8">
         <button
-          className="flex shrink-0 items-center gap-3 text-left"
+          className="flex min-w-0 shrink-0 items-center gap-3 text-left"
           onClick={() => onNavigate("home")}
           type="button"
         >
@@ -34,11 +36,14 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
 
         <img
           alt="TANTE PIAV Akronym-Illustration"
-          className="hidden h-12 min-w-0 flex-1 object-contain object-center lg:block xl:h-14"
-          src="/tante-piav-header.png"
+          className="hidden h-11 min-w-0 object-contain object-center sm:block lg:h-12 xl:h-14"
+          src={headerImageSrc}
         />
 
-        <nav aria-label="Hauptnavigation" className="flex flex-wrap items-center gap-2">
+        <nav
+          aria-label="Hauptnavigation"
+          className="flex flex-wrap items-center gap-2 sm:col-span-2 lg:col-span-1 lg:justify-end"
+        >
           {navItems.map((item) => (
             <button
               className={`rounded-md px-3 py-2 text-sm font-medium transition ${

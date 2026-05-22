@@ -76,23 +76,47 @@ export function HomePage({
   }, [visibleCauses.length]);
 
   useEffect(() => {
-    const sentinel = document.getElementById("acronym-collapse-sentinel");
-    if (!sentinel) {
-      return;
-    }
+    const collapseAt = 180;
+    const expandAt = 80;
+    let frame = 0;
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsAcronymCollapsed(!entry.isIntersecting);
-      },
-      {
-        rootMargin: "-86px 0px 0px 0px",
-        threshold: 0
+    const updateCollapsedState = () => {
+      frame = 0;
+      const scrollY = window.scrollY;
+
+      setIsAcronymCollapsed((current) => {
+        if (scrollY >= collapseAt) {
+          return true;
+        }
+
+        if (scrollY <= expandAt) {
+          return false;
+        }
+
+        return current;
+      });
+    };
+
+    const scheduleUpdate = () => {
+      if (frame !== 0) {
+        return;
       }
-    );
 
-    observer.observe(sentinel);
-    return () => observer.disconnect();
+      frame = window.requestAnimationFrame(updateCollapsedState);
+    };
+
+    updateCollapsedState();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      if (frame !== 0) {
+        window.cancelAnimationFrame(frame);
+      }
+
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
+    };
   }, []);
 
   const scrollToCategory = (category: PiavCategory) => {
@@ -139,7 +163,6 @@ export function HomePage({
               resultCount={visibleCauses.length}
               suggestions={suggestions}
             />
-            <div id="acronym-collapse-sentinel" />
             <CollapsibleAcronymNav
               activeCategory={activeCategory}
               categories={categories}

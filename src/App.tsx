@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Footer } from "./components/Footer";
 import { Header } from "./components/Header";
 import { defaultFilters } from "./utils/filterCauses";
@@ -14,10 +14,24 @@ export default function App() {
   const [query, setQuery] = useState("");
   const [filters, setFilters] = useState<CauseFilters>(defaultFilters);
   const [selectedCause, setSelectedCause] = useState<Cause | null>(null);
+  const returnScrollY = useRef(0);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [page, selectedCause?.id]);
+  }, [page]);
+
+  useEffect(() => {
+    if (!selectedCause) {
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [selectedCause]);
 
   const navigate = (nextPage: PageId) => {
     setSelectedCause(null);
@@ -25,21 +39,25 @@ export default function App() {
   };
 
   const selectCause = (cause: Cause) => {
+    if (!selectedCause) {
+      returnScrollY.current = window.scrollY;
+    }
     setSelectedCause(cause);
     setPage("home");
+  };
+
+  const closeCauseDetail = () => {
+    setSelectedCause(null);
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: returnScrollY.current, behavior: "auto" });
+    });
   };
 
   return (
     <div className="flex min-h-screen flex-col bg-white text-clinical-text">
       <Header currentPage={page} onNavigate={navigate} />
       <div className="flex-1">
-        {selectedCause ? (
-          <CauseDetailPage
-            cause={selectedCause}
-            onClose={() => setSelectedCause(null)}
-            onSelectCause={selectCause}
-          />
-        ) : page === "about" ? (
+        {page === "about" ? (
           <AboutPage />
         ) : page === "roadmap" ? (
           <RoadmapPage />
@@ -53,6 +71,13 @@ export default function App() {
           />
         )}
       </div>
+      {selectedCause ? (
+        <CauseDetailPage
+          cause={selectedCause}
+          onClose={closeCauseDetail}
+          onSelectCause={selectCause}
+        />
+      ) : null}
       <Footer onNavigate={navigate} />
     </div>
   );

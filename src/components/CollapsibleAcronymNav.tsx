@@ -17,10 +17,10 @@ export function CollapsibleAcronymNav({
   return (
     <section
       aria-label="TANTE PIAV ausgeschrieben"
-      className={`origin-top-left rounded-lg border border-clinical-line bg-white shadow-sm transition-all duration-300 ease-out ${
+      className={`origin-top-left rounded-lg border border-clinical-line bg-white shadow-sm transition-[max-height,transform] duration-200 ease-out ${
         isCollapsed
-          ? "pointer-events-none max-h-0 -translate-x-6 scale-95 overflow-hidden opacity-0"
-          : "max-h-[860px] opacity-100"
+          ? "invisible pointer-events-none max-h-0 -translate-x-6 scale-95 overflow-hidden opacity-0"
+          : "visible max-h-[860px] opacity-100"
       }`}
     >
       <div className="grid divide-y divide-clinical-line">
@@ -74,11 +74,12 @@ export function CollapsedAcronymRail({
   return (
     <nav
       aria-label="TANTE PIAV reduzierte Abschnittsnavigation"
-      className={`${isDesktop ? "hidden lg:fixed lg:top-24 lg:z-40 lg:flex lg:w-14 lg:flex-col lg:gap-2" : "sticky top-[172px] z-30 -mx-3 flex gap-1 overflow-x-auto border-y border-clinical-line bg-white px-3 py-2 sm:-mx-5 sm:top-[124px] sm:px-5 lg:hidden"} transition-all duration-300 ease-out motion-reduce:transition-none ${
+      className={`${isDesktop ? "hidden lg:fixed lg:top-24 lg:z-40 lg:flex lg:w-14 lg:flex-col lg:gap-2" : "sticky top-[172px] z-30 -mx-3 flex gap-1 overflow-x-auto border-y border-clinical-line bg-white px-3 py-2 sm:-mx-5 sm:top-[124px] sm:px-5 lg:hidden"} transition-transform duration-200 ease-out motion-reduce:transition-none ${
         isVisible
-          ? "pointer-events-auto translate-x-0 scale-100 opacity-100"
-          : "pointer-events-none -translate-y-2 scale-95 opacity-0 lg:-translate-x-8 lg:translate-y-0"
+          ? "visible pointer-events-auto translate-x-0 scale-100 opacity-100"
+          : "invisible pointer-events-none -translate-y-2 scale-95 opacity-0 lg:-translate-x-8 lg:translate-y-0"
       }`}
+      aria-hidden={!isVisible}
       style={isDesktop ? { left: "max(1rem, calc((100vw - 80rem) / 2 + 1.5rem))" } : undefined}
     >
       {categories.map((category, index) => (

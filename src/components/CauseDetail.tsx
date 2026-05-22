@@ -1,4 +1,4 @@
-import { ExternalLink, X } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { causes } from "../data/causes";
 import type { Cause } from "../types/medical";
 import {
@@ -11,18 +11,17 @@ import { FrequencyBadge, RedFlagBadge, UrgencyBadge } from "./Badges";
 
 interface CauseDetailProps {
   cause: Cause;
-  onClose: () => void;
   onSelectCause: (cause: Cause) => void;
 }
 
-export function CauseDetail({ cause, onClose, onSelectCause }: CauseDetailProps) {
+export function CauseDetail({ cause, onSelectCause }: CauseDetailProps) {
   const related = (cause.relatedCauses ?? [])
     .map((id) => causes.find((item) => item.id === id))
     .filter((item): item is Cause => Boolean(item));
 
   return (
-    <section className="rounded-lg border border-clinical-line bg-white p-5 shadow-soft">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+    <section className="rounded-lg border border-clinical-line bg-white p-4 shadow-soft sm:p-5">
+      <div className="flex flex-col gap-4">
         <div>
           <p className="text-sm font-semibold text-clinical-accent">
             {getCategoryLabel(cause.category)}
@@ -32,14 +31,6 @@ export function CauseDetail({ cause, onClose, onSelectCause }: CauseDetailProps)
             {cause.shortDescription}
           </p>
         </div>
-        <button
-          aria-label="Detailansicht schließen"
-          className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-clinical-line text-clinical-muted hover:bg-slate-100"
-          onClick={onClose}
-          type="button"
-        >
-          <X aria-hidden="true" size={18} />
-        </button>
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">

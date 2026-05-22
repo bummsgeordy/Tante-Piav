@@ -53,7 +53,7 @@ export default function App() {
           />
         )}
       </div>
-      <Footer />
+      <Footer onNavigate={navigate} />
     </div>
   );
 }

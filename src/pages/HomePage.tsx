@@ -4,10 +4,8 @@ import { causes } from "../data/causes";
 import type { Cause, CauseFilters, PiavCategory } from "../types/medical";
 import { filterCauses } from "../utils/filterCauses";
 import { searchCauses } from "../utils/searchCauses";
-import { AttributionBox } from "../components/AttributionBox";
-import { CategoryCard } from "../components/CategoryCard";
+import { AcronymList } from "../components/AcronymList";
 import { CauseCard } from "../components/CauseCard";
-import { DisclaimerBox } from "../components/DisclaimerBox";
 import { ExportButtonPlaceholder } from "../components/ExportButtonPlaceholder";
 import { FilterPanel } from "../components/FilterPanel";
 import { SearchBar } from "../components/SearchBar";
@@ -48,42 +46,76 @@ export function HomePage({
     }, 0);
   };
 
+  const focusResults = () => {
+    window.setTimeout(() => {
+      const results = document.getElementById("causes");
+      results?.scrollIntoView({ behavior: "smooth", block: "start" });
+      results?.focus({ preventScroll: true });
+    }, 0);
+  };
+
   return (
     <main>
       <section className="border-b border-clinical-line bg-clinical-surface">
-        <div className="mx-auto grid max-w-7xl gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_0.78fr] lg:px-8">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-wide text-clinical-accent">
-              Differentialdiagnosen strukturiert mitdenken
-            </p>
-            <h1 className="mt-3 max-w-4xl text-4xl font-bold leading-tight text-clinical-ink sm:text-5xl">
-              TANTE PIAV als schnelle klinische Gedankenstütze.
-            </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-8 text-clinical-muted">
-              Die App ordnet Ursachen entlang der ätiologischen Hauptstruktur
-              Trauma, Autoimmun, Neoplastisch, Toxisch-medikamentös,
-              Endokrin-metabolisch, Psychosomatisch/psychiatrisch, Infektion,
-              Angeboren und Vaskulär/kardiovaskulär. Fachgebiete bleiben
-              eine zweite Filterachse.
-            </p>
-            <div className="mt-6">
-              <SearchBar query={query} onQueryChange={onQueryChange} />
-            </div>
+        <div className="mx-auto grid max-w-7xl gap-4 px-3 py-4 sm:px-5 lg:grid-cols-[minmax(360px,0.92fr)_minmax(320px,1.08fr)] lg:px-6">
+          <div className="grid gap-3">
+            <SearchBar
+              onQueryChange={onQueryChange}
+              onSubmit={focusResults}
+              query={query}
+              resultCount={visibleCauses.length}
+            />
+            <AcronymList
+              activeCategory={filters.category}
+              categories={categories}
+              counts={categoryCounts}
+              onSelect={selectCategory}
+            />
           </div>
-          <div className="grid gap-4">
-            <AttributionBox />
-            <DisclaimerBox />
+
+          <div className="grid gap-3 lg:grid-cols-[260px_1fr]">
+            <FilterPanel filters={filters} onFiltersChange={onFiltersChange} />
+            <section className="rounded-lg border border-clinical-line bg-white p-3 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h1 className="text-lg font-bold text-clinical-ink">Ein-Blick-Orientierung</h1>
+                  <p className="text-xs text-clinical-muted">
+                    Kategorie wählen, Suchbegriff eingeben, Red Flags prüfen.
+                  </p>
+                </div>
+                {filters.category !== "all" ? (
+                  <ExportButtonPlaceholder category={filters.category} />
+                ) : null}
+              </div>
+              <div className="mt-3 grid grid-cols-3 gap-2 text-center sm:grid-cols-5">
+                <Metric label="Kategorien" value={categories.length} />
+                <Metric label="Ursachen" value={causes.length} />
+                <Metric label="Treffer" value={visibleCauses.length} />
+                <Metric
+                  label="Notfall"
+                  value={visibleCauses.filter((cause) => cause.urgency === "notfall").length}
+                />
+                <Metric
+                  label="Red Flags"
+                  value={visibleCauses.filter((cause) => cause.hasMajorRedFlags).length}
+                />
+              </div>
+            </section>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <section
+        aria-live="polite"
+        className="mx-auto grid max-w-7xl gap-4 px-3 py-4 sm:px-5 lg:px-6"
+        id="causes"
+        tabIndex={-1}
+      >
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-clinical-ink">TANTE-PIAV-Kategorien</h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-clinical-muted">
-              Häufige und klinisch relevante Ursachen stehen in den Listen
-              zuerst. Seltenere Ursachen sind im Datenmodell vorbereitet.
+            <h2 className="text-xl font-bold text-clinical-ink">Ursachen</h2>
+            <p className="text-sm text-clinical-muted">
+              {visibleCauses.length} von {causes.length} Ursachen sichtbar
             </p>
           </div>
           {filters.category !== "all" ? (
@@ -91,46 +123,29 @@ export function HomePage({
           ) : null}
         </div>
 
-        <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {categories.map((category) => (
-            <CategoryCard
-              category={category}
-              count={categoryCounts[category.id]}
-              key={category.id}
-              onSelect={selectCategory}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section
-        className="mx-auto grid max-w-7xl gap-6 px-4 pb-12 sm:px-6 lg:grid-cols-[280px_1fr] lg:px-8"
-        id="causes"
-      >
-        <FilterPanel filters={filters} onFiltersChange={onFiltersChange} />
-        <div>
-          <div className="mb-4 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <h2 className="text-2xl font-bold text-clinical-ink">Ursachen</h2>
-              <p className="mt-1 text-sm text-clinical-muted">
-                {visibleCauses.length} von {causes.length} Ursachen sichtbar
-              </p>
-            </div>
+        {visibleCauses.length > 0 ? (
+          <div className="grid gap-3 xl:grid-cols-2">
+            {visibleCauses.map((cause) => (
+              <CauseCard cause={cause} key={cause.id} onSelect={onSelectCause} />
+            ))}
           </div>
-
-          {visibleCauses.length > 0 ? (
-            <div className="grid gap-4 xl:grid-cols-2">
-              {visibleCauses.map((cause) => (
-                <CauseCard cause={cause} key={cause.id} onSelect={onSelectCause} />
-              ))}
-            </div>
-          ) : (
-            <div className="rounded-lg border border-clinical-line bg-white p-6 text-clinical-muted">
-              Keine Treffer. Suche oder Filter anpassen.
-            </div>
-          )}
-        </div>
+        ) : (
+          <div className="rounded-lg border border-clinical-line bg-white p-5 text-clinical-muted">
+            Keine Treffer. Suche oder Filter anpassen.
+          </div>
+        )}
       </section>
     </main>
+  );
+}
+
+function Metric({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-md border border-clinical-line bg-clinical-surface px-2 py-2">
+      <div className="text-lg font-black text-clinical-ink">{value}</div>
+      <div className="text-[11px] font-semibold uppercase tracking-wide text-clinical-muted">
+        {label}
+      </div>
+    </div>
   );
 }

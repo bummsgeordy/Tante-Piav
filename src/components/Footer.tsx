@@ -1,24 +1,23 @@
 import { ExternalLink } from "lucide-react";
+import type { PageId } from "../types/navigation";
 
-export function Footer() {
+interface FooterProps {
+  onNavigate: (page: PageId) => void;
+}
+
+export function Footer({ onNavigate }: FooterProps) {
   return (
     <footer className="border-t border-clinical-line bg-clinical-ink text-white">
-      <div className="mx-auto grid max-w-7xl gap-5 px-4 py-8 text-sm sm:px-6 lg:grid-cols-[1.2fr_0.8fr] lg:px-8">
-        <div>
-          <p className="font-semibold">TANTE PIAV</p>
-          <p className="mt-2 max-w-3xl leading-6 text-slate-200">
-            Das Akronym TANTE PIAV wurde durch Dres. Ingo Krenz und Andreas
-            Klinge im Podcast Denkfabrik Medizin bekannt gemacht und didaktisch
-            ausgearbeitet. Dieses Projekt versteht sich als ergänzende, offene
-            Gedankenstütze und als Dank an die Kollegen und ihren Podcast.
-          </p>
-          <p className="mt-2 max-w-3xl leading-6 text-slate-300">
-            Kein Medizinprodukt, keine individuelle Diagnostik- oder
-            Therapieempfehlung, kein Ersatz für Leitlinien oder ärztliche
-            Beurteilung.
-          </p>
-        </div>
-        <div className="flex flex-col gap-2 lg:items-end">
+      <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 py-4 text-sm sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+        <p className="font-semibold">TANTE PIAV</p>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <button
+            className="text-slate-100 hover:text-white"
+            onClick={() => onNavigate("about")}
+            type="button"
+          >
+            Über
+          </button>
           <a
             className="inline-flex items-center gap-2 text-slate-100 hover:text-white"
             href="https://denkfabrikmedizin.de/"
@@ -37,7 +36,7 @@ export function Footer() {
             Open Source auf GitHub
             <ExternalLink aria-hidden="true" size={15} />
           </a>
-          <span className="text-slate-300">MIT License</span>
+          <span className="text-slate-300">MIT</span>
         </div>
       </div>
     </footer>

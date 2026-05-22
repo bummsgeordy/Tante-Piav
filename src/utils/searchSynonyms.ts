@@ -1,5 +1,6 @@
 import { symptomEntries } from "../data/symptoms";
 import { normalizeSearchTerm } from "./normalizeSearchTerm";
+import { dictionarySynonymGroups } from "./synonymDictionary";
 
 const manualSynonymGroups = [
   ["thoraxschmerz", "brustschmerz", "retrosternaler schmerz", "herzschmerz"],
@@ -40,7 +41,11 @@ const symptomSynonymGroups = symptomEntries
   )
   .filter((group) => group.length >= 2);
 
-export const synonymGroups = [...manualSynonymGroups, ...symptomSynonymGroups];
+export const synonymGroups = [
+  ...manualSynonymGroups,
+  ...dictionarySynonymGroups,
+  ...symptomSynonymGroups
+];
 
 export const expandSearchQuery = (query: string) => {
   const normalizedQuery = normalizeSearchTerm(query);

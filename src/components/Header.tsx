@@ -8,6 +8,7 @@ interface HeaderProps {
 
 const navItems: Array<{ id: PageId; label: string }> = [
   { id: "home", label: "App" },
+  { id: "symptoms", label: "Symptome" },
   { id: "about", label: "Über" },
   { id: "roadmap", label: "Roadmap" }
 ];
@@ -25,7 +26,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
           type="button"
         >
           <img
-            alt="TANTE PIAV Akronym-Illustration"
+            alt="Projektinterne TANTE-PIAV-Illustration"
             className="h-20 w-full object-contain object-left sm:h-24 sm:w-[min(52vw,700px)] lg:h-28 lg:w-[min(58vw,820px)]"
             src={headerImageSrc}
           />

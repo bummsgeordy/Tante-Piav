@@ -10,9 +10,10 @@ export function AttributionBox() {
         Das Akronym TANTE PIAV wurde durch Dres. Ingo Krenz und Andreas Klinge
         im Podcast Denkfabrik Medizin bekannt gemacht und didaktisch
         ausgearbeitet. Dieses Projekt versteht sich als ergänzende, offene
-        Gedankenstütze und als Dank an die Kollegen und ihren Podcast. Es
-        ersetzt keine ärztliche Beurteilung, keine Leitlinie und keine
-        individuelle Diagnostik- oder Therapieentscheidung.
+        Gedankenstütze und als Dank an die Kollegen und ihren Podcast. Es ist
+        ein unabhängiges Open-Source-Projekt und kein offizielles Angebot des
+        Podcasts. Es ersetzt keine ärztliche Beurteilung, keine Leitlinie und
+        keine individuelle Diagnostik- oder Therapieentscheidung.
       </p>
       <a
         className="mt-3 inline-flex items-center gap-2 font-medium text-clinical-accent hover:text-clinical-accentDark"

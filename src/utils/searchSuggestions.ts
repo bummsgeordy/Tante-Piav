@@ -34,6 +34,7 @@ export const getSearchSuggestions = (query: string, limit = 8) => {
     cause.redFlags.forEach((redFlag) => addTerm(terms, redFlag));
     cause.examples.forEach((example) => addTerm(terms, example));
     cause.searchBoostTerms?.forEach((term) => addTerm(terms, term));
+    cause.sources.forEach((source) => addTerm(terms, source.title));
   });
 
   symptomEntries.forEach((entry) => {
@@ -41,6 +42,7 @@ export const getSearchSuggestions = (query: string, limit = 8) => {
     entry.synonyms.forEach((synonym) => addTerm(terms, synonym));
     entry.tags.forEach((tag) => addTerm(terms, tag));
     entry.redFlags.forEach((redFlag) => addTerm(terms, redFlag));
+    entry.sources.forEach((source) => addTerm(terms, source.title));
   });
 
   synonymGroups.flat().forEach((synonym) => addTerm(terms, synonym));

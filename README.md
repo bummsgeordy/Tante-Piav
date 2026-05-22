@@ -2,15 +2,16 @@
 
 Statische, schnelle und übersichtliche Web-App als medizinische Gedankenstütze für Differentialdiagnosen anhand des Akronyms **TANTE PIAV**.
 
-Die App richtet sich an Ärztinnen, Ärzte und medizinisch Lernende. Sie ist kein Lehrbuch, sondern eine klinisch nutzbare Denkhilfe: Ursachen werden entlang der ätiologischen Hauptstruktur sortiert, können lokal durchsucht und nach Fachgebiet, Häufigkeit und Dringlichkeit gefiltert werden. Zusätzlich gibt es eine symptom- und befundorientierte Einstiegsebene.
+Die App richtet sich an Ärztinnen, Ärzte und medizinisch Lernende. Sie ist kein Lehrbuch, sondern eine klinisch nutzbare Denkhilfe: Ursachen werden entlang der ätiologischen Hauptstruktur sortiert, können lokal durchsucht und nach Fachgebiet, Häufigkeit und Dringlichkeit gefiltert werden. Zusätzlich gibt es eine eigene Seite für die symptom- und befundorientierte Einstiegsebene.
 
 ## Würdigung und Attribution
 
-Das Akronym TANTE PIAV wurde durch Dres. Ingo Krenz und Andreas Klinge im Podcast Denkfabrik Medizin bekannt gemacht und didaktisch ausgearbeitet. Dieses Projekt versteht sich als ergänzende, offene Gedankenstütze und als Dank an die Kollegen und ihren Podcast. Es ersetzt keine ärztliche Beurteilung, keine Leitlinie und keine individuelle Diagnostik- oder Therapieentscheidung.
+Das Akronym TANTE PIAV wurde durch Dres. Ingo Krenz und Andreas Klinge im Podcast Denkfabrik Medizin bekannt gemacht und didaktisch ausgearbeitet. Dieses Projekt versteht sich als ergänzende, offene Gedankenstütze und als Dank an die Kollegen und ihren Podcast. Es ist ein unabhängiges Open-Source-Projekt und kein offizielles Angebot, kein Auftrag und keine Veröffentlichung des Podcasts. Es ersetzt keine ärztliche Beurteilung, keine Leitlinie und keine individuelle Diagnostik- oder Therapieentscheidung.
 
 - Podcast: [Denkfabrik Medizin](https://denkfabrikmedizin.de/)
 - Einordnung: unabhängiges, nicht-kommerzielles Open-Source-Projekt
 - Der Begriff TANTE PIAV wird nicht als eigene Erfindung dieses Projekts dargestellt.
+- Logos oder geschützte Grafiken des Podcasts werden nicht verwendet.
 
 ## Disclaimer
 
@@ -103,7 +104,9 @@ export type Urgency = "ambulant" | "zeitnah" | "notfall";
 - wichtige Ursachen
 - selten, aber nicht verpassen
 
-Die Suche durchsucht Causes und SymptomEntries gemeinsam. Umlaute und einfache Schreibvarianten werden über Normalisierung, Synonymgruppen, Tags und `searchBoostTerms` abgefangen, z. B. `Hypertonie / hoher Blutdruck`, `Dyspnoe / Luftnot / Atemnot`, `Ödeme / Oedeme / Wassereinlagerung`, `Übelkeit / Uebelkeit / Nausea`.
+Die Suche durchsucht Causes und SymptomEntries. Umlaute, Bindestriche, Groß-/Kleinschreibung und einfache deutsche Schreibvarianten werden über `normalizeSearchTerm.ts`, `synonymDictionary.ts`, SymptomEntry-Synonyme, Tags und `searchBoostTerms` abgefangen, z. B. `Hypertonie / hoher Blutdruck`, `Dyspnoe / Luftnot / Atemnot`, `Ödeme / Oedeme / Wassereinlagerung`, `Übelkeit / Uebelkeit / Nausea`.
+
+Die Seite `Symptome` gruppiert Einträge nach Symptom, Labor, Vitalparameter, Syndrom und Befund. Jeder Eintrag zeigt Ursachen in drei Spalten: häufig, wichtig / nicht verpassen und selten, aber gefährlich. Verknüpfte Causes öffnen die Cause-Detailkarte; TANTE-PIAV-Kategorien springen zurück in die App-Übersicht.
 
 ## Quellen
 

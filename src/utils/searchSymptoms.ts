@@ -10,6 +10,7 @@ interface SearchableSymptom extends SymptomEntry {
   causeTerms: string;
   categoryTerms: string;
   specialtyTerms: string;
+  sourceTerms: string;
   normalizedText: string;
 }
 
@@ -28,6 +29,9 @@ const enrichSymptom = (entry: SymptomEntry): SearchableSymptom => {
   const specialtyTerms = entry.specialties
     .map((specialty) => specialties.find((item) => item.id === specialty)?.label ?? specialty)
     .join(" ");
+  const sourceTerms = entry.sources
+    .map((source) => `${source.title} ${source.type} ${source.url}`)
+    .join(" ");
   const normalizedText = normalizeSearchTerm(
     [
       entry.title,
@@ -39,7 +43,8 @@ const enrichSymptom = (entry: SymptomEntry): SearchableSymptom => {
       entry.suggestedBasicWorkup.join(" "),
       causeTerms,
       categoryTerms,
-      specialtyTerms
+      specialtyTerms,
+      sourceTerms
     ].join(" ")
   );
 
@@ -48,6 +53,7 @@ const enrichSymptom = (entry: SymptomEntry): SearchableSymptom => {
     causeTerms,
     categoryTerms,
     specialtyTerms,
+    sourceTerms,
     normalizedText
   };
 };
@@ -62,6 +68,9 @@ const createFuse = (entries: SymptomEntry[]) =>
       { name: "synonyms", weight: 0.22 },
       { name: "tags", weight: 0.16 },
       { name: "causeTerms", weight: 0.2 },
+      { name: "categoryTerms", weight: 0.08 },
+      { name: "specialtyTerms", weight: 0.08 },
+      { name: "sourceTerms", weight: 0.06 },
       { name: "shortDescription", weight: 0.1 },
       { name: "redFlags", weight: 0.08 },
       { name: "normalizedText", weight: 0.22 }

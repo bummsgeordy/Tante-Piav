@@ -9,6 +9,7 @@ import { expandSearchQuery } from "./searchSynonyms";
 interface SearchableCause extends Cause {
   searchCategory: string;
   searchSpecialties: string;
+  sourceTerms: string;
   normalizedText: string;
 }
 
@@ -16,6 +17,9 @@ const enrichCause = (cause: Cause): SearchableCause => {
   const searchCategory = getCategoryLabel(cause.category);
   const searchSpecialties = cause.specialties
     .map((specialty) => specialties.find((item) => item.id === specialty)?.label ?? specialty)
+    .join(" ");
+  const sourceTerms = cause.sources
+    .map((source) => `${source.title} ${source.type} ${source.url}`)
     .join(" ");
 
   const normalizedText = normalizeSearchTerm(
@@ -29,6 +33,7 @@ const enrichCause = (cause: Cause): SearchableCause => {
       cause.searchBoostTerms?.join(" ") ?? "",
       cause.symptomEntryIds?.join(" ") ?? "",
       getLinkedSymptomTerms(cause).join(" "),
+      sourceTerms,
       cause.redFlags.join(" ")
     ].join(" ")
   );
@@ -37,6 +42,7 @@ const enrichCause = (cause: Cause): SearchableCause => {
     ...cause,
     searchCategory,
     searchSpecialties,
+    sourceTerms,
     normalizedText
   };
 };
@@ -55,6 +61,7 @@ const createFuse = (causes: Cause[]) =>
       { name: "relatedSymptoms", weight: 0.12 },
       { name: "searchBoostTerms", weight: 0.18 },
       { name: "symptomEntryIds", weight: 0.08 },
+      { name: "sourceTerms", weight: 0.06 },
       { name: "redFlags", weight: 0.08 },
       { name: "normalizedText", weight: 0.2 }
     ]

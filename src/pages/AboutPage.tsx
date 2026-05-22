@@ -25,7 +25,10 @@ export function AboutPage() {
           Der Begriff TANTE PIAV wird hier nicht als eigene Erfindung des
           Projekts dargestellt. Die Anwendung ist eine praktische, offene
           Ergänzung und Hommage an die didaktische Arbeit von Dres. Ingo Krenz
-          und Andreas Klinge im Podcast Denkfabrik Medizin.
+          und Andreas Klinge im Podcast Denkfabrik Medizin. Dieses Projekt ist
+          unabhängig und nicht als offizielles Projekt, Auftrag oder Angebot des
+          Podcasts gekennzeichnet. Logos oder geschützte Grafiken des Podcasts
+          werden nicht verwendet.
         </p>
       </section>
     </main>

@@ -4,15 +4,21 @@ interface SearchBarProps {
   query: string;
   onQueryChange: (query: string) => void;
   onSubmit: () => void;
+  onSuggestionSelect: (suggestion: string) => void;
   resultCount?: number;
+  suggestions?: string[];
 }
 
 export function SearchBar({
   query,
   onQueryChange,
   onSubmit,
+  onSuggestionSelect,
+  suggestions = [],
   resultCount
 }: SearchBarProps) {
+  const showSuggestions = query.trim().length > 0 && suggestions.length > 0;
+
   return (
     <form
       className="block"
@@ -63,6 +69,20 @@ export function SearchBar({
           </button>
         ) : null}
       </div>
+      {showSuggestions ? (
+        <div className="mt-1.5 flex flex-wrap gap-1.5">
+          {suggestions.map((suggestion) => (
+            <button
+              className="rounded-full border border-clinical-line bg-white px-2.5 py-1 text-xs font-medium text-clinical-text hover:border-clinical-accent hover:text-clinical-accent"
+              key={suggestion}
+              onClick={() => onSuggestionSelect(suggestion)}
+              type="button"
+            >
+              {suggestion}
+            </button>
+          ))}
+        </div>
+      ) : null}
     </form>
   );
 }

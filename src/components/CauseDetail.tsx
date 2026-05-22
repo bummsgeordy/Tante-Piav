@@ -1,7 +1,6 @@
-import { Download, ExternalLink, X } from "lucide-react";
+import { ExternalLink, X } from "lucide-react";
 import { causes } from "../data/causes";
 import type { Cause } from "../types/medical";
-import { causeToMarkdown, copyMarkdown, downloadMarkdown } from "../utils/exportMarkdown";
 import {
   getCategoryLabel,
   getFrequencyLabel,
@@ -20,8 +19,6 @@ export function CauseDetail({ cause, onClose, onSelectCause }: CauseDetailProps)
   const related = (cause.relatedCauses ?? [])
     .map((id) => causes.find((item) => item.id === id))
     .filter((item): item is Cause => Boolean(item));
-
-  const markdown = causeToMarkdown(cause);
 
   return (
     <section className="rounded-lg border border-clinical-line bg-white p-5 shadow-soft">
@@ -125,23 +122,6 @@ export function CauseDetail({ cause, onClose, onSelectCause }: CauseDetailProps)
         </section>
       ) : null}
 
-      <div className="mt-6 flex flex-wrap gap-2 border-t border-clinical-line pt-5">
-        <button
-          className="inline-flex items-center gap-2 rounded-md bg-clinical-accent px-3 py-2 text-sm font-semibold text-white hover:bg-clinical-accentDark"
-          onClick={() => downloadMarkdown(`${cause.id}.md`, markdown)}
-          type="button"
-        >
-          <Download aria-hidden="true" size={16} />
-          Markdown herunterladen
-        </button>
-        <button
-          className="rounded-md border border-clinical-line px-3 py-2 text-sm font-semibold text-clinical-text hover:border-clinical-accent hover:text-clinical-accent"
-          onClick={() => void copyMarkdown(markdown)}
-          type="button"
-        >
-          Markdown kopieren
-        </button>
-      </div>
     </section>
   );
 }

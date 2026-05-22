@@ -1,6 +1,6 @@
 import { normalizeSearchTerm } from "./normalizeSearchTerm";
 
-const synonymGroups = [
+export const synonymGroups = [
   ["thoraxschmerz", "brustschmerz", "retrosternaler schmerz", "herzschmerz"],
   ["dyspnoe", "atemnot", "luftnot", "kurzatmigkeit"],
   ["synkope", "ohnmacht", "kollaps", "bewusstlosigkeit"],

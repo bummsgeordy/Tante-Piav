@@ -14,7 +14,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
   };
 
   return (
-    <aside className="rounded-lg border border-clinical-line bg-white p-4 shadow-sm">
+    <aside className="rounded-lg border border-clinical-line bg-white p-3 shadow-sm">
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-base font-semibold text-clinical-ink">Filter</h2>
         <button
@@ -26,7 +26,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
         </button>
       </div>
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+      <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
         <label className="block text-sm font-medium text-clinical-ink">
           TANTE-PIAV-Kategorie
           <select
@@ -76,7 +76,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
           </select>
         </label>
 
-        <label className="flex items-start gap-3 rounded-md border border-red-100 bg-red-50 p-3 text-sm text-red-900">
+        <label className="flex items-center gap-2 rounded-md border border-red-100 bg-red-50 p-2 text-sm text-red-900">
           <input
             checked={filters.redFlagsOnly}
             className="mt-1 h-4 w-4 rounded border-red-300 text-red-700 focus:ring-red-200"
@@ -84,10 +84,7 @@ export function FilterPanel({ filters, onFiltersChange }: FilterPanelProps) {
             type="checkbox"
           />
           <span>
-            <span className="block font-semibold">Nur Ursachen mit relevanten Red Flags</span>
-            <span className="mt-1 block text-red-800">
-              MVP-Filter für notfallnahe oder zeitkritische Konstellationen.
-            </span>
+            <span className="block font-semibold">Nur Red-Flag-relevante Ursachen</span>
           </span>
         </label>
       </div>

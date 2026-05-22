@@ -3,14 +3,12 @@ import type { Category, PiavCategory } from "../types/medical";
 
 interface AcronymListProps {
   categories: Category[];
-  counts: Record<PiavCategory, number>;
   activeCategory: PiavCategory | "all";
   onSelect: (category: PiavCategory) => void;
 }
 
 export function AcronymList({
   categories,
-  counts,
   activeCategory,
   onSelect
 }: AcronymListProps) {
@@ -44,9 +42,6 @@ export function AcronymList({
               <span className="min-w-0">
                 <span className="flex flex-wrap items-baseline gap-x-2">
                   <span className="font-bold text-clinical-ink">{category.title}</span>
-                  <span className="text-xs font-semibold text-clinical-muted">
-                    {counts[category.id]} Ursachen
-                  </span>
                 </span>
                 <span className="mt-0.5 block truncate text-xs text-clinical-muted">
                   {category.subtitle}

@@ -1,4 +1,4 @@
-import { Activity, Github, Map, Search } from "lucide-react";
+import { Activity, Podcast } from "lucide-react";
 import type { PageId } from "../types/navigation";
 
 interface HeaderProps {
@@ -53,26 +53,9 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
             rel="noreferrer"
             target="_blank"
           >
-            <Search aria-hidden="true" size={16} />
-            Denkfabrik
+            <Podcast aria-hidden="true" size={16} />
+            Denkfabrik Medizin Podcast
           </a>
-          <a
-            className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-clinical-text hover:bg-slate-100"
-            href="https://github.com/bummsgeordy/Tante-Piav"
-            rel="noreferrer"
-            target="_blank"
-          >
-            <Github aria-hidden="true" size={16} />
-            GitHub
-          </a>
-          <button
-            className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-clinical-text hover:bg-slate-100"
-            onClick={() => onNavigate("roadmap")}
-            type="button"
-          >
-            <Map aria-hidden="true" size={16} />
-            Ausbau
-          </button>
         </nav>
       </div>
     </header>

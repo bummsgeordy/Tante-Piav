@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react";
 import type { Cause } from "../types/medical";
-import { getCategoryAcronym, getCategoryLabel, getSpecialtyLabel } from "../utils/getCategoryLabel";
-import { FrequencyBadge, RedFlagBadge, UrgencyBadge } from "./Badges";
+import { getCategoryAcronym, getCategoryLabel } from "../utils/getCategoryLabel";
+import { FrequencyBadge, UrgencyBadge } from "./Badges";
 
 interface CauseCardProps {
   cause: Cause;
@@ -24,9 +24,13 @@ export function CauseCard({ cause, onSelect }: CauseCardProps) {
               <p className="text-xs font-semibold uppercase tracking-wide text-clinical-accent">
                 {getCategoryAcronym(cause.category)} - {getCategoryLabel(cause.category)}
               </p>
-              <h3 className="mt-0.5 break-words text-base font-semibold leading-5 text-clinical-ink">
-                {cause.title}
-              </h3>
+              <div className="mt-0.5 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+                <h3 className="break-words text-base font-semibold leading-5 text-clinical-ink">
+                  {cause.title}
+                </h3>
+                <FrequencyBadge frequency={cause.frequency} />
+                <UrgencyBadge urgency={cause.urgency} />
+              </div>
             </div>
             <button
               className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md border border-clinical-line px-2.5 py-1.5 text-sm font-medium text-clinical-text hover:border-clinical-accent hover:text-clinical-accent"
@@ -41,23 +45,6 @@ export function CauseCard({ cause, onSelect }: CauseCardProps) {
           <p className="mt-1.5 break-words text-sm leading-5 text-clinical-muted">
             {cause.shortDescription}
           </p>
-
-          <div className="mt-2 flex min-w-0 flex-wrap gap-1.5">
-            <FrequencyBadge frequency={cause.frequency} />
-            <UrgencyBadge urgency={cause.urgency} />
-            <RedFlagBadge major={cause.hasMajorRedFlags} />
-          </div>
-
-          <div className="mt-2 flex min-w-0 flex-wrap gap-1.5">
-            {cause.specialties.slice(0, 3).map((specialty) => (
-              <span
-                className="min-w-0 break-words rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-clinical-muted"
-                key={specialty}
-              >
-                {getSpecialtyLabel(specialty)}
-              </span>
-            ))}
-          </div>
         </div>
 
         {hasRedFlags ? (

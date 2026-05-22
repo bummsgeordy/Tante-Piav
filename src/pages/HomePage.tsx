@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { categories } from "../data/categories";
 import { causes } from "../data/causes";
 import type { Cause, CauseFilters, PiavCategory } from "../types/medical";
-import { AcronymList } from "../components/AcronymList";
+import {
+  CollapsedAcronymRail,
+  CollapsibleAcronymNav
+} from "../components/CollapsibleAcronymNav";
 import { FilterPanel } from "../components/FilterPanel";
 import { GroupedCauseList } from "../components/GroupedCauseList";
 import { SearchBar } from "../components/SearchBar";
 import { SearchContextBar } from "../components/SearchContextBar";
-import { StickyAcronymRail } from "../components/StickyAcronymRail";
 import { defaultFilters, filterCauses } from "../utils/filterCauses";
 import { getSearchSuggestions } from "../utils/searchSuggestions";
 import { searchCauses } from "../utils/searchCauses";
@@ -28,6 +30,7 @@ export function HomePage({
   onSelectCause
 }: HomePageProps) {
   const [activeCategory, setActiveCategory] = useState<PiavCategory>(categories[0].id);
+  const [isAcronymCollapsed, setIsAcronymCollapsed] = useState(false);
 
   const visibleCauses = useMemo(() => {
     const searched = searchCauses(causes, query);
@@ -72,6 +75,26 @@ export function HomePage({
     return () => observer.disconnect();
   }, [visibleCauses.length]);
 
+  useEffect(() => {
+    const sentinel = document.getElementById("acronym-collapse-sentinel");
+    if (!sentinel) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsAcronymCollapsed(!entry.isIntersecting);
+      },
+      {
+        rootMargin: "-86px 0px 0px 0px",
+        threshold: 0
+      }
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
+
   const scrollToCategory = (category: PiavCategory) => {
     setActiveCategory(category);
     document
@@ -103,8 +126,8 @@ export function HomePage({
   return (
     <main>
       <section className="border-b border-clinical-line bg-clinical-surface" id="app-start">
-        <div className="mx-auto grid max-w-7xl gap-3 px-3 py-3 sm:px-5 lg:grid-cols-[minmax(360px,0.95fr)_minmax(320px,1.05fr)] lg:px-6">
-          <div className="grid gap-3">
+        <div className="mx-auto grid max-w-7xl gap-3 px-3 py-3 sm:px-5 lg:grid-cols-[minmax(360px,1fr)_280px] lg:px-6">
+          <div className="grid gap-3 lg:relative">
             <SearchBar
               onQueryChange={onQueryChange}
               onSuggestionSelect={selectSuggestion}
@@ -113,65 +136,44 @@ export function HomePage({
               resultCount={visibleCauses.length}
               suggestions={suggestions}
             />
-            <AcronymList
+            <div id="acronym-collapse-sentinel" />
+            <CollapsibleAcronymNav
               activeCategory={activeCategory}
               categories={categories}
+              isCollapsed={isAcronymCollapsed}
               onSelect={scrollToCategory}
             />
           </div>
 
-          <div className="grid gap-3 lg:grid-cols-[250px_1fr]">
-            <FilterPanel filters={filters} onFiltersChange={onFiltersChange} />
-            <section className="rounded-lg border border-clinical-line bg-white p-3 shadow-sm">
-              <h1 className="text-lg font-bold text-clinical-ink">TANTE PIAV</h1>
-              <p className="mt-1 text-sm leading-5 text-clinical-muted">
-                Vollständige Übersicht nach ätiologischer Struktur. Die Buchstaben
-                links springen zu den Abschnitten; Suche und Filter schränken die
-                sichtbaren Ursachen ein.
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold text-clinical-muted">
-                <span className="rounded-full bg-clinical-surface px-2.5 py-1">
-                  {visibleCauses.length} von {causes.length} Ursachen
-                </span>
-                {activeFilterCount > 0 ? (
-                  <span className="rounded-full bg-amber-50 px-2.5 py-1 text-amber-900">
-                    {activeFilterCount} aktive Filter
-                  </span>
-                ) : null}
-                {query.trim() ? (
-                  <span className="rounded-full bg-teal-50 px-2.5 py-1 text-clinical-accent">
-                    Suche aktiv
-                  </span>
-                ) : null}
-              </div>
-            </section>
-          </div>
+          <FilterPanel filters={filters} onFiltersChange={onFiltersChange} />
         </div>
       </section>
 
-      <div className="mx-auto max-w-7xl px-3 sm:px-5 lg:px-6">
-        <StickyAcronymRail
-          activeCategory={activeCategory}
-          categories={categories}
-          onSelect={scrollToCategory}
-          variant="mobile"
-        />
-      </div>
-
       <section
         aria-live="polite"
-        className="mx-auto flex max-w-7xl gap-4 px-3 py-3 sm:px-5 lg:px-6"
+        className="mx-auto grid max-w-7xl grid-cols-1 gap-3 px-3 py-3 sm:px-5 lg:grid-cols-[4.5rem_minmax(0,1fr)] lg:gap-4 lg:px-6"
         id="causes"
         tabIndex={-1}
       >
-        <StickyAcronymRail
-          activeCategory={activeCategory}
-          categories={categories}
-          onSelect={scrollToCategory}
-          variant="desktop"
-        />
+        <div className="relative hidden lg:block">
+          <CollapsedAcronymRail
+            activeCategory={activeCategory}
+            categories={categories}
+            isVisible={isAcronymCollapsed}
+            onSelect={scrollToCategory}
+            variant="desktop"
+          />
+        </div>
 
         <div className="min-w-0 flex-1">
+          <CollapsedAcronymRail
+            activeCategory={activeCategory}
+            categories={categories}
+            isVisible={isAcronymCollapsed}
+            onSelect={scrollToCategory}
+            variant="mobile"
+          />
+
           <SearchContextBar
             activeFilterCount={activeFilterCount}
             onClear={clearSearchAndFilters}

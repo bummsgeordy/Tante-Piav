@@ -48,6 +48,12 @@ export function SearchBar({
           className="w-full rounded-lg border border-clinical-line bg-white py-2.5 pl-10 pr-20 text-base text-clinical-ink outline-none transition placeholder:text-slate-400 focus:border-clinical-accent focus:ring-4 focus:ring-teal-100"
           id="cause-search"
           onChange={(event) => onQueryChange(event.target.value)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              event.preventDefault();
+              onSubmit();
+            }
+          }}
           placeholder="Symptom, Befund, Ursache ..."
           type="search"
           value={query}

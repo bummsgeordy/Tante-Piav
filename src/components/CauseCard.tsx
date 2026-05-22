@@ -10,16 +10,18 @@ interface CauseCardProps {
 
 export function CauseCard({ cause, onSelect }: CauseCardProps) {
   return (
-    <article className="rounded-lg border border-clinical-line bg-white p-3 shadow-sm">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-        <div>
+    <article className="min-w-0 overflow-hidden rounded-lg border border-clinical-line bg-white p-2.5 shadow-sm">
+      <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+        <div className="min-w-0">
           <p className="text-xs font-semibold uppercase tracking-wide text-clinical-accent">
             {getCategoryAcronym(cause.category)} - {getCategoryLabel(cause.category)}
           </p>
-          <h3 className="mt-0.5 text-base font-semibold text-clinical-ink">{cause.title}</h3>
+          <h3 className="mt-0.5 break-words text-base font-semibold leading-5 text-clinical-ink">
+            {cause.title}
+          </h3>
         </div>
         <button
-          className="inline-flex items-center justify-center gap-1.5 rounded-md border border-clinical-line px-2.5 py-1.5 text-sm font-medium text-clinical-text hover:border-clinical-accent hover:text-clinical-accent"
+          className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-md border border-clinical-line px-2.5 py-1.5 text-sm font-medium text-clinical-text hover:border-clinical-accent hover:text-clinical-accent"
           onClick={() => onSelect(cause)}
           type="button"
         >
@@ -28,18 +30,20 @@ export function CauseCard({ cause, onSelect }: CauseCardProps) {
         </button>
       </div>
 
-      <p className="mt-2 text-sm leading-5 text-clinical-muted">{cause.shortDescription}</p>
+      <p className="mt-1.5 break-words text-sm leading-5 text-clinical-muted">
+        {cause.shortDescription}
+      </p>
 
-      <div className="mt-2 flex flex-wrap gap-1.5">
+      <div className="mt-2 flex min-w-0 flex-wrap gap-1.5">
         <FrequencyBadge frequency={cause.frequency} />
         <UrgencyBadge urgency={cause.urgency} />
         <RedFlagBadge major={cause.hasMajorRedFlags} />
       </div>
 
-      <div className="mt-2 flex flex-wrap gap-1.5">
+      <div className="mt-2 flex min-w-0 flex-wrap gap-1.5">
         {cause.specialties.slice(0, 3).map((specialty) => (
           <span
-            className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-clinical-muted"
+            className="min-w-0 break-words rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-clinical-muted"
             key={specialty}
           >
             {getSpecialtyLabel(specialty)}
@@ -48,9 +52,9 @@ export function CauseCard({ cause, onSelect }: CauseCardProps) {
       </div>
 
       {cause.redFlags.length > 0 ? (
-        <div className="mt-2 rounded-md border border-red-100 bg-red-50 px-2.5 py-2">
+        <div className="mt-2 min-w-0 rounded-md border border-red-100 bg-red-50 px-2.5 py-1.5">
           <p className="text-xs font-semibold uppercase tracking-wide text-red-800">Red Flags</p>
-          <p className="mt-0.5 text-sm leading-5 text-red-900">
+          <p className="mt-0.5 break-words text-sm leading-5 text-red-900">
             {cause.redFlags.slice(0, 3).join(" · ")}
           </p>
         </div>

@@ -23,7 +23,7 @@ export function AcronymList({
 
           return (
             <button
-              className={`group grid grid-cols-[2.25rem_1fr_auto] items-center gap-3 px-3 py-2.5 text-left transition hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-inset focus:ring-teal-100 ${
+              className={`group grid grid-cols-[2.25rem_1fr_auto] items-center gap-3 px-3 py-2 text-left transition hover:bg-teal-50 focus:outline-none focus:ring-4 focus:ring-inset focus:ring-teal-100 ${
                 isActive ? "bg-teal-50" : "bg-white"
               }`}
               key={category.id}

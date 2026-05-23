@@ -1,5 +1,5 @@
-import { useEffect, useMemo } from "react";
-import { ExternalLink } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
 import { causes } from "../data/causes";
 import { symptomEntries } from "../data/symptoms";
 import { SearchBar } from "../components/SearchBar";
@@ -36,6 +36,7 @@ export function SymptomsPage({
   onSelectCategory,
   onSelectSymptom
 }: SymptomsPageProps) {
+  const [expandedKinds, setExpandedKinds] = useState<Set<SymptomKind>>(() => new Set());
   const visibleSymptoms = useMemo(() => searchSymptoms(symptomEntries, query), [query]);
   const suggestions = useMemo(() => getSearchSuggestions(query), [query]);
   const grouped = useMemo(() => {
@@ -48,6 +49,11 @@ export function SymptomsPage({
   useEffect(() => {
     if (!selectedSymptomId) {
       return;
+    }
+
+    const selectedEntry = symptomEntries.find((entry) => entry.id === selectedSymptomId);
+    if (selectedEntry) {
+      setExpandedKinds((current) => new Set([...current, selectedEntry.kind]));
     }
 
     window.setTimeout(() => {
@@ -69,6 +75,31 @@ export function SymptomsPage({
   const selectSuggestion = (suggestion: string) => {
     onQueryChange(suggestion);
     focusResults();
+  };
+
+  const visibleKinds = kindGroups
+    .filter((group) => (grouped.get(group.kind) ?? []).length > 0)
+    .map((group) => group.kind);
+  const allExpanded = visibleKinds.every((kind) => expandedKinds.has(kind));
+
+  const toggleKind = (kind: SymptomKind) => {
+    setExpandedKinds((current) => {
+      const next = new Set(current);
+      if (next.has(kind)) {
+        next.delete(kind);
+      } else {
+        next.add(kind);
+      }
+      return next;
+    });
+  };
+
+  const expandAllKinds = () => {
+    setExpandedKinds(new Set(visibleKinds));
+  };
+
+  const collapseAllKinds = () => {
+    setExpandedKinds(new Set());
   };
 
   return (
@@ -97,30 +128,81 @@ export function SymptomsPage({
         className="mx-auto grid max-w-7xl gap-3 px-3 py-3 sm:px-5 lg:px-6"
         id="symptom-results"
       >
+        {visibleKinds.length > 0 ? (
+          <div className="flex justify-end">
+            <button
+              className="rounded-md border border-clinical-line bg-white px-3 py-2 text-sm font-semibold text-clinical-text shadow-sm hover:border-clinical-accent hover:text-clinical-accent"
+              onClick={allExpanded ? collapseAllKinds : expandAllKinds}
+              type="button"
+            >
+              {allExpanded ? "Alles einklappen" : "Alles ausklappen"}
+            </button>
+          </div>
+        ) : null}
+
         {kindGroups.map((group) => {
           const entries = grouped.get(group.kind) ?? [];
           if (entries.length === 0) {
             return null;
           }
 
+          const isExpanded = expandedKinds.has(group.kind);
+          const contentId = `symptom-kind-${group.kind}`;
+
           return (
-            <section className="grid gap-2" key={group.kind}>
-              <header className="flex items-center justify-between">
-                <h2 className="text-lg font-bold text-clinical-ink">{group.title}</h2>
-                <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-clinical-muted">
+            <section className="rounded-lg border border-clinical-line bg-white p-2.5 shadow-sm" key={group.kind}>
+              <header className="flex items-start justify-between gap-2">
+                <button
+                  aria-controls={contentId}
+                  aria-expanded={isExpanded}
+                  className="group flex min-w-0 flex-1 items-center gap-2 text-left"
+                  onClick={() => toggleKind(group.kind)}
+                  type="button"
+                >
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-clinical-surface text-clinical-ink transition group-hover:bg-teal-50 group-hover:text-clinical-accent">
+                    {isExpanded ? (
+                      <ChevronDown aria-hidden="true" size={18} />
+                    ) : (
+                      <ChevronRight aria-hidden="true" size={18} />
+                    )}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block text-lg font-bold text-clinical-ink">{group.title}</span>
+                    <span className="block text-sm text-clinical-muted">
+                      {entries.length} Einträge
+                    </span>
+                  </span>
+                </button>
+                <button
+                  className="shrink-0 rounded-full bg-clinical-surface px-2.5 py-1 text-xs font-semibold text-clinical-muted hover:bg-teal-50 hover:text-clinical-accent"
+                  onClick={() => toggleKind(group.kind)}
+                  type="button"
+                >
                   {entries.length} Einträge
-                </span>
+                </button>
               </header>
-              {entries.map((entry) => (
-                <SymptomMatrixCard
-                  entry={entry}
-                  isActive={entry.id === selectedSymptomId}
-                  key={entry.id}
-                  onSelectCategory={onSelectCategory}
-                  onSelectCause={onSelectCause}
-                  onSelectSymptom={onSelectSymptom}
-                />
-              ))}
+
+              <div
+                className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none ${
+                  isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                }`}
+                id={contentId}
+              >
+                <div className="min-h-0 overflow-hidden">
+                  <div className="mt-2 grid gap-2 border-t border-clinical-line pt-2">
+                    {entries.map((entry) => (
+                      <SymptomMatrixCard
+                        entry={entry}
+                        isActive={entry.id === selectedSymptomId}
+                        key={entry.id}
+                        onSelectCategory={onSelectCategory}
+                        onSelectCause={onSelectCause}
+                        onSelectSymptom={onSelectSymptom}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
             </section>
           );
         })}

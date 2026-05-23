@@ -37,6 +37,7 @@ export function SymptomsPage({
   onSelectSymptom
 }: SymptomsPageProps) {
   const [expandedKinds, setExpandedKinds] = useState<Set<SymptomKind>>(() => new Set());
+  const [expandedSymptomIds, setExpandedSymptomIds] = useState<Set<string>>(() => new Set());
   const visibleSymptoms = useMemo(() => searchSymptoms(symptomEntries, query), [query]);
   const suggestions = useMemo(() => getSearchSuggestions(query), [query]);
   const grouped = useMemo(() => {
@@ -54,6 +55,7 @@ export function SymptomsPage({
     const selectedEntry = symptomEntries.find((entry) => entry.id === selectedSymptomId);
     if (selectedEntry) {
       setExpandedKinds((current) => new Set([...current, selectedEntry.kind]));
+      setExpandedSymptomIds((current) => new Set([...current, selectedEntry.id]));
     }
 
     window.setTimeout(() => {
@@ -80,7 +82,10 @@ export function SymptomsPage({
   const visibleKinds = kindGroups
     .filter((group) => (grouped.get(group.kind) ?? []).length > 0)
     .map((group) => group.kind);
+  const visibleSymptomIds = visibleSymptoms.map((entry) => entry.id);
   const allExpanded = visibleKinds.every((kind) => expandedKinds.has(kind));
+  const allSymptomEntriesExpanded =
+    visibleSymptomIds.length > 0 && visibleSymptomIds.every((id) => expandedSymptomIds.has(id));
 
   const toggleKind = (kind: SymptomKind) => {
     setExpandedKinds((current) => {
@@ -100,6 +105,28 @@ export function SymptomsPage({
 
   const collapseAllKinds = () => {
     setExpandedKinds(new Set());
+  };
+
+  const expandAll = () => {
+    setExpandedKinds(new Set(visibleKinds));
+    setExpandedSymptomIds(new Set(visibleSymptomIds));
+  };
+
+  const collapseAll = () => {
+    setExpandedKinds(new Set());
+    setExpandedSymptomIds(new Set());
+  };
+
+  const toggleSymptomEntry = (entry: SymptomEntry) => {
+    setExpandedSymptomIds((current) => {
+      const next = new Set(current);
+      if (next.has(entry.id)) {
+        next.delete(entry.id);
+      } else {
+        next.add(entry.id);
+      }
+      return next;
+    });
   };
 
   return (
@@ -129,13 +156,20 @@ export function SymptomsPage({
         id="symptom-results"
       >
         {visibleKinds.length > 0 ? (
-          <div className="flex justify-end">
+          <div className="flex flex-wrap justify-end gap-2">
             <button
               className="rounded-md border border-clinical-line bg-white px-3 py-2 text-sm font-semibold text-clinical-text shadow-sm hover:border-clinical-accent hover:text-clinical-accent"
               onClick={allExpanded ? collapseAllKinds : expandAllKinds}
               type="button"
             >
-              {allExpanded ? "Alles einklappen" : "Alles ausklappen"}
+              {allExpanded ? "Oberthemen einklappen" : "Oberthemen ausklappen"}
+            </button>
+            <button
+              className="rounded-md border border-clinical-line bg-white px-3 py-2 text-sm font-semibold text-clinical-text shadow-sm hover:border-clinical-accent hover:text-clinical-accent"
+              onClick={allExpanded && allSymptomEntriesExpanded ? collapseAll : expandAll}
+              type="button"
+            >
+              {allExpanded && allSymptomEntriesExpanded ? "Alles einklappen" : "Alles ausklappen"}
             </button>
           </div>
         ) : null}
@@ -193,11 +227,13 @@ export function SymptomsPage({
                     {entries.map((entry) => (
                       <SymptomMatrixCard
                         entry={entry}
+                        isExpanded={expandedSymptomIds.has(entry.id)}
                         isActive={entry.id === selectedSymptomId}
                         key={entry.id}
                         onSelectCategory={onSelectCategory}
                         onSelectCause={onSelectCause}
                         onSelectSymptom={onSelectSymptom}
+                        onToggle={toggleSymptomEntry}
                       />
                     ))}
                   </div>
@@ -213,105 +249,146 @@ export function SymptomsPage({
 
 function SymptomMatrixCard({
   entry,
+  isExpanded,
   isActive,
   onSelectCause,
   onSelectCategory,
-  onSelectSymptom
+  onSelectSymptom,
+  onToggle
 }: {
   entry: SymptomEntry;
+  isExpanded: boolean;
   isActive: boolean;
   onSelectCause: (cause: Cause) => void;
   onSelectCategory: (category: PiavCategory) => void;
   onSelectSymptom: (entry: SymptomEntry) => void;
+  onToggle: (entry: SymptomEntry) => void;
 }) {
+  const contentId = `symptom-${entry.id}-content`;
+
   return (
     <article
-      className={`scroll-mt-40 rounded-lg border bg-white p-3 shadow-sm ${
+      className={`scroll-mt-40 rounded-lg border bg-white p-2.5 shadow-sm ${
         isActive ? "border-clinical-accent ring-2 ring-teal-100" : "border-clinical-line"
       }`}
       id={`symptom-${entry.id}`}
     >
-      <header className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.32fr)]">
+      <header className="flex items-start justify-between gap-2">
         <button
-          className="min-w-0 text-left"
+          aria-controls={contentId}
+          aria-expanded={isExpanded}
+          className="group flex min-w-0 flex-1 items-start gap-2 text-left"
+          onClick={() => onToggle(entry)}
+          type="button"
+        >
+          <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-clinical-surface text-clinical-ink transition group-hover:bg-teal-50 group-hover:text-clinical-accent">
+            {isExpanded ? (
+              <ChevronDown aria-hidden="true" size={16} />
+            ) : (
+              <ChevronRight aria-hidden="true" size={16} />
+            )}
+          </span>
+          <span className="min-w-0">
+            <span className="block text-xs font-semibold uppercase tracking-wide text-clinical-accent">
+              {entry.kind}
+            </span>
+            <span className="mt-0.5 block break-words text-base font-bold leading-5 text-clinical-ink">
+              {entry.title}
+            </span>
+            <span className="mt-1 line-clamp-2 block text-sm leading-5 text-clinical-muted">
+              {entry.shortDescription}
+            </span>
+          </span>
+        </button>
+        <button
+          className="shrink-0 rounded-full bg-clinical-surface px-2.5 py-1 text-xs font-semibold text-clinical-muted hover:bg-teal-50 hover:text-clinical-accent"
           onClick={() => onSelectSymptom(entry)}
           type="button"
         >
-          <p className="text-xs font-semibold uppercase tracking-wide text-clinical-accent">
-            {entry.kind}
-          </p>
-          <h3 className="mt-0.5 break-words text-lg font-bold leading-6 text-clinical-ink">
-            {entry.title}
-          </h3>
-          <p className="mt-1 text-sm leading-6 text-clinical-muted">{entry.shortDescription}</p>
+          Fokus
         </button>
-        <aside className="rounded-md border border-red-100 bg-red-50 p-2.5">
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-red-800">Red Flags</h4>
-          <p className="mt-1 text-xs leading-5 text-red-900">
-            {entry.redFlags.slice(0, 4).join(" · ")}
-          </p>
-        </aside>
       </header>
 
-      <div className="mt-3 grid gap-2 lg:grid-cols-3">
-        <CauseColumn
-          causeIds={entry.commonCauseIds}
-          onSelectCategory={onSelectCategory}
-          onSelectCause={onSelectCause}
-          title="häufig"
-        />
-        <CauseColumn
-          causeIds={entry.importantCauseIds}
-          onSelectCategory={onSelectCategory}
-          onSelectCause={onSelectCause}
-          title="wichtig / nicht verpassen"
-        />
-        <CauseColumn
-          causeIds={entry.rareButImportantCauseIds}
-          onSelectCategory={onSelectCategory}
-          onSelectCause={onSelectCause}
-          title="selten, aber gefährlich"
-        />
-      </div>
+      <div
+        className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none ${
+          isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+        }`}
+        id={contentId}
+      >
+        <div className="min-h-0 overflow-hidden">
+          <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.32fr)]">
+            <p className="text-sm leading-6 text-clinical-muted">{entry.shortDescription}</p>
+            <aside className="rounded-md border border-red-100 bg-red-50 p-2.5">
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-red-800">
+                Red Flags
+              </h4>
+              <p className="mt-1 text-xs leading-5 text-red-900">
+                {entry.redFlags.slice(0, 4).join(" · ")}
+              </p>
+            </aside>
+          </div>
 
-      <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.32fr)]">
-        <section className="rounded-md border border-clinical-line bg-clinical-surface p-2.5">
-          <h4 className="text-sm font-semibold text-clinical-ink">Basisabklärung</h4>
-          <ul className="mt-1 list-disc space-y-1 pl-5 text-sm leading-6 text-clinical-muted">
-            {entry.suggestedBasicWorkup.slice(0, 5).map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
-        <section className="rounded-md border border-clinical-line p-2.5">
-          <h4 className="text-sm font-semibold text-clinical-ink">TANTE-PIAV-Bezug</h4>
-          <div className="mt-2 flex flex-wrap gap-1.5">
-            {entry.piavCategories.map((category) => (
-              <button
-                className="rounded-full bg-teal-50 px-2.5 py-1 text-xs font-semibold text-clinical-accent hover:bg-teal-100"
-                key={category}
-                onClick={() => onSelectCategory(category)}
-                type="button"
-              >
-                {getCategoryLabel(category)}
-              </button>
-            ))}
+          <div className="mt-3 grid gap-2 lg:grid-cols-3">
+            <CauseColumn
+              causeIds={entry.commonCauseIds}
+              onSelectCategory={onSelectCategory}
+              onSelectCause={onSelectCause}
+              title="häufig"
+            />
+            <CauseColumn
+              causeIds={entry.importantCauseIds}
+              onSelectCategory={onSelectCategory}
+              onSelectCause={onSelectCause}
+              title="wichtig / nicht verpassen"
+            />
+            <CauseColumn
+              causeIds={entry.rareButImportantCauseIds}
+              onSelectCategory={onSelectCategory}
+              onSelectCause={onSelectCause}
+              title="selten, aber gefährlich"
+            />
           </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {entry.sources.slice(0, 3).map((source) => (
-              <a
-                className="inline-flex items-center gap-1 rounded-md border border-clinical-line px-2 py-1 text-xs font-medium text-clinical-accent hover:border-clinical-accent"
-                href={source.url}
-                key={`${source.title}-${source.url}`}
-                rel="noreferrer"
-                target="_blank"
-              >
-                {source.title}
-                <ExternalLink aria-hidden="true" size={12} />
-              </a>
-            ))}
+
+          <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.32fr)]">
+            <section className="rounded-md border border-clinical-line bg-clinical-surface p-2.5">
+              <h4 className="text-sm font-semibold text-clinical-ink">Basisabklärung</h4>
+              <ul className="mt-1 list-disc space-y-1 pl-5 text-sm leading-6 text-clinical-muted">
+                {entry.suggestedBasicWorkup.slice(0, 5).map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+            <section className="rounded-md border border-clinical-line p-2.5">
+              <h4 className="text-sm font-semibold text-clinical-ink">TANTE-PIAV-Bezug</h4>
+              <div className="mt-2 flex flex-wrap gap-1.5">
+                {entry.piavCategories.map((category) => (
+                  <button
+                    className="rounded-full bg-teal-50 px-2.5 py-1 text-xs font-semibold text-clinical-accent hover:bg-teal-100"
+                    key={category}
+                    onClick={() => onSelectCategory(category)}
+                    type="button"
+                  >
+                    {getCategoryLabel(category)}
+                  </button>
+                ))}
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {entry.sources.slice(0, 3).map((source) => (
+                  <a
+                    className="inline-flex items-center gap-1 rounded-md border border-clinical-line px-2 py-1 text-xs font-medium text-clinical-accent hover:border-clinical-accent"
+                    href={source.url}
+                    key={`${source.title}-${source.url}`}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {source.title}
+                    <ExternalLink aria-hidden="true" size={12} />
+                  </a>
+                ))}
+              </div>
+            </section>
           </div>
-        </section>
+        </div>
       </div>
     </article>
   );

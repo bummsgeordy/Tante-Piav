@@ -1,3 +1,4 @@
+import { ChevronDown, ChevronRight } from "lucide-react";
 import type { Category, Cause } from "../types/medical";
 import type { SymptomEntry } from "../types/symptom";
 import { CauseCard } from "./CauseCard";
@@ -5,20 +6,42 @@ import { CauseCard } from "./CauseCard";
 interface GroupedCauseListProps {
   categories: Category[];
   causesByCategory: Map<string, Cause[]>;
+  expandedCategoryIds: Set<string>;
+  onCollapseAll: () => void;
+  onExpandAll: () => void;
   onSelectCause: (cause: Cause) => void;
   onSelectSymptom?: (entry: SymptomEntry) => void;
+  onToggleCategory: (categoryId: string) => void;
 }
 
 export function GroupedCauseList({
   categories,
   causesByCategory,
+  expandedCategoryIds,
+  onCollapseAll,
+  onExpandAll,
   onSelectCause,
-  onSelectSymptom
+  onSelectSymptom,
+  onToggleCategory
 }: GroupedCauseListProps) {
+  const allExpanded = categories.every((category) => expandedCategoryIds.has(category.id));
+
   return (
     <div className="grid min-w-0 gap-2.5">
+      <div className="flex justify-end">
+        <button
+          className="rounded-md border border-clinical-line bg-white px-3 py-2 text-sm font-semibold text-clinical-text shadow-sm hover:border-clinical-accent hover:text-clinical-accent"
+          onClick={allExpanded ? onCollapseAll : onExpandAll}
+          type="button"
+        >
+          {allExpanded ? "Alles einklappen" : "Alles ausklappen"}
+        </button>
+      </div>
+
       {categories.map((category) => {
         const categoryCauses = causesByCategory.get(category.id) ?? [];
+        const isExpanded = expandedCategoryIds.has(category.id);
+        const contentId = `section-${category.id}-content`;
 
         return (
           <section
@@ -26,36 +49,66 @@ export function GroupedCauseList({
             id={`section-${category.id}`}
             key={category.id}
           >
-            <header className="mb-2 flex min-w-0 flex-col gap-2 border-b border-clinical-line pb-2 sm:flex-row sm:items-start sm:justify-between">
-              <div className="min-w-0">
-                <h2 className="break-words text-lg font-bold leading-6 text-clinical-ink">
-                  {category.title}
-                </h2>
-                <p className="break-words text-sm leading-5 text-clinical-muted">
-                  {category.description}
-                </p>
-              </div>
-              <span className="shrink-0 rounded-full bg-clinical-surface px-2.5 py-1 text-xs font-bold text-clinical-muted">
+            <header className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+              <button
+                aria-controls={contentId}
+                aria-expanded={isExpanded}
+                className="group flex min-w-0 flex-1 items-start gap-2 text-left"
+                onClick={() => onToggleCategory(category.id)}
+                type="button"
+              >
+                <span className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-clinical-surface text-clinical-ink transition group-hover:bg-teal-50 group-hover:text-clinical-accent">
+                  {isExpanded ? (
+                    <ChevronDown aria-hidden="true" size={18} />
+                  ) : (
+                    <ChevronRight aria-hidden="true" size={18} />
+                  )}
+                </span>
+                <span className="min-w-0">
+                  <span className="block break-words text-lg font-bold leading-6 text-clinical-ink">
+                    {category.title}
+                  </span>
+                  <span className="block break-words text-sm leading-5 text-clinical-muted">
+                    {category.description}
+                  </span>
+                </span>
+              </button>
+              <button
+                className="shrink-0 rounded-full bg-clinical-surface px-2.5 py-1 text-xs font-bold text-clinical-muted hover:bg-teal-50 hover:text-clinical-accent"
+                onClick={() => onToggleCategory(category.id)}
+                type="button"
+              >
                 {categoryCauses.length} Treffer
-              </span>
+              </button>
             </header>
 
-            {categoryCauses.length > 0 ? (
-              <div className="grid min-w-0 gap-2">
-                {categoryCauses.map((cause) => (
-                  <CauseCard
-                    cause={cause}
-                    key={cause.id}
-                    onSelect={onSelectCause}
-                    onSelectSymptom={onSelectSymptom}
-                  />
-                ))}
+            <div
+              className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none ${
+                isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+              }`}
+              id={contentId}
+            >
+              <div className="min-h-0 overflow-hidden">
+                <div className="mt-2 border-t border-clinical-line pt-2">
+                  {categoryCauses.length > 0 ? (
+                    <div className="grid min-w-0 gap-2">
+                      {categoryCauses.map((cause) => (
+                        <CauseCard
+                          cause={cause}
+                          key={cause.id}
+                          onSelect={onSelectCause}
+                          onSelectSymptom={onSelectSymptom}
+                        />
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="rounded-md bg-clinical-surface p-3 text-sm text-clinical-muted">
+                      Keine Ursachen in diesem Abschnitt für die aktuelle Suche/Filterung.
+                    </div>
+                  )}
+                </div>
               </div>
-            ) : (
-              <div className="rounded-md bg-clinical-surface p-3 text-sm text-clinical-muted">
-                Keine Ursachen in diesem Abschnitt für die aktuelle Suche/Filterung.
-              </div>
-            )}
+            </div>
           </section>
         );
       })}

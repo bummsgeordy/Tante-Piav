@@ -34,6 +34,7 @@ export function HomePage({
 }: HomePageProps) {
   const [activeCategory, setActiveCategory] = useState<PiavCategory>(categories[0].id);
   const [isAcronymCollapsed, setIsAcronymCollapsed] = useState(false);
+  const [expandedCategoryIds, setExpandedCategoryIds] = useState<Set<PiavCategory>>(() => new Set());
 
   const visibleCauses = useMemo(() => {
     const searched = searchCauses(causes, query);
@@ -153,9 +154,33 @@ export function HomePage({
 
   const scrollToCategory = (category: PiavCategory) => {
     setActiveCategory(category);
-    document
-      .getElementById(`section-${category}`)
-      ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setExpandedCategoryIds((current) => new Set([...current, category]));
+    window.setTimeout(() => {
+      document
+        .getElementById(`section-${category}`)
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
+  };
+
+  const toggleCategory = (category: string) => {
+    setExpandedCategoryIds((current) => {
+      const next = new Set(current);
+      const typedCategory = category as PiavCategory;
+      if (next.has(typedCategory)) {
+        next.delete(typedCategory);
+      } else {
+        next.add(typedCategory);
+      }
+      return next;
+    });
+  };
+
+  const expandAllCategories = () => {
+    setExpandedCategoryIds(new Set(categories.map((category) => category.id)));
+  };
+
+  const collapseAllCategories = () => {
+    setExpandedCategoryIds(new Set());
   };
 
   const focusResults = () => {
@@ -242,8 +267,12 @@ export function HomePage({
           <GroupedCauseList
             categories={categories}
             causesByCategory={causesByCategory}
+            expandedCategoryIds={expandedCategoryIds}
+            onCollapseAll={collapseAllCategories}
+            onExpandAll={expandAllCategories}
             onSelectCause={onSelectCause}
             onSelectSymptom={onSelectSymptom}
+            onToggleCategory={toggleCategory}
           />
         </div>
       </section>

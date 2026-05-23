@@ -4,25 +4,19 @@ import type { Category, PiavCategory } from "../types/medical";
 interface CollapsibleAcronymNavProps {
   activeCategory: PiavCategory;
   categories: Category[];
-  isCollapsed: boolean;
   onSelect: (category: PiavCategory) => void;
 }
 
 export function CollapsibleAcronymNav({
   activeCategory,
   categories,
-  isCollapsed,
   onSelect
 }: CollapsibleAcronymNavProps) {
   return (
     <section
       aria-label="TANTE PIAV ausgeschrieben"
-      className={`origin-top-left rounded-lg border border-clinical-line bg-white shadow-sm transition-[max-height,transform] duration-200 ease-out ${
-        isCollapsed
-          ? "invisible pointer-events-none max-h-0 -translate-x-6 scale-95 overflow-hidden opacity-0"
-          : "visible max-h-[860px] opacity-100"
-      }`}
-      aria-hidden={isCollapsed}
+      className="rounded-lg border border-clinical-line bg-white shadow-sm"
+      id="acronym-nav-expanded"
     >
       <div className="grid divide-y divide-clinical-line">
         {categories.map((category) => (
@@ -75,13 +69,20 @@ export function CollapsedAcronymRail({
   return (
     <nav
       aria-label="TANTE PIAV reduzierte Abschnittsnavigation"
-      className={`${isDesktop ? "hidden lg:fixed lg:top-24 lg:z-40 lg:flex lg:w-14 lg:flex-col lg:gap-2" : "sticky top-[172px] z-30 -mx-3 flex gap-1 overflow-x-auto border-y border-clinical-line bg-white px-3 py-2 sm:-mx-5 sm:top-[124px] sm:px-5 lg:hidden"} transition-transform duration-200 ease-out motion-reduce:transition-none ${
+      className={`${isDesktop ? "hidden lg:fixed lg:z-40 lg:flex lg:w-14 lg:flex-col lg:gap-2" : "fixed left-0 right-0 z-30 flex gap-1 overflow-x-auto border-y border-clinical-line bg-white/95 px-3 py-2 shadow-sm backdrop-blur sm:px-5 lg:hidden"} transition-[opacity,transform] duration-300 ease-out will-change-transform motion-reduce:transition-none ${
         isVisible
-          ? "visible pointer-events-auto translate-x-0 scale-100 opacity-100"
-          : "invisible pointer-events-none -translate-y-2 scale-95 opacity-0 lg:-translate-x-8 lg:translate-y-0"
+          ? "pointer-events-auto translate-x-0 translate-y-0 scale-100 opacity-100"
+          : "pointer-events-none -translate-y-3 scale-95 opacity-0 lg:-translate-x-8 lg:translate-y-0"
       }`}
       aria-hidden={!isVisible}
-      style={isDesktop ? { left: "max(1rem, calc((100vw - 80rem) / 2 + 1.5rem))" } : undefined}
+      style={
+        isDesktop
+          ? {
+              left: "max(1rem, calc((100vw - 80rem) / 2 + 1.5rem))",
+              top: "calc(var(--app-header-height) + 0.75rem)"
+            }
+          : { top: "calc(var(--app-header-height) - 1px)" }
+      }
     >
       {categories.map((category, index) => (
         <button
@@ -90,6 +91,7 @@ export function CollapsedAcronymRail({
           key={category.id}
           onClick={() => onSelect(category.id)}
           style={{ transitionDelay: isVisible ? `${index * 18}ms` : "0ms" }}
+          tabIndex={isVisible ? 0 : -1}
           title={category.title}
           type="button"
         >

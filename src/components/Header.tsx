@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import { Podcast } from "lucide-react";
 import type { PageId } from "../types/navigation";
 
@@ -16,8 +17,37 @@ const navItems: Array<{ id: PageId; label: string }> = [
 const headerImageSrc = `${import.meta.env.BASE_URL}tante-piav-header.png`;
 
 export function Header({ currentPage, onNavigate }: HeaderProps) {
+  const headerRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) {
+      return;
+    }
+
+    const updateHeaderHeight = () => {
+      document.documentElement.style.setProperty(
+        "--app-header-height",
+        `${Math.ceil(header.getBoundingClientRect().height)}px`
+      );
+    };
+
+    updateHeaderHeight();
+    const observer = new ResizeObserver(updateHeaderHeight);
+    observer.observe(header);
+    window.addEventListener("resize", updateHeaderHeight);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", updateHeaderHeight);
+    };
+  }, []);
+
   return (
-    <header className="sticky top-0 z-30 border-b border-clinical-line bg-white/95 backdrop-blur">
+    <header
+      className="sticky top-0 z-30 border-b border-clinical-line bg-white/95 backdrop-blur"
+      ref={headerRef}
+    >
       <div className="mx-auto grid max-w-7xl gap-2 px-3 py-1 sm:grid-cols-[minmax(220px,1fr)_auto] sm:items-center sm:px-5 lg:grid-cols-[minmax(420px,1fr)_auto] lg:gap-4 lg:px-6">
         <button
           aria-label="Zur App-Startseite"

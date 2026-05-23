@@ -22,7 +22,7 @@ export function GroupedCauseList({
 
         return (
           <section
-            className="min-w-0 scroll-mt-32 rounded-lg border border-clinical-line bg-white p-2.5 shadow-sm lg:scroll-mt-28"
+            className="min-w-0 scroll-mt-[calc(var(--app-header-height)+3.75rem)] rounded-lg border border-clinical-line bg-white p-2.5 shadow-sm lg:scroll-mt-[calc(var(--app-header-height)+2rem)]"
             id={`section-${category.id}`}
             key={category.id}
           >

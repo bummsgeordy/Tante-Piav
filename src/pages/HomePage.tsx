@@ -57,7 +57,11 @@ export function HomePage({
 
     const updateActiveCategory = () => {
       frame = 0;
-      const markerY = window.innerWidth < 1024 ? Math.min(420, window.innerHeight * 0.48) : 150;
+      const headerHeight = getHeaderHeight();
+      const markerY =
+        window.innerWidth < 1024
+          ? Math.min(window.innerHeight * 0.42, headerHeight + 96)
+          : headerHeight + 120;
       const sections = categories
         .map((category) => ({
           id: category.id,
@@ -100,20 +104,24 @@ export function HomePage({
   }, [visibleCauses.length]);
 
   useEffect(() => {
-    const collapseAt = 620;
-    const expandAt = 500;
     let frame = 0;
 
     const updateCollapsedState = () => {
       frame = 0;
-      const scrollY = window.scrollY;
+      const expandedNav = document.getElementById("acronym-nav-expanded");
+      if (!expandedNav) {
+        return;
+      }
+
+      const headerHeight = getHeaderHeight();
+      const expandedBottom = expandedNav.getBoundingClientRect().bottom;
 
       setIsAcronymCollapsed((current) => {
-        if (scrollY >= collapseAt) {
+        if (expandedBottom <= headerHeight + 10) {
           return true;
         }
 
-        if (scrollY <= expandAt) {
+        if (expandedBottom >= headerHeight + 70) {
           return false;
         }
 
@@ -190,7 +198,6 @@ export function HomePage({
             <CollapsibleAcronymNav
               activeCategory={activeCategory}
               categories={categories}
-              isCollapsed={isAcronymCollapsed}
               onSelect={scrollToCategory}
             />
           </div>
@@ -269,4 +276,12 @@ function getActiveFilterCount(filters: CauseFilters) {
     filters.frequency !== "all",
     filters.urgency !== "all"
   ].filter(Boolean).length;
+}
+
+function getHeaderHeight() {
+  const value = window
+    .getComputedStyle(document.documentElement)
+    .getPropertyValue("--app-header-height");
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) ? parsed : 96;
 }

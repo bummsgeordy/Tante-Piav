@@ -24,7 +24,7 @@ export function SearchContextBar({
   ].filter(Boolean);
 
   return (
-    <div className="sticky top-[226px] z-10 rounded-lg border border-clinical-line bg-white/95 px-3 py-2 text-sm shadow-sm backdrop-blur sm:top-[178px] lg:top-20">
+    <div className="sticky top-[calc(var(--app-header-height)+3.5rem)] z-10 rounded-lg border border-clinical-line bg-white/95 px-3 py-2 text-sm shadow-sm backdrop-blur lg:top-[calc(var(--app-header-height)+0.75rem)]">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <p className="font-semibold text-clinical-ink">{parts.join(" · ")}</p>
         <button

@@ -262,5 +262,399 @@ export const additionalCauseSeeds: Partial<Cause>[] = [
         type: "leitlinie"
       }
     ]
+  },
+  {
+    id: "vasovagale-synkope",
+    title: "Vasovagale / Reflexsynkope",
+    category: "vaskulaer-kardiovaskulaer",
+    frequency: "haeufig",
+    urgency: "ambulant",
+    specialties: ["allgemeinmedizin", "innere-medizin", "kardiologie"],
+    shortDescription:
+      "Häufige, meist benigne Synkopenform durch Reflexantwort mit Vasodilatation und/oder Bradykardie.",
+    examples: ["Synkope bei Schmerz", "Synkope nach langem Stehen", "Situative Synkope"],
+    typicalClues: ["Prodromi", "Übelkeit", "Schweißigkeit", "Auslöser", "rasche Erholung"],
+    redFlags: ["fehlende Prodromi", "Belastungssynkope", "Synkope im Liegen", "Herzerkrankung"],
+    relatedSymptoms: ["synkope-kollaps", "Schwindel", "Übelkeit"],
+    symptomEntryIds: ["synkope-kollaps"],
+    searchBoostTerms: ["Reflexsynkope", "vasovagal", "Ohnmacht", "Kollaps"],
+    tags: ["Synkope", "Reflex", "vasovagal", "orthostatisch"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "AAFP: Syncope Evaluation", url: "https://www.aafp.org/pubs/afp/issues/2023/1100/syncope.html", type: "review" },
+      { title: "MSD Manual Professional: Syncope", url: "https://www.msdmanuals.com/professional/cardiovascular-disorders/symptoms-of-cardiovascular-disorders/syncope", type: "manual" }
+    ]
+  },
+  {
+    id: "orthostatische-hypotonie",
+    title: "Orthostatische Hypotonie",
+    category: "vaskulaer-kardiovaskulaer",
+    frequency: "haeufig",
+    urgency: "ambulant",
+    specialties: ["allgemeinmedizin", "innere-medizin", "kardiologie", "neurologie"],
+    shortDescription:
+      "Blutdruckabfall beim Aufstehen, häufig durch Volumenmangel, Medikamente, autonome Dysfunktion oder Alter.",
+    examples: ["Volumenmangel", "autonome Neuropathie", "medikamentös verstärkte Orthostase"],
+    typicalClues: ["Schwindel beim Aufstehen", "Präsynkope", "Sturz", "Besserung im Liegen"],
+    redFlags: ["Synkope mit Verletzung", "persistierende Hypotonie", "GI-Blutung", "neurologische Defizite"],
+    relatedSymptoms: ["synkope-kollaps", "schwindel-vertigo"],
+    symptomEntryIds: ["synkope-kollaps", "schwindel-vertigo"],
+    searchBoostTerms: ["Orthostase", "Blutdruckabfall", "Präsynkope", "Aufstehen"],
+    tags: ["Orthostase", "Hypotonie", "Schwindel", "Synkope"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "AAFP: Syncope Evaluation", url: "https://www.aafp.org/pubs/afp/issues/2023/1100/syncope.html", type: "review" },
+      { title: "AAFP: Dizziness Evaluation", url: "https://www.aafp.org/pubs/afp/issues/2023/0500/dizziness.html", type: "review" }
+    ]
+  },
+  {
+    id: "tachyarrhythmie-bradyarrhythmie",
+    title: "Tachy- oder Bradyarrhythmie",
+    category: "vaskulaer-kardiovaskulaer",
+    frequency: "relevant",
+    urgency: "notfall",
+    specialties: ["kardiologie", "innere-medizin", "allgemeinmedizin"],
+    shortDescription:
+      "Rhythmusstörungen können Synkope, Palpitationen, Schwindel, Dyspnoe oder hämodynamische Instabilität verursachen.",
+    examples: ["Vorhofflimmern mit schneller Überleitung", "AV-Block", "ventrikuläre Tachykardie"],
+    typicalClues: ["Palpitationen", "unregelmäßiger Puls", "plötzlicher Beginn", "EKG-Auffälligkeit"],
+    redFlags: ["Synkope", "Thoraxschmerz", "Hypotonie", "bekannte Herzerkrankung"],
+    relatedSymptoms: ["synkope-kollaps", "palpitationen-tachykardie", "schwindel-vertigo", "dyspnoe-luftnot"],
+    symptomEntryIds: ["synkope-kollaps", "palpitationen-tachykardie", "schwindel-vertigo", "dyspnoe-luftnot"],
+    searchBoostTerms: ["Arrhythmie", "Bradykardie", "Tachykardie", "AV-Block", "VT"],
+    tags: ["Arrhythmie", "Synkope", "Palpitationen", "EKG"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "MSD Manual Professional: Palpitations", url: "https://www.msdmanuals.com/professional/cardiovascular-disorders/symptoms-of-cardiovascular-disorders/palpitations", type: "manual" },
+      { title: "ESC Guidelines", url: "https://www.escardio.org/Guidelines", type: "leitlinie" }
+    ]
+  },
+  {
+    id: "aortenstenose-strukturelle-herzerkrankung",
+    title: "Aortenstenose / strukturelle Herzerkrankung",
+    category: "vaskulaer-kardiovaskulaer",
+    frequency: "relevant",
+    urgency: "zeitnah",
+    specialties: ["kardiologie", "innere-medizin"],
+    shortDescription:
+      "Strukturelle Herzerkrankungen können Belastungssynkope, Dyspnoe, Thoraxschmerz oder Leistungsknick erklären.",
+    examples: ["Aortenstenose", "hypertrophe Kardiomyopathie", "pulmonale Hypertonie"],
+    typicalClues: ["Belastungssymptome", "Herzgeräusch", "Synkope", "Dyspnoe"],
+    redFlags: ["Belastungssynkope", "Ruhedyspnoe", "Hypotonie", "Thoraxschmerz"],
+    relatedSymptoms: ["synkope-kollaps", "dyspnoe-luftnot", "brustschmerz"],
+    symptomEntryIds: ["synkope-kollaps", "dyspnoe-luftnot", "brustschmerz"],
+    searchBoostTerms: ["Aortenstenose", "Herzgeräusch", "HOCM", "Kardiomyopathie"],
+    tags: ["Aortenstenose", "Herzerkrankung", "Synkope", "Herzgeräusch"],
+    hasMajorRedFlags: true,
+    sources: [{ title: "ESC Guidelines", url: "https://www.escardio.org/Guidelines", type: "leitlinie" }]
+  },
+  {
+    id: "gastrointestinale-blutung",
+    title: "Gastrointestinale Blutung",
+    category: "vaskulaer-kardiovaskulaer",
+    frequency: "relevant",
+    urgency: "notfall",
+    specialties: ["gastroenterologie", "innere-medizin", "allgemeinmedizin"],
+    shortDescription:
+      "Akute oder chronische GI-Blutung kann Anämie, Bauchschmerz, Synkope oder Kreislaufinstabilität verursachen.",
+    examples: ["Ulkusblutung", "Divertikelblutung", "Tumorblutung"],
+    typicalClues: ["Meläna", "Hämatochezie", "Hämatemesis", "Eisenmangel", "Antikoagulation"],
+    redFlags: ["Schock", "Synkope", "rascher Hb-Abfall", "Bluterbrechen", "Teerstuhl"],
+    relatedSymptoms: ["anaemie", "akuter-bauchschmerz", "synkope-kollaps"],
+    symptomEntryIds: ["anaemie", "akuter-bauchschmerz", "synkope-kollaps"],
+    searchBoostTerms: ["GI-Blutung", "Meläna", "Hämatochezie", "Hämatemesis", "okkulte Blutung"],
+    tags: ["Blutung", "Anämie", "Gastroenterologie", "Notfall"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "MSD Manual Professional", url: "https://www.msdmanuals.com/professional", type: "manual" },
+      { title: "AWMF Leitlinienregister", url: "https://register.awmf.org/", type: "leitlinie" }
+    ]
+  },
+  {
+    id: "appendizitis",
+    title: "Appendizitis",
+    category: "infektion",
+    frequency: "haeufig",
+    urgency: "zeitnah",
+    specialties: ["gastroenterologie", "allgemeinmedizin", "innere-medizin"],
+    shortDescription:
+      "Häufige chirurgische Ursache akuter Bauchschmerzen, klassisch rechts unten, aber klinisch variabel.",
+    examples: ["unkomplizierte Appendizitis", "perforierte Appendizitis"],
+    typicalClues: ["periumbilikaler Beginn", "Wanderung nach rechts unten", "Fieber", "Übelkeit"],
+    redFlags: ["Peritonismus", "Sepsiszeichen", "freie Luft/Perforation", "Schwangerschaft"],
+    relatedSymptoms: ["akuter-bauchschmerz", "uebelkeit-erbrechen", "fieber-unklarer-genese"],
+    symptomEntryIds: ["akuter-bauchschmerz", "uebelkeit-erbrechen", "fieber-unklarer-genese"],
+    searchBoostTerms: ["Blinddarm", "McBurney", "rechtsseitiger Unterbauchschmerz"],
+    tags: ["Appendizitis", "Bauchschmerz", "Fieber", "Chirurgie"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "AAFP: Acute Abdominal Pain in Adults", url: "https://www.aafp.org/pubs/afp/issues/2023/0600/acute-abdominal-pain-adults.html", type: "review" },
+      { title: "NCBI Bookshelf: Acute Abdomen", url: "https://www.ncbi.nlm.nih.gov/books/NBK459328/", type: "review" }
+    ]
+  },
+  {
+    id: "gallensteine-cholezystitis",
+    title: "Gallensteine / Cholezystitis",
+    category: "infektion",
+    frequency: "haeufig",
+    urgency: "zeitnah",
+    specialties: ["gastroenterologie", "allgemeinmedizin", "innere-medizin"],
+    shortDescription:
+      "Biliäre Kolik und Cholezystitis verursachen häufig rechtsseitige Oberbauchschmerzen, Übelkeit und ggf. Fieber.",
+    examples: ["biliäre Kolik", "akute Cholezystitis", "Choledocholithiasis"],
+    typicalClues: ["rechter Oberbauch", "postprandial", "Übelkeit", "Murphy-Zeichen"],
+    redFlags: ["Ikterus plus Fieber", "Sepsis", "Peritonismus", "Pankreatitiszeichen"],
+    relatedSymptoms: ["akuter-bauchschmerz", "uebelkeit-erbrechen", "fieber-unklarer-genese"],
+    symptomEntryIds: ["akuter-bauchschmerz", "uebelkeit-erbrechen", "fieber-unklarer-genese"],
+    searchBoostTerms: ["Gallenblase", "biliäre Kolik", "Choledocholithiasis", "Murphy"],
+    tags: ["Gallensteine", "Cholezystitis", "Oberbauch", "Ikterus"],
+    hasMajorRedFlags: true,
+    sources: [{ title: "AAFP: Acute Abdominal Pain in Adults", url: "https://www.aafp.org/pubs/afp/issues/2023/0600/acute-abdominal-pain-adults.html", type: "review" }]
+  },
+  {
+    id: "pankreatitis",
+    title: "Akute Pankreatitis",
+    category: "toxisch-medikamentoes",
+    frequency: "relevant",
+    urgency: "notfall",
+    specialties: ["gastroenterologie", "innere-medizin", "allgemeinmedizin"],
+    shortDescription:
+      "Entzündung des Pankreas, häufig biliär oder alkoholassoziiert, mit Oberbauchschmerz und Übelkeit/Erbrechen.",
+    examples: ["biliäre Pankreatitis", "alkoholassoziierte Pankreatitis", "medikamentös"],
+    typicalClues: ["gürtelförmiger Oberbauchschmerz", "Erbrechen", "Lipase erhöht", "Alkohol/Gallensteine"],
+    redFlags: ["Schock", "Hypoxie", "Organversagen", "Fieber/Sepsis", "starke Schmerzen"],
+    relatedSymptoms: ["akuter-bauchschmerz", "uebelkeit-erbrechen"],
+    symptomEntryIds: ["akuter-bauchschmerz", "uebelkeit-erbrechen"],
+    searchBoostTerms: ["Lipase", "Pankreas", "Oberbauch", "Gürtelschmerz"],
+    tags: ["Pankreatitis", "Lipase", "Bauchschmerz", "Alkohol", "Gallensteine"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "AAFP: Acute Abdominal Pain in Adults", url: "https://www.aafp.org/pubs/afp/issues/2023/0600/acute-abdominal-pain-adults.html", type: "review" },
+      { title: "AWMF Leitlinienregister", url: "https://register.awmf.org/", type: "leitlinie" }
+    ]
+  },
+  {
+    id: "ileus",
+    title: "Ileus / Darmobstruktion",
+    category: "vaskulaer-kardiovaskulaer",
+    frequency: "relevant",
+    urgency: "notfall",
+    specialties: ["gastroenterologie", "innere-medizin", "allgemeinmedizin"],
+    shortDescription:
+      "Mechanische oder paralytische Darmobstruktion mit Bauchschmerz, Distension, Erbrechen und Stuhl-/Windverhalt.",
+    examples: ["Bridenileus", "Tumorobstruktion", "paralytischer Ileus"],
+    typicalClues: ["Distension", "Erbrechen", "Voroperationen", "Stuhlverhalt"],
+    redFlags: ["Peritonismus", "Ischämieverdacht", "Sepsis", "Kreislaufinstabilität"],
+    relatedSymptoms: ["akuter-bauchschmerz", "uebelkeit-erbrechen"],
+    symptomEntryIds: ["akuter-bauchschmerz", "uebelkeit-erbrechen"],
+    searchBoostTerms: ["Darmverschluss", "Obstruktion", "Stuhlverhalt", "Briden"],
+    tags: ["Ileus", "Darmverschluss", "Bauchschmerz", "Erbrechen"],
+    hasMajorRedFlags: true,
+    sources: [{ title: "NCBI Bookshelf: Acute Abdomen", url: "https://www.ncbi.nlm.nih.gov/books/NBK459328/", type: "review" }]
+  },
+  {
+    id: "eisenmangelanaemie",
+    title: "Eisenmangelanämie",
+    category: "endokrin-metabolisch",
+    frequency: "haeufig",
+    urgency: "zeitnah",
+    specialties: ["allgemeinmedizin", "innere-medizin", "gastroenterologie", "gynaekologie"],
+    shortDescription:
+      "Häufige Anämieursache durch Blutverlust, erhöhten Bedarf oder Malabsorption; Ursache des Eisenmangels muss aktiv gesucht werden.",
+    examples: ["GI-Blutung", "starke Menstruation", "Zöliakie", "Schwangerschaft"],
+    typicalClues: ["Ferritin niedrig", "Transferrinsättigung niedrig", "Mikrozytose", "Müdigkeit"],
+    redFlags: ["GI-Blutung", "Gewichtsverlust", "rascher Hb-Abfall", "postmenopausaler/neuer Eisenmangel"],
+    relatedSymptoms: ["anaemie", "muedigkeit-leistungsknick", "gewichtsabnahme"],
+    symptomEntryIds: ["anaemie", "muedigkeit-leistungsknick", "gewichtsabnahme"],
+    searchBoostTerms: ["Eisen", "Ferritin", "Transferrinsättigung", "mikrozytär", "Blutarmut"],
+    tags: ["Eisenmangel", "Anämie", "Ferritin", "GI-Blutung"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "NEJM: Iron-Deficiency Anemia", url: "https://www.nejm.org/doi/full/10.1056/NEJMra1401038", type: "review" },
+      { title: "MSD Manual Professional: Iron Deficiency Anemia", url: "https://www.msdmanuals.com/professional/hematology-and-oncology/anemias-caused-by-deficient-erythropoiesis/iron-deficiency-anemia", type: "manual" }
+    ]
+  },
+  {
+    id: "vitamin-b12-folatmangel",
+    title: "Vitamin-B12- oder Folatmangel",
+    category: "endokrin-metabolisch",
+    frequency: "relevant",
+    urgency: "ambulant",
+    specialties: ["allgemeinmedizin", "innere-medizin", "gastroenterologie", "neurologie"],
+    shortDescription:
+      "Megaloblastäre Anämie durch B12- oder Folatmangel; B12-Mangel kann neurologische Symptome verursachen.",
+    examples: ["perniziöse Anämie", "Malabsorption", "vegane Ernährung", "Medikamente"],
+    typicalClues: ["Makrozytose", "Glossitis", "Parästhesien", "Gangunsicherheit"],
+    redFlags: ["neurologische Ausfälle", "Panzytopenie", "schwere Anämie"],
+    relatedSymptoms: ["anaemie", "muedigkeit-leistungsknick", "schwindel-vertigo"],
+    symptomEntryIds: ["anaemie", "muedigkeit-leistungsknick", "schwindel-vertigo"],
+    searchBoostTerms: ["B12", "Folat", "makrozytär", "perniziöse Anämie", "Megaloblasten"],
+    tags: ["B12", "Folat", "Anämie", "Neurologie"],
+    hasMajorRedFlags: true,
+    sources: [{ title: "MSD Manual Professional: Evaluation of Anemia", url: "https://www.msdmanuals.com/professional/hematology-and-oncology/approach-to-the-patient-with-anemia/evaluation-of-anemia", type: "manual" }]
+  },
+  {
+    id: "anaemie-chronische-entzuendung-ckd",
+    title: "Anämie bei chronischer Entzündung oder CKD",
+    category: "endokrin-metabolisch",
+    frequency: "haeufig",
+    urgency: "ambulant",
+    specialties: ["innere-medizin", "nephrologie", "rheumatologie", "allgemeinmedizin"],
+    shortDescription:
+      "Normozytäre oder gemischte Anämie bei chronischer Entzündung, CKD, Tumorerkrankung oder Infektion.",
+    examples: ["CKD-Anämie", "rheumatische Entzündung", "chronische Infektion", "Malignom"],
+    typicalClues: ["CRP erhöht", "Ferritin normal/hoch", "eGFR reduziert", "normozytär"],
+    redFlags: ["Panzytopenie", "B-Symptomatik", "rascher Hb-Abfall", "Nierenversagen"],
+    relatedSymptoms: ["anaemie", "muedigkeit-leistungsknick", "nierenschwaeche-egfr-abfall"],
+    symptomEntryIds: ["anaemie", "muedigkeit-leistungsknick", "nierenschwaeche-egfr-abfall"],
+    searchBoostTerms: ["Anemia of chronic disease", "CKD-Anämie", "Entzündungsanämie", "EPO"],
+    tags: ["Anämie", "CKD", "Entzündung", "Ferritin"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "AAFP: Anemia in Older Adults", url: "https://www.aafp.org/pubs/afp/issues/2018/1001/p437.html", type: "review" },
+      { title: "KDIGO Guidelines", url: "https://kdigo.org/guidelines/", type: "leitlinie" }
+    ]
+  },
+  {
+    id: "haemolyse",
+    title: "Hämolyse",
+    category: "autoimmun",
+    frequency: "relevant",
+    urgency: "zeitnah",
+    specialties: ["innere-medizin", "onkologie", "rheumatologie"],
+    shortDescription:
+      "Beschleunigter Erythrozytenabbau mit Anämie, Ikterus, erhöhtem LDH/indirektem Bilirubin und Retikulozytose.",
+    examples: ["autoimmune Hämolyse", "mechanische Hämolyse", "medikamentös", "angeborene Hämoglobinopathie"],
+    typicalClues: ["Ikterus", "dunkler Urin", "LDH erhöht", "Haptoglobin niedrig", "Retikulozyten hoch"],
+    redFlags: ["rascher Hb-Abfall", "Hämoglobinurie", "Nierenversagen", "Thrombopenie/Schistocyten"],
+    relatedSymptoms: ["anaemie", "muedigkeit-leistungsknick"],
+    symptomEntryIds: ["anaemie", "muedigkeit-leistungsknick"],
+    searchBoostTerms: ["Hämolyse", "LDH", "Haptoglobin", "Coombs", "Schistozyten"],
+    tags: ["Hämolyse", "Anämie", "Autoimmun", "Ikterus"],
+    hasMajorRedFlags: true,
+    sources: [{ title: "MSD Manual Professional: Evaluation of Anemia", url: "https://www.msdmanuals.com/professional/hematology-and-oncology/approach-to-the-patient-with-anemia/evaluation-of-anemia", type: "manual" }]
+  },
+  {
+    id: "raas-mra-hyperkaliaemie",
+    title: "RAAS-/MRA-assoziierte Hyperkaliämie",
+    category: "toxisch-medikamentoes",
+    frequency: "haeufig",
+    urgency: "zeitnah",
+    specialties: ["nephrologie", "kardiologie", "innere-medizin", "allgemeinmedizin"],
+    shortDescription:
+      "ACE-Hemmer, ARB, MRA und Kombinationen können besonders bei CKD, Diabetes, Herzinsuffizienz oder AKI Hyperkaliämie auslösen.",
+    examples: ["ACE-Hemmer plus Spironolacton", "ARB bei CKD", "Trimethoprim-Kombination"],
+    typicalClues: ["Medikamentenstart/Dosissteigerung", "CKD", "Kaliumpräparate", "AKI"],
+    redFlags: ["EKG-Veränderungen", "Kalium stark erhöht", "Muskelschwäche", "AKI"],
+    relatedSymptoms: ["hyperkaliaemie", "nierenschwaeche-egfr-abfall"],
+    symptomEntryIds: ["hyperkaliaemie", "nierenschwaeche-egfr-abfall"],
+    searchBoostTerms: ["ACE-Hemmer", "ARB", "Spironolacton", "Eplerenon", "RAAS", "MRA"],
+    tags: ["Hyperkaliämie", "RAAS", "Medikamente", "CKD"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "NEJM: Managing Hyperkalemia Caused by RAAS Inhibitors", url: "https://www.nejm.org/doi/full/10.1056/NEJMra035279", type: "review" },
+      { title: "AAFP: Potassium Disorders", url: "https://www.aafp.org/pubs/afp/issues/2023/0100/potassium-disorders-hypokalemia-hyperkalemia.html", type: "review" }
+    ]
+  },
+  {
+    id: "pseudohyperkaliaemie",
+    title: "Pseudohyperkaliämie",
+    category: "toxisch-medikamentoes",
+    frequency: "relevant",
+    urgency: "ambulant",
+    specialties: ["innere-medizin", "allgemeinmedizin", "nephrologie"],
+    shortDescription:
+      "Falsch erhöhtes Kalium durch Präanalytik oder Zellzerfall in der Probe; muss vor riskanter Behandlung bedacht werden.",
+    examples: ["Hämolyse der Probe", "starkes Faustballen", "Thrombozytose/Leukozytose"],
+    typicalClues: ["klinisch asymptomatisch", "normales EKG", "hämolytische Probe", "Diskrepanz zu Vorwerten"],
+    redFlags: ["trotzdem EKG-Veränderungen", "hoher Risikokontext", "echte Hyperkaliämie nicht sicher ausgeschlossen"],
+    relatedSymptoms: ["hyperkaliaemie"],
+    symptomEntryIds: ["hyperkaliaemie"],
+    searchBoostTerms: ["Hämolyse Probe", "Präanalytik", "falsch erhöhtes Kalium"],
+    tags: ["Pseudohyperkaliämie", "Kalium", "Präanalytik"],
+    hasMajorRedFlags: true,
+    sources: [{ title: "AAFP: Potassium Disorders", url: "https://www.aafp.org/pubs/afp/issues/2023/0100/potassium-disorders-hypokalemia-hyperkalemia.html", type: "review" }]
+  },
+  {
+    id: "rhabdomyolyse",
+    title: "Rhabdomyolyse",
+    category: "trauma",
+    frequency: "relevant",
+    urgency: "notfall",
+    specialties: ["innere-medizin", "nephrologie", "allgemeinmedizin"],
+    shortDescription:
+      "Muskelzerfall kann Hyperkaliämie, AKI, Myoglobinurie und systemische Komplikationen verursachen.",
+    examples: ["Immobilisation", "Trauma", "Statinassoziiert", "Krampfanfall", "Intoxikation"],
+    typicalClues: ["Muskelschmerz", "Schwäche", "dunkler Urin", "CK stark erhöht"],
+    redFlags: ["Hyperkaliämie", "AKI", "Kompartmentsyndrom", "Arrhythmie"],
+    relatedSymptoms: ["hyperkaliaemie", "nierenschwaeche-egfr-abfall"],
+    symptomEntryIds: ["hyperkaliaemie", "nierenschwaeche-egfr-abfall"],
+    searchBoostTerms: ["CK", "Myoglobin", "Muskelzerfall", "dunkler Urin"],
+    tags: ["Rhabdomyolyse", "Hyperkaliämie", "AKI", "Trauma"],
+    hasMajorRedFlags: true,
+    sources: [{ title: "MSD Manual Professional", url: "https://www.msdmanuals.com/professional", type: "manual" }]
+  },
+  {
+    id: "benigner-paroxysmaler-lagerungsschwindel",
+    title: "Benigner paroxysmaler Lagerungsschwindel",
+    category: "vaskulaer-kardiovaskulaer",
+    frequency: "haeufig",
+    urgency: "ambulant",
+    specialties: ["allgemeinmedizin", "neurologie"],
+    shortDescription:
+      "Häufige periphere Schwindelursache mit kurzen, lageabhängigen Drehschwindelattacken.",
+    examples: ["posteriorer Bogengang", "horizontaler Bogengang"],
+    typicalClues: ["Sekunden dauernd", "lagegetriggert", "Dix-Hallpike passend", "zwischen Attacken besser"],
+    redFlags: ["neurologische Defizite", "neuer starker Kopfschmerz", "Gangunfähigkeit", "atypischer Nystagmus"],
+    relatedSymptoms: ["schwindel-vertigo", "uebelkeit-erbrechen"],
+    symptomEntryIds: ["schwindel-vertigo", "uebelkeit-erbrechen"],
+    searchBoostTerms: ["BPPV", "Lagerungsschwindel", "Dix-Hallpike", "Epley"],
+    tags: ["Schwindel", "BPPV", "Vertigo", "Lagerung"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "NEJM: Benign Paroxysmal Positional Vertigo", url: "https://www.nejm.org/doi/abs/10.1056/NEJM199911183412107", type: "review" },
+      { title: "AAFP: Dizziness Evaluation", url: "https://www.aafp.org/pubs/afp/issues/2023/0500/dizziness.html", type: "review" }
+    ]
+  },
+  {
+    id: "vestibulaere-migraene",
+    title: "Vestibuläre Migräne",
+    category: "vaskulaer-kardiovaskulaer",
+    frequency: "relevant",
+    urgency: "ambulant",
+    specialties: ["neurologie", "allgemeinmedizin"],
+    shortDescription:
+      "Episodischer Schwindel im Zusammenhang mit Migräneanamnese, Kopfschmerz, Photophobie oder Phonophobie.",
+    examples: ["Schwindelattacken mit Migränesymptomen", "Migräneäquivalent"],
+    typicalClues: ["wiederkehrende Episoden", "Migräne", "Licht-/Lärmempfindlichkeit", "Übelkeit"],
+    redFlags: ["erstmaliger schwerer Kopfschmerz", "fokale Defizite", "anhaltende Gangunfähigkeit"],
+    relatedSymptoms: ["schwindel-vertigo", "uebelkeit-erbrechen"],
+    symptomEntryIds: ["schwindel-vertigo", "uebelkeit-erbrechen"],
+    searchBoostTerms: ["vestibuläre Migräne", "Migräneschwindel", "Photophobie", "Phonophobie"],
+    tags: ["Schwindel", "Migräne", "Vertigo", "Neurologie"],
+    hasMajorRedFlags: true,
+    sources: [{ title: "AAFP: Dizziness Evaluation", url: "https://www.aafp.org/pubs/afp/issues/2023/0500/dizziness.html", type: "review" }]
+  },
+  {
+    id: "vestibularisneuritis",
+    title: "Vestibularisneuritis / akutes vestibuläres Syndrom",
+    category: "infektion",
+    frequency: "relevant",
+    urgency: "zeitnah",
+    specialties: ["neurologie", "allgemeinmedizin", "innere-medizin"],
+    shortDescription:
+      "Akuter anhaltender vestibulärer Schwindel, der klinisch von zentralen Ursachen wie Kleinhirn-/Hirnstamminfarkt abgegrenzt werden muss.",
+    examples: ["akute unilaterale Vestibulopathie", "postinfektiöse Neuritis"],
+    typicalClues: ["anhaltender Drehschwindel", "Übelkeit", "Nystagmus", "Gangunsicherheit"],
+    redFlags: ["HINTS zentral", "fokale neurologische Zeichen", "neuer Kopf-/Nackenschmerz", "Gangunfähigkeit"],
+    relatedSymptoms: ["schwindel-vertigo", "uebelkeit-erbrechen"],
+    symptomEntryIds: ["schwindel-vertigo", "uebelkeit-erbrechen"],
+    searchBoostTerms: ["Vestibularisneuritis", "akutes vestibuläres Syndrom", "HINTS"],
+    tags: ["Schwindel", "Vestibularisneuritis", "AVS", "Schlaganfall"],
+    hasMajorRedFlags: true,
+    sources: [
+      { title: "AAFP: Dizziness Evaluation", url: "https://www.aafp.org/pubs/afp/issues/2023/0500/dizziness.html", type: "review" },
+      { title: "PMC: TiTrATE approach", url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC4522574/", type: "review" }
+    ]
   }
 ];

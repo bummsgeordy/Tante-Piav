@@ -1214,5 +1214,460 @@ export const symptomEntries: SymptomEntry[] = [
         type: "leitlinie"
       }
     ]
+  },
+  {
+    id: "synkope-kollaps",
+    title: "Synkope / Kollaps / Präsynkope",
+    kind: "symptom",
+    synonyms: [
+      "Synkope",
+      "Kollaps",
+      "Ohnmacht",
+      "Bewusstlosigkeit",
+      "Präsynkope",
+      "Praesynkope",
+      "Wegtreten",
+      "Blackout",
+      "plötzlicher Bewusstseinsverlust"
+    ],
+    shortDescription:
+      "Kurzzeitiger Bewusstseinsverlust oder Beinahe-Synkope verlangt zuerst die Trennung von benigner Reflexsynkope, orthostatischer Ursache, Arrhythmie, struktureller Herzerkrankung, Blutung, Lungenembolie und neurologischen Mimics.",
+    redFlags: [
+      "Synkope unter Belastung oder im Liegen",
+      "Thoraxschmerz, Dyspnoe oder Palpitationen vor Synkope",
+      "bekannte strukturelle Herzerkrankung",
+      "Familienanamnese plötzlicher Herztod",
+      "persistierende Hypotonie oder Brady-/Tachyarrhythmie",
+      "neurologisches Defizit oder stärkster Kopfschmerz",
+      "Hinweise auf Blutung"
+    ],
+    commonCauseIds: [
+      "vasovagale-synkope",
+      "orthostatische-hypotonie",
+      "medikamentoes-induzierte-hypotonie",
+      "dehydratation-exsikkose",
+      "angststoerung-panikattacken"
+    ],
+    importantCauseIds: [
+      "tachyarrhythmie-bradyarrhythmie",
+      "akutes-koronarsyndrom",
+      "aortenstenose-strukturelle-herzerkrankung",
+      "lungenembolie",
+      "gastrointestinale-blutung"
+    ],
+    rareButImportantCauseIds: [
+      "aortendissektion",
+      "subarachnoidalblutung",
+      "epileptischer-anfall",
+      "ektopische-schwangerschaft"
+    ],
+    piavCategories: [
+      "vaskulaer-kardiovaskulaer",
+      "toxisch-medikamentoes",
+      "endokrin-metabolisch",
+      "psychosomatisch-psychiatrisch",
+      "neoplastisch"
+    ],
+    specialties: ["allgemeinmedizin", "innere-medizin", "kardiologie", "neurologie"],
+    suggestedBasicWorkup: [
+      "Ereignis genau rekonstruieren: Position, Belastung, Prodromi, Dauer, Erholung, Verletzung",
+      "Vitalparameter inklusive Orthostase",
+      "12-Kanal-EKG",
+      "Medikamente, Volumenstatus, Blutungszeichen und Schwangerschaftsmöglichkeit prüfen",
+      "Blutbild, Elektrolyte, Glukose, Kreatinin je nach Kontext",
+      "bei kardialen Red Flags: zeitnahe Notfall-/kardiologische Abklärung"
+    ],
+    tags: ["Synkope", "Kollaps", "Ohnmacht", "Arrhythmie", "Orthostase", "Reflexsynkope", "Herz"],
+    sources: [
+      {
+        title: "AAFP: Syncope Evaluation and Differential Diagnosis",
+        url: "https://www.aafp.org/pubs/afp/issues/2023/1100/syncope.html",
+        type: "review"
+      },
+      {
+        title: "MSD Manual Professional: Syncope",
+        url: "https://www.msdmanuals.com/professional/cardiovascular-disorders/symptoms-of-cardiovascular-disorders/syncope",
+        type: "manual"
+      },
+      {
+        title: "ESC Syncope Guidelines",
+        url: "https://www.escardio.org/Guidelines/Clinical-Practice-Guidelines/Syncope-Guidelines-on-Diagnosis-and-Management-of",
+        type: "leitlinie"
+      }
+    ]
+  },
+  {
+    id: "akuter-bauchschmerz",
+    title: "Akuter Bauchschmerz / akutes Abdomen",
+    kind: "symptom",
+    synonyms: [
+      "Bauchschmerz",
+      "Bauchschmerzen",
+      "Abdominalschmerz",
+      "akutes Abdomen",
+      "Unterbauchschmerz",
+      "Oberbauchschmerz",
+      "Flankenschmerz",
+      "Kolik"
+    ],
+    shortDescription:
+      "Akuter Bauchschmerz ist breit und zeitkritisch: häufig gastroenterologisch, biliär, urologisch oder gynäkologisch, aber vaskuläre und chirurgische Ursachen müssen früh erkannt werden.",
+    redFlags: [
+      "Peritonismus oder Abwehrspannung",
+      "Kreislaufinstabilität",
+      "starker progredienter Schmerz",
+      "Schmerz plus Synkope",
+      "Blut im Stuhl oder Hämatemesis",
+      "positiver Schwangerschaftstest",
+      "Immunsuppression oder hohes Alter mit diskreter Symptomatik"
+    ],
+    commonCauseIds: [
+      "gastroenteritis-intraabdominelle-infektion",
+      "reflux-gastritis-ulcus",
+      "gallensteine-cholezystitis",
+      "appendizitis",
+      "pyelonephritis-harnwegsinfekt"
+    ],
+    importantCauseIds: [
+      "akutes-abdomen",
+      "pankreatitis",
+      "ileus",
+      "gastrointestinale-blutung",
+      "ektopische-schwangerschaft"
+    ],
+    rareButImportantCauseIds: [
+      "mesenterialischaemie",
+      "aortendissektion",
+      "rupturiertes-aortenaneurysma",
+      "nebenniereninsuffizienz"
+    ],
+    piavCategories: [
+      "infektion",
+      "vaskulaer-kardiovaskulaer",
+      "endokrin-metabolisch",
+      "toxisch-medikamentoes",
+      "neoplastisch",
+      "trauma"
+    ],
+    specialties: ["allgemeinmedizin", "innere-medizin", "gastroenterologie", "urologie", "gynaekologie"],
+    suggestedBasicWorkup: [
+      "Vitalparameter und Peritonismus priorisieren",
+      "Schmerzlokalisation, Zeitverlauf, Erbrechen, Stuhl/Urin, Medikamente und Voroperationen erfassen",
+      "Schwangerschaftstest bei möglicher Schwangerschaft",
+      "BB, CRP, Elektrolyte, Kreatinin, Leberwerte, Lipase, Urinstatus je nach Kontext",
+      "Sonographie/CT abhängig von Lokalisation, Alter, Red Flags und Setting"
+    ],
+    tags: ["Bauchschmerz", "akutes Abdomen", "Appendizitis", "Cholezystitis", "Pankreatitis", "Mesenterialischämie"],
+    sources: [
+      {
+        title: "AAFP: Acute Abdominal Pain in Adults",
+        url: "https://www.aafp.org/pubs/afp/issues/2023/0600/acute-abdominal-pain-adults.html",
+        type: "review"
+      },
+      {
+        title: "NEJM: Acute Abdomen in the Modern Era",
+        url: "https://www.nejm.org/doi/abs/10.1056/NEJMra2304821",
+        type: "review"
+      },
+      {
+        title: "NCBI Bookshelf: Acute Abdomen",
+        url: "https://www.ncbi.nlm.nih.gov/books/NBK459328/",
+        type: "review"
+      }
+    ]
+  },
+  {
+    id: "fieber-unklarer-genese",
+    title: "Fieber unklarer Genese / prolongiertes Fieber",
+    kind: "syndrom",
+    synonyms: [
+      "Fieber unklarer Genese",
+      "FUO",
+      "prolongiertes Fieber",
+      "unklares Fieber",
+      "Fieber ohne Fokus",
+      "B-Symptomatik",
+      "Nachtschweiß"
+    ],
+    shortDescription:
+      "Prolongiertes oder unklares Fieber wird ätiologisch breit gedacht: Infektionen, Neoplasien, nichtinfektiöse Entzündung/Autoimmunität, Medikamente und seltene sonstige Ursachen.",
+    redFlags: [
+      "Sepsiszeichen oder Kreislaufinstabilität",
+      "Immunsuppression",
+      "neurologische Symptome oder Meningismus",
+      "neue Herzgeräusche oder Emboliezeichen",
+      "B-Symptomatik mit Lymphadenopathie",
+      "Reiserückkehr mit schwerem Krankheitsgefühl"
+    ],
+    commonCauseIds: [
+      "atemwegsinfekt-pneumonie",
+      "pyelonephritis-harnwegsinfekt",
+      "gastroenteritis-intraabdominelle-infektion",
+      "arzneimittelnebenwirkung",
+      "haut-weichteilinfektion"
+    ],
+    importantCauseIds: [
+      "endokarditis",
+      "tuberkulose",
+      "haematologische-neoplasien",
+      "systemischer-lupus-erythematodes",
+      "vaskulitis-polymyalgia-rheumatica"
+    ],
+    rareButImportantCauseIds: [
+      "adult-onset-still-disease",
+      "hiv",
+      "osteomyelitis",
+      "castleman-erkrankung",
+      "medikamentenfieber"
+    ],
+    piavCategories: ["infektion", "neoplastisch", "autoimmun", "toxisch-medikamentoes"],
+    specialties: ["allgemeinmedizin", "innere-medizin", "infektiologie", "rheumatologie", "onkologie"],
+    suggestedBasicWorkup: [
+      "Fieber objektivieren und Verlauf dokumentieren",
+      "Reise-, Tier-, Berufs-, Medikamenten-, Sexual- und Expositionsanamnese",
+      "wiederholte körperliche Untersuchung inkl. Haut, Lymphknoten, Herz, Abdomen",
+      "BB mit Differenzial, CRP/BSG, Leber-/Nierenwerte, Urinstatus, Blutkulturen je nach Setting",
+      "Bildgebung und Spezialdiagnostik fokussiert nach Befunden"
+    ],
+    tags: ["FUO", "Fieber", "Infektion", "Malignom", "Rheumatologie", "Medikamentenfieber", "Nachtschweiß"],
+    sources: [
+      {
+        title: "NEJM: Fever of Unknown Origin",
+        url: "https://www.nejm.org/doi/full/10.1056/NEJMra2111003",
+        type: "review"
+      },
+      {
+        title: "AAFP: Fever of Unknown Origin in Adults",
+        url: "https://www.aafp.org/pubs/afp/issues/2022/0200/p137.html",
+        type: "review"
+      },
+      {
+        title: "NCBI Bookshelf: Fever of Unknown Origin",
+        url: "https://www.ncbi.nlm.nih.gov/books/NBK532265/",
+        type: "review"
+      }
+    ]
+  },
+  {
+    id: "anaemie",
+    title: "Anämie / niedriges Hämoglobin",
+    kind: "labor",
+    synonyms: [
+      "Anämie",
+      "Anaemie",
+      "Blutarmut",
+      "Hämoglobin niedrig",
+      "Hb niedrig",
+      "Eisenmangel",
+      "mikrozytär",
+      "makrozytär",
+      "normozytär"
+    ],
+    shortDescription:
+      "Anämie ist ein Befund mit breiter Ätiologie. MCV, Retikulozyten, Eisenstatus, Entzündung, Nierenfunktion, Blutungshinweise und B-Symptomatik strukturieren die Abklärung.",
+    redFlags: [
+      "hämodynamische Instabilität oder aktive Blutung",
+      "Thoraxschmerz, Synkope oder Ruhedyspnoe",
+      "Meläna, Hämatochezie oder Hämatemesis",
+      "Panzytopenie oder Blastenverdacht",
+      "B-Symptomatik oder Lymphadenopathie",
+      "rascher Hb-Abfall"
+    ],
+    commonCauseIds: [
+      "eisenmangelanaemie",
+      "gastrointestinale-blutung",
+      "anaemie-chronische-entzuendung-ckd",
+      "vitamin-b12-folatmangel",
+      "menstruationsassoziierter-eisenmangel"
+    ],
+    importantCauseIds: [
+      "haematologische-neoplasien",
+      "haemolyse",
+      "chronische-niereninsuffizienz",
+      "kolorektales-karzinom",
+      "zoeliakie"
+    ],
+    rareButImportantCauseIds: [
+      "myelodysplastisches-syndrom",
+      "aplastische-anaemie",
+      "thrombotische-mikroangiopathie",
+      "paroxysmale-naechtliche-haemoglobinurie"
+    ],
+    piavCategories: ["neoplastisch", "endokrin-metabolisch", "autoimmun", "infektion", "angeboren", "toxisch-medikamentoes"],
+    specialties: ["allgemeinmedizin", "innere-medizin", "gastroenterologie", "nephrologie", "onkologie"],
+    suggestedBasicWorkup: [
+      "BB mit MCV/RDW und Retikulozyten",
+      "Ferritin, Transferrinsättigung, CRP; B12/Folat je nach MCV/Kontext",
+      "Kreatinin/eGFR, Leberwerte, Hämolyseparameter bei Verdacht",
+      "Blutungsanamnese, Menstruation, GI-Symptome, Ernährung und Medikamente",
+      "bei Eisenmangel ohne plausible Ursache GI-/gynäkologische Blutungsquelle prüfen"
+    ],
+    tags: ["Anämie", "Hb", "Eisenmangel", "B12", "Folat", "GI-Blutung", "CKD", "Myelodysplasie"],
+    sources: [
+      {
+        title: "MSD Manual Professional: Evaluation of Anemia",
+        url: "https://www.msdmanuals.com/professional/hematology-and-oncology/approach-to-the-patient-with-anemia/evaluation-of-anemia",
+        type: "manual"
+      },
+      {
+        title: "NEJM: Iron-Deficiency Anemia",
+        url: "https://www.nejm.org/doi/full/10.1056/NEJMra1401038",
+        type: "review"
+      },
+      {
+        title: "AAFP: Anemia in Older Adults",
+        url: "https://www.aafp.org/pubs/afp/issues/2018/1001/p437.html",
+        type: "review"
+      }
+    ]
+  },
+  {
+    id: "hyperkaliaemie",
+    title: "Hyperkaliämie",
+    kind: "labor",
+    synonyms: [
+      "Hyperkaliämie",
+      "Hyperkaliaemie",
+      "Kalium hoch",
+      "K hoch",
+      "erhöhtes Kalium",
+      "zu viel Kalium",
+      "spitze T-Wellen"
+    ],
+    shortDescription:
+      "Erhöhtes Kalium kann prärenal/renal, medikamentös, durch Zellzerfall, Azidose oder Pseudohyperkaliämie entstehen. Dringlichkeit richtet sich nach Höhe, Dynamik, EKG und Risikokontext.",
+    redFlags: [
+      "EKG-Veränderungen",
+      "Kalium stark erhöht oder rascher Anstieg",
+      "Muskelschwäche, Lähmung oder Palpitationen",
+      "AKI/CKD oder Oligurie",
+      "Azidose, DKA oder Rhabdomyolyse",
+      "RAAS-Blockade plus MRA/Trimethoprim/NSAID"
+    ],
+    commonCauseIds: [
+      "chronische-niereninsuffizienz",
+      "akutes-nierenversagen",
+      "raas-mra-hyperkaliaemie",
+      "pseudohyperkaliaemie",
+      "metabolische-azidose"
+    ],
+    importantCauseIds: [
+      "rhabdomyolyse",
+      "diabetes-mellitus-entgleisung",
+      "nebenniereninsuffizienz",
+      "tumorlyse-syndrom",
+      "medikamentoes-nephrotoxisch"
+    ],
+    rareButImportantCauseIds: [
+      "hypoaldosteronismus-typ-4-rta",
+      "periodische-paralyse",
+      "verbrennung-gewebszerfall"
+    ],
+    piavCategories: ["endokrin-metabolisch", "toxisch-medikamentoes", "trauma", "neoplastisch", "angeboren"],
+    specialties: ["innere-medizin", "nephrologie", "kardiologie", "endokrinologie", "allgemeinmedizin"],
+    suggestedBasicWorkup: [
+      "Wert plausibilisieren und Pseudohyperkaliämie ausschließen",
+      "EKG bei relevant erhöhter, symptomatischer oder dynamischer Hyperkaliämie",
+      "Kreatinin/eGFR, Bikarbonat/BGA, Glukose/Ketone je nach Kontext",
+      "Medikamente prüfen: ACE-Hemmer/ARB, MRA, NSAID, Trimethoprim, Kaliumpräparate",
+      "Zellzerfall, Hämolyse, Rhabdomyolyse, Tumorlyse und Nebenniereninsuffizienz mitdenken"
+    ],
+    tags: ["Hyperkaliämie", "Kalium", "EKG", "CKD", "AKI", "RAAS", "Spironolacton", "Rhabdomyolyse"],
+    sources: [
+      {
+        title: "AAFP: Potassium Disorders",
+        url: "https://www.aafp.org/pubs/afp/issues/2023/0100/potassium-disorders-hypokalemia-hyperkalemia.html",
+        type: "review"
+      },
+      {
+        title: "NEJM: Managing Hyperkalemia Caused by RAAS Inhibitors",
+        url: "https://www.nejm.org/doi/full/10.1056/NEJMra035279",
+        type: "review"
+      },
+      {
+        title: "Nature Reviews Nephrology: Potassium and the kidney",
+        url: "https://www.nature.com/articles/s41581-026-01053-5",
+        type: "review"
+      }
+    ]
+  },
+  {
+    id: "schwindel-vertigo",
+    title: "Schwindel / Vertigo / Benommenheit",
+    kind: "symptom",
+    synonyms: [
+      "Schwindel",
+      "Vertigo",
+      "Dizziness",
+      "Benommenheit",
+      "Drehschwindel",
+      "Schwankschwindel",
+      "Gangunsicherheit",
+      "vestibuläres Syndrom"
+    ],
+    shortDescription:
+      "Schwindel wird besser nach Zeitverlauf und Triggern als nach Wortwahl strukturiert. Häufig vestibulär oder orthostatisch, aber Schlaganfall, Arrhythmie, Anämie, Medikamente und Intoxikation müssen erfasst werden.",
+    redFlags: [
+      "neue fokale neurologische Defizite",
+      "Dysarthrie, Doppelbilder, Dysphagie, Ataxie",
+      "neuer starker Kopf- oder Nackenschmerz",
+      "anhaltender akuter vestibulärer Schwindel mit Gangunfähigkeit",
+      "Synkope, Thoraxschmerz oder Palpitationen",
+      "Antikoagulation oder relevantes Trauma"
+    ],
+    commonCauseIds: [
+      "benigner-paroxysmaler-lagerungsschwindel",
+      "vestibulaere-migraene",
+      "orthostatische-hypotonie",
+      "arzneimittelnebenwirkung",
+      "angststoerung-panikattacken"
+    ],
+    importantCauseIds: [
+      "schlaganfall-tia",
+      "vestibularisneuritis",
+      "tachyarrhythmie-bradyarrhythmie",
+      "anaemie",
+      "hypoglykaemie"
+    ],
+    rareButImportantCauseIds: [
+      "vertebralisdissektion",
+      "kleinhirnblutung",
+      "wernicke-enzephalopathie",
+      "kohlenmonoxidvergiftung"
+    ],
+    piavCategories: [
+      "vaskulaer-kardiovaskulaer",
+      "toxisch-medikamentoes",
+      "infektion",
+      "trauma",
+      "endokrin-metabolisch",
+      "psychosomatisch-psychiatrisch"
+    ],
+    specialties: ["allgemeinmedizin", "innere-medizin", "neurologie", "kardiologie"],
+    suggestedBasicWorkup: [
+      "Timing, Trigger und Verlauf klären",
+      "Neurologischer Status, Gangbild, Nystagmus; HINTS nur bei passendem akutem vestibulärem Syndrom und Expertise",
+      "Orthostase, Puls, Blutdruck, EKG bei Präsynkope/Palpitationen",
+      "Glukose, BB, Elektrolyte je nach Kontext",
+      "Medikamente, Alkohol/Substanzen und Trauma erfassen"
+    ],
+    tags: ["Schwindel", "Vertigo", "BPPV", "HINTS", "Schlaganfall", "Orthostase", "Medikamente"],
+    sources: [
+      {
+        title: "AAFP: Dizziness Evaluation and Management",
+        url: "https://www.aafp.org/pubs/afp/issues/2023/0500/dizziness.html",
+        type: "review"
+      },
+      {
+        title: "MSD Manual Professional: Dizziness and Vertigo",
+        url: "https://www.msdmanuals.com/en-gb/professional/ear%2C-nose%2C-and-throat-disorders/approach-to-the-patient-with-ear-problems/dizziness-and-vertigo",
+        type: "manual"
+      },
+      {
+        title: "PMC: TiTrATE approach to acute dizziness and vertigo",
+        url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC4522574/",
+        type: "review"
+      }
+    ]
   }
 ];

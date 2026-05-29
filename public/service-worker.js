@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tante-piav-pwa-v1";
+const CACHE_VERSION = "tante-piav-pwa-v2-performance";
 const APP_SHELL = [
   "./",
   "./index.html",

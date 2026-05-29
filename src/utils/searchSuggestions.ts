@@ -12,10 +12,11 @@ const addTerm = (terms: Set<string>, value: string) => {
   }
 };
 
-export const getSearchSuggestions = (query: string, limit = 8) => {
-  const normalizedQuery = normalizeSearchTerm(query);
-  if (!normalizedQuery) {
-    return [];
+let cachedSuggestionTerms: Array<{ term: string; normalized: string }> | null = null;
+
+const getSuggestionTerms = () => {
+  if (cachedSuggestionTerms) {
+    return cachedSuggestionTerms;
   }
 
   const terms = new Set<string>();
@@ -47,17 +48,30 @@ export const getSearchSuggestions = (query: string, limit = 8) => {
 
   synonymGroups.flat().forEach((synonym) => addTerm(terms, synonym));
 
-  return Array.from(terms)
-    .filter((term) => normalizeSearchTerm(term).includes(normalizedQuery))
+  cachedSuggestionTerms = Array.from(terms).map((term) => ({
+    term,
+    normalized: normalizeSearchTerm(term)
+  }));
+
+  return cachedSuggestionTerms;
+};
+
+export const getSearchSuggestions = (query: string, limit = 8) => {
+  const normalizedQuery = normalizeSearchTerm(query);
+  if (!normalizedQuery) {
+    return [];
+  }
+
+  return getSuggestionTerms()
+    .filter(({ normalized }) => normalized.includes(normalizedQuery))
     .sort((a, b) => {
-      const normalizedA = normalizeSearchTerm(a);
-      const normalizedB = normalizeSearchTerm(b);
-      const startsA = normalizedA.startsWith(normalizedQuery);
-      const startsB = normalizedB.startsWith(normalizedQuery);
+      const startsA = a.normalized.startsWith(normalizedQuery);
+      const startsB = b.normalized.startsWith(normalizedQuery);
       if (startsA !== startsB) {
         return startsA ? -1 : 1;
       }
-      return a.length - b.length || a.localeCompare(b, "de");
+      return a.term.length - b.term.length || a.term.localeCompare(b.term, "de");
     })
-    .slice(0, limit);
+    .slice(0, limit)
+    .map(({ term }) => term);
 };

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { categories } from "../data/categories";
 import { causes } from "../data/causes";
 import type { Cause, CauseFilters, PiavCategory } from "../types/medical";
@@ -35,11 +35,14 @@ export function HomePage({
   const [activeCategory, setActiveCategory] = useState<PiavCategory>(categories[0].id);
   const [isAcronymCollapsed, setIsAcronymCollapsed] = useState(false);
   const [expandedCategoryIds, setExpandedCategoryIds] = useState<Set<PiavCategory>>(() => new Set());
+  const deferredQuery = useDeferredValue(query);
+  const activeFilterCount = getActiveFilterCount(filters);
+  const hasActiveSearchContext = deferredQuery.trim().length > 0 || activeFilterCount > 0;
 
   const visibleCauses = useMemo(() => {
-    const searched = searchCauses(causes, query);
+    const searched = searchCauses(causes, deferredQuery);
     return sortByClinicalPriority(filterCauses(searched, filters));
-  }, [filters, query]);
+  }, [deferredQuery, filters]);
 
   const causesByCategory = useMemo(() => {
     const grouped = new Map<PiavCategory, Cause[]>();
@@ -50,105 +53,69 @@ export function HomePage({
     return grouped;
   }, [visibleCauses]);
 
-  const suggestions = useMemo(() => getSearchSuggestions(query), [query]);
-  const activeFilterCount = getActiveFilterCount(filters);
+  const suggestions = useMemo(() => getSearchSuggestions(deferredQuery), [deferredQuery]);
+  const autoExpandMatchingCategories = hasActiveSearchContext && visibleCauses.length <= 80;
 
   useEffect(() => {
-    let frame = 0;
+    const headerHeight = getHeaderHeight();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleEntries = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
 
-    const updateActiveCategory = () => {
-      frame = 0;
-      const headerHeight = getHeaderHeight();
-      const markerY =
-        window.innerWidth < 1024
-          ? Math.min(window.innerHeight * 0.42, headerHeight + 96)
-          : headerHeight + 120;
-      const sections = categories
-        .map((category) => ({
-          id: category.id,
-          top: document.getElementById(`section-${category.id}`)?.getBoundingClientRect().top
-        }))
-        .filter((section): section is { id: PiavCategory; top: number } =>
-          typeof section.top === "number"
-        );
-
-      const currentSection =
-        sections
-          .filter((section) => section.top <= markerY)
-          .sort((a, b) => b.top - a.top)[0] ?? sections[0];
-
-      if (currentSection) {
-        setActiveCategory(currentSection.id);
+        const category = visibleEntries[0]?.target.getAttribute("data-category-id");
+        if (category) {
+          setActiveCategory(category as PiavCategory);
+        }
+      },
+      {
+        root: null,
+        rootMargin: `-${headerHeight + 72}px 0px -45% 0px`,
+        threshold: [0, 0.08, 0.2, 0.45]
       }
-    };
+    );
 
-    const scheduleUpdate = () => {
-      if (frame !== 0) {
-        return;
+    categories.forEach((category) => {
+      const section = document.getElementById(`section-${category.id}`);
+      if (section) {
+        observer.observe(section);
       }
+    });
 
-      frame = window.requestAnimationFrame(updateActiveCategory);
-    };
-
-    updateActiveCategory();
-    window.addEventListener("scroll", scheduleUpdate, { passive: true });
-    window.addEventListener("resize", scheduleUpdate);
-
-    return () => {
-      if (frame !== 0) {
-        window.cancelAnimationFrame(frame);
-      }
-
-      window.removeEventListener("scroll", scheduleUpdate);
-      window.removeEventListener("resize", scheduleUpdate);
-    };
+    return () => observer.disconnect();
   }, [visibleCauses.length]);
 
   useEffect(() => {
-    let frame = 0;
+    let observer: IntersectionObserver | null = null;
 
-    const updateCollapsedState = () => {
-      frame = 0;
-      const expandedNav = document.getElementById("acronym-nav-expanded");
-      if (!expandedNav) {
+    const observeSentinel = () => {
+      observer?.disconnect();
+      const sentinel = document.getElementById("acronym-nav-collapse-sentinel");
+      if (!sentinel) {
         return;
       }
 
       const headerHeight = getHeaderHeight();
-      const expandedBottom = expandedNav.getBoundingClientRect().bottom;
-
-      setIsAcronymCollapsed((current) => {
-        if (expandedBottom <= headerHeight + 10) {
-          return true;
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          setIsAcronymCollapsed(!entry.isIntersecting);
+        },
+        {
+          root: null,
+          rootMargin: `-${headerHeight + 8}px 0px 0px 0px`,
+          threshold: 0
         }
-
-        if (expandedBottom >= headerHeight + 70) {
-          return false;
-        }
-
-        return current;
-      });
+      );
+      observer.observe(sentinel);
     };
 
-    const scheduleUpdate = () => {
-      if (frame !== 0) {
-        return;
-      }
-
-      frame = window.requestAnimationFrame(updateCollapsedState);
-    };
-
-    updateCollapsedState();
-    window.addEventListener("scroll", scheduleUpdate, { passive: true });
-    window.addEventListener("resize", scheduleUpdate);
+    observeSentinel();
+    window.addEventListener("resize", observeSentinel);
 
     return () => {
-      if (frame !== 0) {
-        window.cancelAnimationFrame(frame);
-      }
-
-      window.removeEventListener("scroll", scheduleUpdate);
-      window.removeEventListener("resize", scheduleUpdate);
+      observer?.disconnect();
+      window.removeEventListener("resize", observeSentinel);
     };
   }, []);
 
@@ -225,6 +192,7 @@ export function HomePage({
               categories={categories}
               onSelect={scrollToCategory}
             />
+            <div aria-hidden="true" className="h-px" id="acronym-nav-collapse-sentinel" />
           </div>
 
           <FilterPanel filters={filters} onFiltersChange={onFiltersChange} />
@@ -265,6 +233,7 @@ export function HomePage({
           />
 
           <GroupedCauseList
+            autoExpandMatchingCategories={autoExpandMatchingCategories}
             categories={categories}
             causesByCategory={causesByCategory}
             expandedCategoryIds={expandedCategoryIds}

@@ -1,3 +1,4 @@
+import { memo, useMemo } from "react";
 import { ChevronRight } from "lucide-react";
 import type { Cause } from "../types/medical";
 import type { SymptomEntry } from "../types/symptom";
@@ -10,8 +11,8 @@ interface CauseCardProps {
   onSelectSymptom?: (entry: SymptomEntry) => void;
 }
 
-export function CauseCard({ cause, onSelect, onSelectSymptom }: CauseCardProps) {
-  const linkedSymptoms = getLinkedSymptomsForCause(cause).slice(0, 3);
+function CauseCardComponent({ cause, onSelect, onSelectSymptom }: CauseCardProps) {
+  const linkedSymptoms = useMemo(() => getLinkedSymptomsForCause(cause).slice(0, 3), [cause]);
 
   return (
     <article className="min-w-0 overflow-hidden rounded-md border border-clinical-line bg-white px-2.5 py-2 shadow-sm">
@@ -58,3 +59,5 @@ export function CauseCard({ cause, onSelect, onSelectSymptom }: CauseCardProps) 
     </article>
   );
 }
+
+export const CauseCard = memo(CauseCardComponent);

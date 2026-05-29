@@ -13,6 +13,11 @@ interface SearchableCause extends Cause {
   normalizedText: string;
 }
 
+interface SearchIndex {
+  fuse: Fuse<SearchableCause>;
+  items: SearchableCause[];
+}
+
 const enrichCause = (cause: Cause): SearchableCause => {
   const searchCategory = getCategoryLabel(cause.category);
   const searchSpecialties = cause.specialties
@@ -47,9 +52,17 @@ const enrichCause = (cause: Cause): SearchableCause => {
   };
 };
 
-const createFuse = (causes: Cause[]) =>
-  new Fuse(causes.map(enrichCause), {
-    threshold: 0.34,
+const indexCache = new WeakMap<readonly Cause[], SearchIndex>();
+
+const getSearchIndex = (causes: readonly Cause[]) => {
+  const cached = indexCache.get(causes);
+  if (cached) {
+    return cached;
+  }
+
+  const items = causes.map(enrichCause);
+  const fuse = new Fuse(items, {
+    threshold: 0.24,
     ignoreLocation: true,
     includeScore: true,
     keys: [
@@ -67,19 +80,39 @@ const createFuse = (causes: Cause[]) =>
     ]
   });
 
+  const index = { fuse, items };
+  indexCache.set(causes, index);
+  return index;
+};
+
 export const searchCauses = (causes: Cause[], query: string) => {
   const trimmed = query.trim();
   if (!trimmed) {
     return causes;
   }
 
-  const fuse = createFuse(causes);
+  const { fuse, items } = getSearchIndex(causes);
   const byId = new Map<string, Cause>();
 
   expandSearchQuery(trimmed).forEach((queryVariant) => {
-    fuse.search(queryVariant).forEach((result) => {
-      byId.set(result.item.id, result.item);
+    const normalizedVariant = normalizeSearchTerm(queryVariant);
+    if (!normalizedVariant) {
+      return;
+    }
+
+    items.forEach((item) => {
+      if (item.normalizedText.includes(normalizedVariant)) {
+        byId.set(item.id, item);
+      }
     });
+
+    if (byId.size < 12) {
+      fuse.search(queryVariant).forEach((result) => {
+        if ((result.score ?? 1) <= 0.24) {
+          byId.set(result.item.id, result.item);
+        }
+      });
+    }
   });
 
   return Array.from(byId.values());

@@ -14,6 +14,11 @@ interface SearchableSymptom extends SymptomEntry {
   normalizedText: string;
 }
 
+interface SearchIndex {
+  fuse: Fuse<SearchableSymptom>;
+  items: SearchableSymptom[];
+}
+
 const causeTitleById = new Map(causes.map((cause) => [cause.id, cause.title]));
 
 const enrichSymptom = (entry: SymptomEntry): SearchableSymptom => {
@@ -58,9 +63,17 @@ const enrichSymptom = (entry: SymptomEntry): SearchableSymptom => {
   };
 };
 
-const createFuse = (entries: SymptomEntry[]) =>
-  new Fuse(entries.map(enrichSymptom), {
-    threshold: 0.34,
+const indexCache = new WeakMap<readonly SymptomEntry[], SearchIndex>();
+
+const getSearchIndex = (entries: readonly SymptomEntry[]) => {
+  const cached = indexCache.get(entries);
+  if (cached) {
+    return cached;
+  }
+
+  const items = entries.map(enrichSymptom);
+  const fuse = new Fuse(items, {
+    threshold: 0.24,
     ignoreLocation: true,
     includeScore: true,
     keys: [
@@ -77,19 +90,39 @@ const createFuse = (entries: SymptomEntry[]) =>
     ]
   });
 
+  const index = { fuse, items };
+  indexCache.set(entries, index);
+  return index;
+};
+
 export const searchSymptoms = (entries: SymptomEntry[], query: string) => {
   const trimmed = query.trim();
   if (!trimmed) {
     return entries;
   }
 
-  const fuse = createFuse(entries);
+  const { fuse, items } = getSearchIndex(entries);
   const byId = new Map<string, SymptomEntry>();
 
   expandSearchQuery(trimmed).forEach((queryVariant) => {
-    fuse.search(queryVariant).forEach((result) => {
-      byId.set(result.item.id, result.item);
+    const normalizedVariant = normalizeSearchTerm(queryVariant);
+    if (!normalizedVariant) {
+      return;
+    }
+
+    items.forEach((item) => {
+      if (item.normalizedText.includes(normalizedVariant)) {
+        byId.set(item.id, item);
+      }
     });
+
+    if (byId.size < 6) {
+      fuse.search(queryVariant).forEach((result) => {
+        if ((result.score ?? 1) <= 0.24) {
+          byId.set(result.item.id, result.item);
+        }
+      });
+    }
   });
 
   return Array.from(byId.values());

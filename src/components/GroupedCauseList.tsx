@@ -7,6 +7,7 @@ interface GroupedCauseListProps {
   categories: Category[];
   causesByCategory: Map<string, Cause[]>;
   expandedCategoryIds: Set<string>;
+  autoExpandMatchingCategories?: boolean;
   onCollapseAll: () => void;
   onExpandAll: () => void;
   onSelectCause: (cause: Cause) => void;
@@ -15,6 +16,7 @@ interface GroupedCauseListProps {
 }
 
 export function GroupedCauseList({
+  autoExpandMatchingCategories = false,
   categories,
   causesByCategory,
   expandedCategoryIds,
@@ -24,7 +26,15 @@ export function GroupedCauseList({
   onSelectSymptom,
   onToggleCategory
 }: GroupedCauseListProps) {
-  const allExpanded = categories.every((category) => expandedCategoryIds.has(category.id));
+  const isCategoryExpanded = (category: Category) => {
+    const categoryCauses = causesByCategory.get(category.id) ?? [];
+    return (
+      expandedCategoryIds.has(category.id) ||
+      (autoExpandMatchingCategories && categoryCauses.length > 0)
+    );
+  };
+
+  const allExpanded = categories.every(isCategoryExpanded);
 
   return (
     <div className="grid min-w-0 gap-2.5">
@@ -40,12 +50,13 @@ export function GroupedCauseList({
 
       {categories.map((category) => {
         const categoryCauses = causesByCategory.get(category.id) ?? [];
-        const isExpanded = expandedCategoryIds.has(category.id);
+        const isExpanded = isCategoryExpanded(category);
         const contentId = `section-${category.id}-content`;
 
         return (
           <section
             className="min-w-0 scroll-mt-[calc(var(--app-header-height)+3.75rem)] rounded-lg border border-clinical-line bg-white p-2.5 shadow-sm lg:scroll-mt-[calc(var(--app-header-height)+2rem)]"
+            data-category-id={category.id}
             id={`section-${category.id}`}
             key={category.id}
           >
@@ -82,33 +93,33 @@ export function GroupedCauseList({
               </button>
             </header>
 
-            <div
-              className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none ${
-                isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-              }`}
-              id={contentId}
-            >
-              <div className="min-h-0 overflow-hidden">
-                <div className="mt-2 border-t border-clinical-line pt-2">
-                  {categoryCauses.length > 0 ? (
-                    <div className="grid min-w-0 gap-2">
-                      {categoryCauses.map((cause) => (
-                        <CauseCard
-                          cause={cause}
-                          key={cause.id}
-                          onSelect={onSelectCause}
-                          onSelectSymptom={onSelectSymptom}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="rounded-md bg-clinical-surface p-3 text-sm text-clinical-muted">
-                      Keine Ursachen in diesem Abschnitt für die aktuelle Suche/Filterung.
-                    </div>
-                  )}
+            {isExpanded ? (
+              <div
+                className="grid grid-rows-[1fr] opacity-100 transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none"
+                id={contentId}
+              >
+                <div className="min-h-0 overflow-hidden">
+                  <div className="mt-2 border-t border-clinical-line pt-2">
+                    {categoryCauses.length > 0 ? (
+                      <div className="grid min-w-0 gap-2">
+                        {categoryCauses.map((cause) => (
+                          <CauseCard
+                            cause={cause}
+                            key={cause.id}
+                            onSelect={onSelectCause}
+                            onSelectSymptom={onSelectSymptom}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="rounded-md bg-clinical-surface p-3 text-sm text-clinical-muted">
+                        Keine Ursachen in diesem Abschnitt für die aktuelle Suche/Filterung.
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            ) : null}
           </section>
         );
       })}

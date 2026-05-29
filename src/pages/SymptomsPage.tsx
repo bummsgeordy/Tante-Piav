@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useState } from "react";
 import { ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
 import { causes } from "../data/causes";
 import { symptomEntries } from "../data/symptoms";
@@ -38,8 +38,9 @@ export function SymptomsPage({
 }: SymptomsPageProps) {
   const [expandedKinds, setExpandedKinds] = useState<Set<SymptomKind>>(() => new Set());
   const [expandedSymptomIds, setExpandedSymptomIds] = useState<Set<string>>(() => new Set());
-  const visibleSymptoms = useMemo(() => searchSymptoms(symptomEntries, query), [query]);
-  const suggestions = useMemo(() => getSearchSuggestions(query), [query]);
+  const deferredQuery = useDeferredValue(query);
+  const visibleSymptoms = useMemo(() => searchSymptoms(symptomEntries, deferredQuery), [deferredQuery]);
+  const suggestions = useMemo(() => getSearchSuggestions(deferredQuery), [deferredQuery]);
   const grouped = useMemo(() => {
     const map = new Map<SymptomKind, SymptomEntry[]>();
     kindGroups.forEach((group) => map.set(group.kind, []));

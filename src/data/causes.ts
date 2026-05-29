@@ -1,5 +1,6 @@
 import type { Cause, SourceLink } from "../types/medical";
 import { additionalCauseSeeds } from "./additionalCauses";
+import { referencedCauseCompletions } from "./referencedCauseCompletions";
 
 const awmf: SourceLink = {
   title: "AWMF Leitlinienregister",
@@ -918,7 +919,9 @@ const isCompleteCause = (cause: Partial<Cause>): cause is Cause =>
       typeof cause.hasMajorRedFlags === "boolean"
   );
 
-export const causes: Cause[] = additionalCauseSeeds.reduce<Cause[]>((items, seed) => {
+const causeAugmentations: Partial<Cause>[] = [...additionalCauseSeeds, ...referencedCauseCompletions];
+
+export const causes: Cause[] = causeAugmentations.reduce<Cause[]>((items, seed) => {
   const existingIndex = items.findIndex((cause) => cause.id === seed.id);
 
   if (existingIndex >= 0) {

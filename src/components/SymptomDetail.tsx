@@ -57,7 +57,10 @@ export function SymptomDetail({ entry, onSelectCause, onSelectCategory }: Sympto
 
       <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.35fr)]">
         <section className="rounded-md border border-clinical-line bg-clinical-surface p-3">
-          <h3 className="text-sm font-semibold text-clinical-ink">Basisabklärung</h3>
+          <h3 className="text-sm font-semibold text-clinical-ink">Mögliche erste Orientierung</h3>
+          <p className="mt-1 text-xs leading-5 text-clinical-muted">
+            Kontextabhängig und unvollständig; keine individuelle Diagnostikempfehlung.
+          </p>
           <ul className="mt-2 list-disc space-y-1 pl-5 text-sm leading-6 text-clinical-muted">
             {entry.suggestedBasicWorkup.map((item) => (
               <li key={item}>{item}</li>
@@ -96,7 +99,7 @@ export function SymptomDetail({ entry, onSelectCause, onSelectCategory }: Sympto
               className="inline-flex items-center gap-1.5 rounded-md border border-clinical-line px-2.5 py-1.5 text-xs font-medium text-clinical-accent hover:border-clinical-accent"
               href={source.url}
               key={`${source.title}-${source.url}`}
-              rel="noreferrer"
+              rel="noopener noreferrer"
               target="_blank"
             >
               {source.title}
@@ -119,7 +122,7 @@ function CauseBucket({
   title: string;
 }) {
   const matchedCauses = causeIds
-    .map((id) => causes.find((cause) => cause.id === id))
+    .map((id) => causeById.get(id))
     .filter((cause): cause is Cause => Boolean(cause));
 
   return (
@@ -146,3 +149,5 @@ function CauseBucket({
     </section>
   );
 }
+
+const causeById = new Map(causes.map((cause) => [cause.id, cause]));

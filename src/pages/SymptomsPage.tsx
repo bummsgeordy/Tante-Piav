@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { memo, useDeferredValue, useEffect, useMemo, useState } from "react";
 import { ChevronDown, ChevronRight, ExternalLink } from "lucide-react";
 import { causes } from "../data/causes";
 import { symptomEntries } from "../data/symptoms";
@@ -53,17 +53,18 @@ export function SymptomsPage({
       return;
     }
 
-    const selectedEntry = symptomEntries.find((entry) => entry.id === selectedSymptomId);
-    if (selectedEntry) {
-      setExpandedKinds((current) => new Set([...current, selectedEntry.kind]));
-      setExpandedSymptomIds((current) => new Set([...current, selectedEntry.id]));
-    }
-
-    window.setTimeout(() => {
+    const frame = window.requestAnimationFrame(() => {
+      const selectedEntry = symptomEntries.find((entry) => entry.id === selectedSymptomId);
+      if (selectedEntry) {
+        setExpandedKinds((current) => new Set([...current, selectedEntry.kind]));
+        setExpandedSymptomIds((current) => new Set([...current, selectedEntry.id]));
+      }
       document
         .getElementById(`symptom-${selectedSymptomId}`)
         ?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 0);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
   }, [selectedSymptomId]);
 
   const focusResults = () => {
@@ -84,9 +85,8 @@ export function SymptomsPage({
     .filter((group) => (grouped.get(group.kind) ?? []).length > 0)
     .map((group) => group.kind);
   const visibleSymptomIds = visibleSymptoms.map((entry) => entry.id);
-  const allExpanded = visibleKinds.every((kind) => expandedKinds.has(kind));
-  const allSymptomEntriesExpanded =
-    visibleSymptomIds.length > 0 && visibleSymptomIds.every((id) => expandedSymptomIds.has(id));
+  const hasExpandedKinds = visibleKinds.some((kind) => expandedKinds.has(kind));
+  const hasAnyExpandedContent = hasExpandedKinds || expandedSymptomIds.size > 0;
 
   const toggleKind = (kind: SymptomKind) => {
     setExpandedKinds((current) => {
@@ -140,6 +140,10 @@ export function SymptomsPage({
               Symptom-, Befund- und Laborzugang als Denkhilfe. Die Einträge sind nicht
               vollständig und müssen fachlich geprüft werden.
             </p>
+            <p className="mt-1 text-xs leading-5 text-clinical-muted">
+              Die Gruppen häufig, wichtig und selten sind kontextabhängige Denkachsen, keine
+              absolute Wahrscheinlichkeitsrangfolge.
+            </p>
           </div>
           <SearchBar
             onQueryChange={onQueryChange}
@@ -160,17 +164,17 @@ export function SymptomsPage({
           <div className="flex flex-wrap justify-end gap-2">
             <button
               className="rounded-md border border-clinical-line bg-white px-3 py-2 text-sm font-semibold text-clinical-text shadow-sm hover:border-clinical-accent hover:text-clinical-accent"
-              onClick={allExpanded ? collapseAllKinds : expandAllKinds}
+              onClick={hasExpandedKinds ? collapseAllKinds : expandAllKinds}
               type="button"
             >
-              {allExpanded ? "Oberthemen einklappen" : "Oberthemen ausklappen"}
+              {hasExpandedKinds ? "Oberthemen einklappen" : "Oberthemen ausklappen"}
             </button>
             <button
               className="rounded-md border border-clinical-line bg-white px-3 py-2 text-sm font-semibold text-clinical-text shadow-sm hover:border-clinical-accent hover:text-clinical-accent"
-              onClick={allExpanded && allSymptomEntriesExpanded ? collapseAll : expandAll}
+              onClick={hasAnyExpandedContent ? collapseAll : expandAll}
               type="button"
             >
-              {allExpanded && allSymptomEntriesExpanded ? "Alles einklappen" : "Alles ausklappen"}
+              {hasAnyExpandedContent ? "Alles einklappen" : "Alles ausklappen"}
             </button>
           </div>
         ) : null}
@@ -217,13 +221,8 @@ export function SymptomsPage({
                 </button>
               </header>
 
-              <div
-                className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none ${
-                  isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-                }`}
-                id={contentId}
-              >
-                <div className="min-h-0 overflow-hidden">
+              {isExpanded ? (
+                <div className="clinical-expand-content" id={contentId}>
                   <div className="mt-2 grid gap-2 border-t border-clinical-line pt-2">
                     {entries.map((entry) => (
                       <SymptomMatrixCard
@@ -239,7 +238,7 @@ export function SymptomsPage({
                     ))}
                   </div>
                 </div>
-              </div>
+              ) : null}
             </section>
           );
         })}
@@ -248,7 +247,7 @@ export function SymptomsPage({
   );
 }
 
-function SymptomMatrixCard({
+const SymptomMatrixCard = memo(function SymptomMatrixCard({
   entry,
   isExpanded,
   isActive,
@@ -310,13 +309,8 @@ function SymptomMatrixCard({
         </button>
       </header>
 
-      <div
-        className={`grid transition-[grid-template-rows,opacity] duration-200 ease-out motion-reduce:transition-none ${
-          isExpanded ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
-        }`}
-        id={contentId}
-      >
-        <div className="min-h-0 overflow-hidden">
+      {isExpanded ? (
+        <div className="clinical-expand-content" id={contentId}>
           <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.32fr)]">
             <p className="text-sm leading-6 text-clinical-muted">{entry.shortDescription}</p>
             <aside className="rounded-md border border-red-100 bg-red-50 p-2.5">
@@ -352,7 +346,12 @@ function SymptomMatrixCard({
 
           <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(260px,0.32fr)]">
             <section className="rounded-md border border-clinical-line bg-clinical-surface p-2.5">
-              <h4 className="text-sm font-semibold text-clinical-ink">Basisabklärung</h4>
+              <h4 className="text-sm font-semibold text-clinical-ink">
+                Mögliche erste Orientierung
+              </h4>
+              <p className="mt-1 text-xs leading-5 text-clinical-muted">
+                Kontextabhängig und unvollständig; keine individuelle Diagnostikempfehlung.
+              </p>
               <ul className="mt-1 list-disc space-y-1 pl-5 text-sm leading-6 text-clinical-muted">
                 {entry.suggestedBasicWorkup.slice(0, 5).map((item) => (
                   <li key={item}>{item}</li>
@@ -379,7 +378,7 @@ function SymptomMatrixCard({
                     className="inline-flex items-center gap-1 rounded-md border border-clinical-line px-2 py-1 text-xs font-medium text-clinical-accent hover:border-clinical-accent"
                     href={source.url}
                     key={`${source.title}-${source.url}`}
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     target="_blank"
                   >
                     {source.title}
@@ -390,10 +389,10 @@ function SymptomMatrixCard({
             </section>
           </div>
         </div>
-      </div>
+      ) : null}
     </article>
   );
-}
+});
 
 function CauseColumn({
   causeIds,
@@ -420,7 +419,7 @@ function CauseColumn({
                 className="rounded-md bg-slate-50 px-2 py-1.5 text-xs leading-5 text-clinical-muted"
                 key={id}
               >
-                {humanizeId(id)} · noch nicht als Cause-Karte angelegt
+                {humanizeId(id)} · nicht quellengeprüfter Entwurf ausgeblendet
               </span>
             );
           }

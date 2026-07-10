@@ -1,6 +1,7 @@
 import type { SymptomEntry } from "../types/symptom";
+import { markSymptomSourceChecked } from "./contentReview";
 
-export const symptomEntries: SymptomEntry[] = [
+const symptomEntrySeeds: SymptomEntry[] = [
   {
     id: "hoher-blutdruck",
     title: "Hoher Blutdruck / Hypertonie",
@@ -1671,3 +1672,5 @@ export const symptomEntries: SymptomEntry[] = [
     ]
   }
 ];
+
+export const symptomEntries: SymptomEntry[] = symptomEntrySeeds.map(markSymptomSourceChecked);

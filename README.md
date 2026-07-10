@@ -36,6 +36,8 @@ Diese App ist eine Gedankenstütze.
 
 ## Installation
 
+Voraussetzung: Node.js `>=20.19.0`.
+
 ```bash
 npm install
 ```
@@ -56,13 +58,28 @@ npm run build
 
 Der Build erzeugt `dist/`. Dieser Ordner wird nicht versioniert, weil GitHub Pages aus GitHub Actions deployt.
 
+## Qualitätsprüfungen
+
+```bash
+npm run validate:data
+npm run lint
+npm run test
+npm run check
+npm run audit
+```
+
+`npm run check` führt Linting, Tests, TypeScript-Prüfung und Produktionsbuild aus.
+GitHub Actions führt vor jeder Veröffentlichung zusätzlich den Sicherheits-Audit aus.
+
 ## PWA und Offline-Nutzung
 
 Phase 1 der Roadmap ist umgesetzt: Die App enthält ein Web App Manifest,
 PWA-Icons, einen Service Worker und einen kompakten Offline-Hinweis in der UI.
 Nach dem ersten erfolgreichen Online-Laden bleiben die gespeicherten statischen
 Inhalte auch offline nutzbar. Die Offline-Funktion ersetzt keine fachliche
-Aktualitätsprüfung der medizinischen Inhalte.
+Aktualitätsprüfung der medizinischen Inhalte. Liegt eine neue App-Version vor,
+erscheint ein Aktualisierungshinweis; der Service Worker verwaltet ausschließlich
+Cache-Einträge mit dem projektspezifischen Präfix `tante-piav-pwa-`.
 
 ## Datenmodell
 
@@ -71,6 +88,10 @@ Medizinische Inhalte liegen getrennt vom UI-Code in `src/data/`.
 - `src/data/categories.ts`: TANTE-PIAV-Hauptstruktur
 - `src/data/causes.ts`: strukturierte Ursachen
 - `src/data/additionalCauses.ts`: ergänzende Causes und Erweiterungen bestehender Causes
+- `src/data/criticalCauseSeeds.ts`: individuell ausgearbeitete, zeitkritische Ergänzungen
+- `src/data/contentReview.ts`: Version und Prüfstatus medizinischer Inhalte
+- `src/data/contentAudit.ts`: maschinenlesbares Inventar sichtbarer und ausgeblendeter Inhalte
+- `src/data/referencedCauseCompletions.ts`: nicht veröffentlichte Referenzentwürfe
 - `src/data/symptoms.ts`: symptom-, befund- und labororientierte Einstiegsebene
 - `src/data/sourceRegistry.ts`: zentrale, wiederverwendbare Quellenlinks
 - `src/data/specialties.ts`: Fachgebietsfilter
@@ -96,9 +117,23 @@ export type Urgency = "ambulant" | "zeitnah" | "notfall";
 
 `relatedSymptoms`, `tags`, `searchBoostTerms`, `symptomEntryIds`, `practicalNotes` und `mdxSlug` sind bewusst vorbereitet, damit Ursachen datenbasiert suchbar bleiben und später ausführlichere MDX-Detailseiten ergänzt werden können.
 
+### Prüfstatus medizinischer Inhalte
+
+Cause- und Symptom-Datensätze können folgende Stati tragen:
+
+- `draft`: nicht individuell geprüft; in App, Suche und Trefferzahlen ausgeblendet
+- `source-checked`: Quellen redaktionell abgeglichen
+- `clinical-review-pending`: klinische Fachprüfung steht aus
+- `clinician-reviewed`: nur nach dokumentierter Prüfung durch medizinisch qualifizierte Personen
+
+Der aktuelle Codex-Quellenabgleich ist keine ärztliche Fachfreigabe. Sichtbare
+Detailkarten zeigen Inhaltsversion und Datum des letzten Quellenabgleichs. Alle
+automatisch aus IDs abgeleiteten Referenzkarten bleiben getrennte Entwürfe, bis
+sie individuell ausgearbeitet und geprüft wurden.
+
 ### Symptomorientierte Datenebene
 
-`SymptomEntry` beschreibt häufige Symptome, Befunde, Laborwerte und Vitalparameter. Ein Eintrag enthält Synonyme, Red Flags, Basisabklärung, verknüpfte TANTE-PIAV-Kategorien und drei Ursache-Gruppen:
+`SymptomEntry` beschreibt häufige Symptome, Befunde, Laborwerte und Vitalparameter. Ein Eintrag enthält Synonyme, Red Flags, eine mögliche erste Orientierung, verknüpfte TANTE-PIAV-Kategorien und drei Ursache-Gruppen:
 
 - häufige Ursachen
 - wichtige Ursachen
@@ -111,6 +146,12 @@ Die Seite `Symptome` gruppiert Einträge nach Symptom, Labor, Vitalparameter, Sy
 ## Quellen
 
 Quellen werden nur verlinkt. Es werden keine geschützten Inhalte aus Leitlinien, Handbüchern oder kommerziellen Quellen kopiert.
+
+Quellen werden nach Möglichkeit krankheitsspezifisch und frei zugänglich gewählt.
+Links mit eingeschränkten Nachnutzungsrechten werden als `link-only` behandelt:
+Sie dienen als externer Verweis, ihre Inhalte werden nicht in App-Texte übernommen
+oder für die Software transformiert. Abstracts können zur Einordnung dienen;
+sämtliche Formulierungen im Datensatz werden eigenständig und knapp erstellt.
 
 Geeignete offene Quellen und Orientierungen:
 
@@ -131,6 +172,10 @@ Geeignete offene Quellen und Orientierungen:
 AMBOSS, UpToDate und andere geschützte Quellen sollen nicht als Datenquelle kopiert werden. Sie können höchstens als nicht-verlinkte fachliche Orientierung für Autorinnen und Autoren dienen.
 
 Medizinische Aussagen in `src/data/` sind knapp gehalten und müssen vor produktiver Nutzung fachlich geprüft, aktualisiert und quellenbasiert erweitert werden.
+
+Automatische Datenprüfungen sichern eindeutige IDs, vollständige Referenzen,
+HTTPS-Quellen, Prüfmetadaten und den Ausschluss generischer Entwürfe aus der
+Produktionsansicht. Sie ersetzen keine inhaltliche Prüfung durch Fachpersonen.
 
 ## Roadmap
 
@@ -174,6 +219,7 @@ Medizinische Aussagen in `src/data/` sind knapp gehalten und müssen vor produkt
 Beiträge sind willkommen, sollten aber medizinisch sorgfältig und quellenbasiert erfolgen.
 
 - Medizinische Inhalte fachlich prüfen lassen.
+- Prüfstatus und Datum des Quellenabgleichs pflegen.
 - Quellenlinks angeben.
 - Keine Inhalte aus geschützten Quellen kopieren.
 - Red Flags klar und knapp benennen.

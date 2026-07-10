@@ -1,4 +1,4 @@
-import { useDeferredValue, useEffect, useMemo, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { categories } from "../data/categories";
 import { causes } from "../data/causes";
 import type { Cause, CauseFilters, PiavCategory } from "../types/medical";
@@ -35,6 +35,9 @@ export function HomePage({
   const [activeCategory, setActiveCategory] = useState<PiavCategory>(categories[0].id);
   const [isAcronymCollapsed, setIsAcronymCollapsed] = useState(false);
   const [expandedCategoryIds, setExpandedCategoryIds] = useState<Set<PiavCategory>>(() => new Set());
+  const [headerHeight, setHeaderHeight] = useState(getHeaderHeight);
+  const navigationTargetRef = useRef<PiavCategory | null>(null);
+  const navigationUnlockTimerRef = useRef<number | null>(null);
   const deferredQuery = useDeferredValue(query);
   const activeFilterCount = getActiveFilterCount(filters);
   const hasActiveSearchContext = deferredQuery.trim().length > 0 || activeFilterCount > 0;
@@ -57,9 +60,33 @@ export function HomePage({
   const autoExpandMatchingCategories = hasActiveSearchContext && visibleCauses.length <= 80;
 
   useEffect(() => {
-    const headerHeight = getHeaderHeight();
+    const updateHeaderHeight = (event: Event) => {
+      const measured = (event as CustomEvent<number>).detail ?? getHeaderHeight();
+      setHeaderHeight((current) => (current === measured ? current : measured));
+    };
+    window.addEventListener("tante-piav-header-resize", updateHeaderHeight);
+    const frame = window.requestAnimationFrame(() => setHeaderHeight(getHeaderHeight()));
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("tante-piav-header-resize", updateHeaderHeight);
+    };
+  }, []);
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
+        if (navigationTargetRef.current) {
+          setActiveCategory(navigationTargetRef.current);
+          return;
+        }
+
+        const isAtDocumentEnd =
+          window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4;
+        if (isAtDocumentEnd) {
+          setActiveCategory(categories[categories.length - 1].id);
+          return;
+        }
+
         const visibleEntries = entries
           .filter((entry) => entry.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
@@ -84,7 +111,7 @@ export function HomePage({
     });
 
     return () => observer.disconnect();
-  }, [visibleCauses.length]);
+  }, [headerHeight, visibleCauses.length]);
 
   useEffect(() => {
     let observer: IntersectionObserver | null = null;
@@ -96,14 +123,13 @@ export function HomePage({
         return;
       }
 
-      const headerHeight = getHeaderHeight();
       observer = new IntersectionObserver(
         ([entry]) => {
           setIsAcronymCollapsed(!entry.isIntersecting);
         },
         {
           root: null,
-          rootMargin: `-${headerHeight + 8}px 0px 0px 0px`,
+          rootMargin: `-${headerHeight + 8}px 0px 100000px 0px`,
           threshold: 0
         }
       );
@@ -111,15 +137,13 @@ export function HomePage({
     };
 
     observeSentinel();
-    window.addEventListener("resize", observeSentinel);
-
     return () => {
       observer?.disconnect();
-      window.removeEventListener("resize", observeSentinel);
     };
-  }, []);
+  }, [headerHeight]);
 
   const scrollToCategory = (category: PiavCategory) => {
+    navigationTargetRef.current = category;
     setActiveCategory(category);
     setExpandedCategoryIds((current) => new Set([...current, category]));
     window.setTimeout(() => {
@@ -127,7 +151,24 @@ export function HomePage({
         .getElementById(`section-${category}`)
         ?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 0);
+    if (navigationUnlockTimerRef.current) {
+      window.clearTimeout(navigationUnlockTimerRef.current);
+    }
+    navigationUnlockTimerRef.current = window.setTimeout(() => {
+      setActiveCategory(category);
+      navigationTargetRef.current = null;
+      navigationUnlockTimerRef.current = null;
+    }, 700);
   };
+
+  useEffect(
+    () => () => {
+      if (navigationUnlockTimerRef.current) {
+        window.clearTimeout(navigationUnlockTimerRef.current);
+      }
+    },
+    []
+  );
 
   const toggleCategory = (category: string) => {
     setExpandedCategoryIds((current) => {

@@ -40,6 +40,10 @@ button:disabled {
   animation: detail-slide-in 220ms ease-out both;
 }
 
+.clinical-expand-content {
+  animation: expand-content-in 160ms ease-out both;
+}
+
 @keyframes detail-slide-in {
   from {
     opacity: 0.92;
@@ -49,6 +53,18 @@ button:disabled {
   to {
     opacity: 1;
     transform: translateX(0);
+  }
+}
+
+@keyframes expand-content-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

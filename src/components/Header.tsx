@@ -26,10 +26,17 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
     }
 
     const updateHeaderHeight = () => {
+      const nextHeight = Math.ceil(header.getBoundingClientRect().height);
+      const currentHeight = Number.parseFloat(
+        document.documentElement.style.getPropertyValue("--app-header-height")
+      );
       document.documentElement.style.setProperty(
         "--app-header-height",
-        `${Math.ceil(header.getBoundingClientRect().height)}px`
+        `${nextHeight}px`
       );
+      if (currentHeight !== nextHeight) {
+        window.dispatchEvent(new CustomEvent("tante-piav-header-resize", { detail: nextHeight }));
+      }
     };
 
     updateHeaderHeight();
@@ -83,7 +90,7 @@ export function Header({ currentPage, onNavigate }: HeaderProps) {
           <a
             className="inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-clinical-text hover:bg-slate-100"
             href="https://denkfabrikmedizin.de/"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             target="_blank"
           >
             <Podcast aria-hidden="true" size={16} />

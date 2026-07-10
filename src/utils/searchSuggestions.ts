@@ -2,61 +2,88 @@ import { categories } from "../data/categories";
 import { causes } from "../data/causes";
 import { specialties } from "../data/specialties";
 import { symptomEntries } from "../data/symptoms";
+import type { SymptomKind } from "../types/symptom";
 import { normalizeSearchTerm } from "./normalizeSearchTerm";
 import { synonymGroups } from "./searchSynonyms";
 
-const addTerm = (terms: Set<string>, value: string) => {
-  const trimmed = value.trim();
-  if (trimmed.length >= 3) {
-    terms.add(trimmed);
-  }
+export type SearchSuggestionKind =
+  | "Ursache"
+  | "Symptom"
+  | "Befund"
+  | "Labor"
+  | "Syndrom"
+  | "Vitalparameter"
+  | "Kategorie"
+  | "Fachgebiet"
+  | "Suchbegriff";
+
+export interface SearchSuggestion {
+  term: string;
+  kind: SearchSuggestionKind;
+}
+
+interface IndexedSuggestion extends SearchSuggestion {
+  normalized: string;
+  priority: number;
+}
+
+const kindLabels: Record<SymptomKind, SearchSuggestionKind> = {
+  symptom: "Symptom",
+  befund: "Befund",
+  labor: "Labor",
+  syndrom: "Syndrom",
+  vitalparameter: "Vitalparameter"
 };
 
-let cachedSuggestionTerms: Array<{ term: string; normalized: string }> | null = null;
+let cachedSuggestionTerms: IndexedSuggestion[] | null = null;
 
 const getSuggestionTerms = () => {
   if (cachedSuggestionTerms) {
     return cachedSuggestionTerms;
   }
 
-  const terms = new Set<string>();
+  const terms = new Map<string, IndexedSuggestion>();
+  const addTerm = (value: string, kind: SearchSuggestionKind, priority: number) => {
+    const term = value.trim();
+    const normalized = normalizeSearchTerm(term);
+    if (term.length < 3 || !normalized) {
+      return;
+    }
+
+    const existing = terms.get(normalized);
+    if (!existing || priority < existing.priority) {
+      terms.set(normalized, { term, kind, normalized, priority });
+    }
+  };
 
   categories.forEach((category) => {
-    addTerm(terms, category.title);
-    addTerm(terms, category.subtitle);
+    addTerm(category.title, "Kategorie", 2);
+    addTerm(category.subtitle, "Suchbegriff", 7);
   });
-
-  specialties.forEach((specialty) => addTerm(terms, specialty.label));
+  specialties.forEach((specialty) => addTerm(specialty.label, "Fachgebiet", 5));
 
   causes.forEach((cause) => {
-    addTerm(terms, cause.title);
-    cause.tags.forEach((tag) => addTerm(terms, tag));
-    cause.relatedSymptoms.forEach((symptom) => addTerm(terms, symptom));
-    cause.redFlags.forEach((redFlag) => addTerm(terms, redFlag));
-    cause.examples.forEach((example) => addTerm(terms, example));
-    cause.searchBoostTerms?.forEach((term) => addTerm(terms, term));
-    cause.sources.forEach((source) => addTerm(terms, source.title));
+    addTerm(cause.title, "Ursache", 0);
+    cause.tags.forEach((tag) => addTerm(tag, "Suchbegriff", 6));
+    cause.relatedSymptoms.forEach((symptom) => addTerm(symptom, "Suchbegriff", 5));
+    cause.redFlags.forEach((redFlag) => addTerm(redFlag, "Suchbegriff", 8));
+    cause.examples.forEach((example) => addTerm(example, "Suchbegriff", 7));
+    cause.searchBoostTerms?.forEach((term) => addTerm(term, "Suchbegriff", 4));
   });
 
   symptomEntries.forEach((entry) => {
-    addTerm(terms, entry.title);
-    entry.synonyms.forEach((synonym) => addTerm(terms, synonym));
-    entry.tags.forEach((tag) => addTerm(terms, tag));
-    entry.redFlags.forEach((redFlag) => addTerm(terms, redFlag));
-    entry.sources.forEach((source) => addTerm(terms, source.title));
+    const label = kindLabels[entry.kind];
+    addTerm(entry.title, label, 0);
+    entry.synonyms.forEach((synonym) => addTerm(synonym, label, 1));
+    entry.tags.forEach((tag) => addTerm(tag, "Suchbegriff", 5));
   });
 
-  synonymGroups.flat().forEach((synonym) => addTerm(terms, synonym));
-
-  cachedSuggestionTerms = Array.from(terms).map((term) => ({
-    term,
-    normalized: normalizeSearchTerm(term)
-  }));
-
+  synonymGroups.flat().forEach((synonym) => addTerm(synonym, "Suchbegriff", 6));
+  cachedSuggestionTerms = Array.from(terms.values());
   return cachedSuggestionTerms;
 };
 
-export const getSearchSuggestions = (query: string, limit = 8) => {
+export const getSearchSuggestions = (query: string, limit = 8): SearchSuggestion[] => {
   const normalizedQuery = normalizeSearchTerm(query);
   if (!normalizedQuery) {
     return [];
@@ -70,8 +97,8 @@ export const getSearchSuggestions = (query: string, limit = 8) => {
       if (startsA !== startsB) {
         return startsA ? -1 : 1;
       }
-      return a.term.length - b.term.length || a.term.localeCompare(b.term, "de");
+      return a.priority - b.priority || a.term.length - b.term.length || a.term.localeCompare(b.term, "de");
     })
     .slice(0, limit)
-    .map(({ term }) => term);
+    .map(({ term, kind }) => ({ term, kind }));
 };

@@ -29,7 +29,8 @@ export const sourceRegistry = {
   esc: {
     title: "ESC Guidelines",
     url: "https://www.escardio.org/Guidelines",
-    type: "leitlinie"
+    type: "leitlinie",
+    usage: "link-only"
   },
   endocrineSociety: {
     title: "Endocrine Society Clinical Practice Guidelines",
@@ -44,31 +45,31 @@ export const sourceRegistry = {
   ddg: {
     title: "Deutsche Diabetes Gesellschaft",
     url: "https://www.deutsche-diabetes-gesellschaft.de/",
-    type: "leitlinie"
+    type: "sonstiges"
   },
   dge: {
     title: "Deutsche Gesellschaft für Endokrinologie",
     url: "https://www.endokrinologie.net/",
-    type: "leitlinie"
+    type: "sonstiges"
   },
   dgk: {
     title: "Deutsche Gesellschaft für Kardiologie",
     url: "https://dgk.org/",
-    type: "leitlinie"
+    type: "sonstiges"
   },
   dgn: {
     title: "Deutsche Gesellschaft für Neurologie",
     url: "https://dgn.org/",
-    type: "leitlinie"
+    type: "sonstiges"
   },
   rki: {
     title: "Robert Koch-Institut",
     url: "https://www.rki.de/",
-    type: "leitlinie"
+    type: "sonstiges"
   },
   who: {
     title: "World Health Organization",
     url: "https://www.who.int/",
-    type: "leitlinie"
+    type: "sonstiges"
   }
 } satisfies Record<string, SourceLink>;

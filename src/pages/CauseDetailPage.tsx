@@ -1,4 +1,5 @@
 import { ArrowLeft } from "lucide-react";
+import { useRef } from "react";
 import type { Cause } from "../types/medical";
 import { CauseDetail } from "../components/CauseDetail";
 
@@ -9,10 +10,46 @@ interface CauseDetailPageProps {
 }
 
 export function CauseDetailPage({ cause, onClose, onSelectCause }: CauseDetailPageProps) {
+  const dialogRef = useRef<HTMLDivElement | null>(null);
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Escape") {
+      event.preventDefault();
+      onClose();
+      return;
+    }
+
+    if (event.key !== "Tab") {
+      return;
+    }
+
+    const focusable = Array.from(
+      dialogRef.current?.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      ) ?? []
+    );
+    if (focusable.length === 0) {
+      return;
+    }
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
   return (
     <div
+      aria-labelledby="cause-detail-title"
       aria-modal="true"
       className="fixed inset-0 z-50 bg-clinical-ink/20 backdrop-blur-[2px]"
+      onKeyDown={handleKeyDown}
+      ref={dialogRef}
       role="dialog"
     >
       <div className="clinical-detail-panel ml-auto flex h-full w-full max-w-5xl flex-col overflow-hidden border-l border-clinical-line bg-white shadow-2xl">
@@ -27,7 +64,9 @@ export function CauseDetailPage({ cause, onClose, onSelectCause }: CauseDetailPa
             Zurück
           </button>
           <div className="min-w-0">
-            <p className="truncate text-sm font-semibold text-clinical-ink">{cause.title}</p>
+            <p className="truncate text-sm font-semibold text-clinical-ink" id="cause-detail-title">
+              {cause.title}
+            </p>
             <p className="text-xs text-clinical-muted">Detailansicht</p>
           </div>
         </header>

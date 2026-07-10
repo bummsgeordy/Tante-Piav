@@ -1,5 +1,7 @@
 import type { Cause, SourceLink } from "../types/medical";
 import { additionalCauseSeeds } from "./additionalCauses";
+import { markCauseDraft, markCauseSourceChecked } from "./contentReview";
+import { criticalCauseSeeds } from "./criticalCauseSeeds";
 import { referencedCauseCompletions } from "./referencedCauseCompletions";
 
 const awmf: SourceLink = {
@@ -30,7 +32,8 @@ const who: SourceLink = {
 const esc: SourceLink = {
   title: "ESC Guidelines",
   url: "https://www.escardio.org/Guidelines",
-  type: "leitlinie"
+  type: "leitlinie",
+  usage: "link-only"
 };
 const ada: SourceLink = {
   title: "ADA Standards of Care",
@@ -45,7 +48,7 @@ const endocrineSociety: SourceLink = {
 const ddg: SourceLink = {
   title: "Deutsche Diabetes Gesellschaft",
   url: "https://www.deutsche-diabetes-gesellschaft.de/",
-  type: "leitlinie"
+  type: "sonstiges"
 };
 const dge: SourceLink = {
   title: "Deutsche Gesellschaft für Endokrinologie",
@@ -55,12 +58,12 @@ const dge: SourceLink = {
 const dgk: SourceLink = {
   title: "Deutsche Gesellschaft für Kardiologie",
   url: "https://dgk.org/",
-  type: "leitlinie"
+  type: "sonstiges"
 };
 const dgn: SourceLink = {
   title: "Deutsche Gesellschaft für Neurologie",
   url: "https://dgn.org/",
-  type: "leitlinie"
+  type: "sonstiges"
 };
 
 const baseCauses: Cause[] = [
@@ -919,9 +922,9 @@ const isCompleteCause = (cause: Partial<Cause>): cause is Cause =>
       typeof cause.hasMajorRedFlags === "boolean"
   );
 
-const causeAugmentations: Partial<Cause>[] = [...additionalCauseSeeds, ...referencedCauseCompletions];
+const causeAugmentations: Partial<Cause>[] = [...additionalCauseSeeds, ...criticalCauseSeeds];
 
-export const causes: Cause[] = causeAugmentations.reduce<Cause[]>((items, seed) => {
+const mergedCauses = causeAugmentations.reduce<Cause[]>((items, seed) => {
   const existingIndex = items.findIndex((cause) => cause.id === seed.id);
 
   if (existingIndex >= 0) {
@@ -936,3 +939,12 @@ export const causes: Cause[] = causeAugmentations.reduce<Cause[]>((items, seed) 
 
   return items;
 }, baseCauses);
+
+export const causes: Cause[] = mergedCauses.map(markCauseSourceChecked);
+
+// These IDs are referenced by symptom matrices, but their content was generated
+// heuristically. Keeping them separate prevents accidental publication or search hits.
+const publishedCauseIds = new Set(causes.map((cause) => cause.id));
+export const draftCauses: Cause[] = referencedCauseCompletions
+  .filter((cause) => !publishedCauseIds.has(cause.id))
+  .map(markCauseDraft);

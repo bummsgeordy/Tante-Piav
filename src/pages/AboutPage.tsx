@@ -1,5 +1,6 @@
 import { AttributionBox } from "../components/AttributionBox";
 import { DisclaimerBox } from "../components/DisclaimerBox";
+import { CONTENT_VERSION, LAST_SOURCE_REVIEW } from "../data/contentReview";
 
 export function AboutPage() {
   return (
@@ -19,7 +20,20 @@ export function AboutPage() {
       <div className="mt-8 grid gap-4">
         <AttributionBox />
         <DisclaimerBox />
+        <section className="rounded-lg border border-clinical-line bg-clinical-surface p-4">
+          <h2 className="text-lg font-semibold text-clinical-ink">Datenstand und Prüfung</h2>
+          <p className="mt-2 text-sm leading-6 text-clinical-muted">
+            Inhaltsversion {CONTENT_VERSION}, Quellenabgleich vom {formatDate(LAST_SOURCE_REVIEW)}.
+            Sichtbare Karten wurden redaktionell mit Quellen verknüpft. Eine klinische
+            Fachprüfung durch qualifizierte Personen steht aus, sofern eine Karte nicht
+            ausdrücklich anders gekennzeichnet ist. Automatisch erzeugte Entwürfe sind in
+            Suche und App-Ansicht ausgeblendet.
+          </p>
+        </section>
       </div>
     </main>
   );
 }
+
+const formatDate = (value: string) =>
+  new Intl.DateTimeFormat("de-DE").format(new Date(`${value}T00:00:00`));

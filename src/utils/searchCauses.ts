@@ -4,12 +4,12 @@ import { symptomEntries } from "../data/symptoms";
 import type { Cause } from "../types/medical";
 import { getCategoryLabel } from "./getCategoryLabel";
 import { normalizeSearchTerm } from "./normalizeSearchTerm";
-import { expandSearchQuery } from "./searchSynonyms";
 
 interface SearchableCause extends Cause {
   searchCategory: string;
   searchSpecialties: string;
   sourceTerms: string;
+  primaryNormalizedText: string;
   normalizedText: string;
 }
 
@@ -27,17 +27,22 @@ const enrichCause = (cause: Cause): SearchableCause => {
     .map((source) => `${source.title} ${source.type} ${source.url}`)
     .join(" ");
 
-  const normalizedText = normalizeSearchTerm(
+  const primaryNormalizedText = normalizeSearchTerm(
     [
       cause.title,
       searchCategory,
       cause.shortDescription,
-      searchSpecialties,
       cause.tags.join(" "),
       cause.relatedSymptoms.join(" "),
       cause.searchBoostTerms?.join(" ") ?? "",
       cause.symptomEntryIds?.join(" ") ?? "",
-      getLinkedSymptomTerms(cause).join(" "),
+      getLinkedSymptomTerms(cause).join(" ")
+    ].join(" ")
+  );
+  const normalizedText = normalizeSearchTerm(
+    [
+      primaryNormalizedText,
+      searchSpecialties,
       sourceTerms,
       cause.redFlags.join(" ")
     ].join(" ")
@@ -48,6 +53,7 @@ const enrichCause = (cause: Cause): SearchableCause => {
     searchCategory,
     searchSpecialties,
     sourceTerms,
+    primaryNormalizedText,
     normalizedText
   };
 };
@@ -94,26 +100,27 @@ export const searchCauses = (causes: Cause[], query: string) => {
   const { fuse, items } = getSearchIndex(causes);
   const byId = new Map<string, Cause>();
 
-  expandSearchQuery(trimmed).forEach((queryVariant) => {
+  [trimmed, normalizeSearchTerm(trimmed)].forEach((queryVariant) => {
     const normalizedVariant = normalizeSearchTerm(queryVariant);
     if (!normalizedVariant) {
       return;
     }
 
     items.forEach((item) => {
-      if (item.normalizedText.includes(normalizedVariant)) {
+      if (item.primaryNormalizedText.includes(normalizedVariant)) {
         byId.set(item.id, item);
       }
     });
 
-    if (byId.size < 12) {
-      fuse.search(queryVariant).forEach((result) => {
-        if ((result.score ?? 1) <= 0.24) {
-          byId.set(result.item.id, result.item);
-        }
-      });
-    }
   });
+
+  if (normalizeSearchTerm(trimmed).length >= 4 && byId.size < 12) {
+    fuse.search(trimmed).slice(0, 12).forEach((result) => {
+      if ((result.score ?? 1) <= 0.24) {
+        byId.set(result.item.id, result.item);
+      }
+    });
+  }
 
   return Array.from(byId.values());
 };
@@ -123,5 +130,5 @@ const getLinkedSymptomTerms = (cause: Cause) => {
 
   return symptomEntries
     .filter((entry) => related.has(entry.id) || entry.commonCauseIds.includes(cause.id) || entry.importantCauseIds.includes(cause.id) || entry.rareButImportantCauseIds.includes(cause.id))
-    .flatMap((entry) => [entry.title, entry.kind, ...entry.synonyms, ...entry.tags, ...entry.redFlags]);
+    .flatMap((entry) => [entry.title, entry.kind, ...entry.synonyms, ...entry.tags]);
 };

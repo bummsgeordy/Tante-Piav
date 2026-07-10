@@ -1,4 +1,4 @@
-import type { PiavCategory, SourceLink, Specialty } from "./medical";
+import type { PiavCategory, ReviewStatus, SourceLink, Specialty } from "./medical";
 
 export type SymptomPriority = "haeufig" | "wichtig" | "red-flag" | "selten";
 export type SymptomKind = "symptom" | "befund" | "labor" | "syndrom" | "vitalparameter";
@@ -18,4 +18,8 @@ export interface SymptomEntry {
   suggestedBasicWorkup: string[];
   tags: string[];
   sources: SourceLink[];
+  reviewStatus?: ReviewStatus;
+  lastSourceReview?: string;
+  contentVersion?: string;
+  evidenceNotes?: string[];
 }

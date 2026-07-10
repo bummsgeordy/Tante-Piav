@@ -34,17 +34,17 @@ export function GroupedCauseList({
     );
   };
 
-  const allExpanded = categories.every(isCategoryExpanded);
+  const hasExpandedCategory = categories.some(isCategoryExpanded);
 
   return (
     <div className="grid min-w-0 gap-2.5">
       <div className="flex justify-end">
         <button
           className="rounded-md border border-clinical-line bg-white px-3 py-2 text-sm font-semibold text-clinical-text shadow-sm hover:border-clinical-accent hover:text-clinical-accent"
-          onClick={allExpanded ? onCollapseAll : onExpandAll}
+          onClick={hasExpandedCategory ? onCollapseAll : onExpandAll}
           type="button"
         >
-          {allExpanded ? "Alles einklappen" : "Alles ausklappen"}
+          {hasExpandedCategory ? "Alles einklappen" : "Alles ausklappen"}
         </button>
       </div>
 

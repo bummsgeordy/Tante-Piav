@@ -20,9 +20,16 @@ export const additionalCauseSeeds: Partial<Cause>[] = [
     hasMajorRedFlags: true,
     sources: [
       {
+        title: "Nationale VersorgungsLeitlinie Hypertonie",
+        url: "https://www.leitlinien.de/themen/hypertonie",
+        type: "leitlinie",
+        usage: "open-reference"
+      },
+      {
         title: "AHA/ACC 2025 High Blood Pressure Guideline",
         url: "https://www.ahajournals.org/doi/10.1161/CIR.0000000000001356",
-        type: "leitlinie"
+        type: "leitlinie",
+        usage: "link-only"
       }
     ]
   },
@@ -50,9 +57,10 @@ export const additionalCauseSeeds: Partial<Cause>[] = [
         type: "review"
       },
       {
-        title: "Endocrine Society Clinical Practice Guidelines",
-        url: "https://www.endocrine.org/clinical-practice-guidelines",
-        type: "leitlinie"
+        title: "Endocrine Society: Primary Aldosteronism Guideline 2025",
+        url: "https://www.endocrine.org/clinical-practice-guidelines/primary-aldosteronism-2",
+        type: "leitlinie",
+        usage: "open-reference"
       }
     ]
   },
@@ -101,8 +109,9 @@ export const additionalCauseSeeds: Partial<Cause>[] = [
     sources: [
       {
         title: "KDIGO 2024 CKD Guideline",
-        url: "https://www.kidney-international.org/article/S0085-2538(23)00766-4/fulltext",
-        type: "leitlinie"
+        url: "https://kdigo.org/kdigo-announces-publication-of-2024-ckd-guideline/",
+        type: "leitlinie",
+        usage: "open-reference"
       },
       {
         title: "NICE NG203: Chronic kidney disease",

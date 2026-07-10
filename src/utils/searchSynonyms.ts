@@ -35,7 +35,7 @@ const manualSynonymGroups = [
 
 const symptomSynonymGroups = symptomEntries
   .map((entry) =>
-    Array.from(new Set([entry.id, entry.title, ...entry.synonyms, ...entry.tags])).filter(
+    Array.from(new Set([entry.id, entry.title, ...entry.synonyms])).filter(
       (term) => term.trim().length >= 3
     )
   )

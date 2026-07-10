@@ -11,6 +11,18 @@ export type PiavCategory =
 
 export type Frequency = "haeufig" | "relevant" | "selten";
 export type Urgency = "ambulant" | "zeitnah" | "notfall";
+export type ReviewStatus =
+  | "draft"
+  | "source-checked"
+  | "clinical-review-pending"
+  | "clinician-reviewed";
+
+export interface ContentReviewMeta {
+  reviewStatus: ReviewStatus;
+  lastSourceReview: string;
+  contentVersion: string;
+  evidenceNotes?: string[];
+}
 
 export type Specialty =
   | "allgemeinmedizin"
@@ -36,6 +48,8 @@ export interface SourceLink {
   title: string;
   url: string;
   type: "leitlinie" | "review" | "manual" | "studie" | "sonstiges";
+  accessedAt?: string;
+  usage?: "open-reference" | "link-only";
 }
 
 export interface Cause {
@@ -58,6 +72,10 @@ export interface Cause {
   searchBoostTerms?: string[];
   symptomEntryIds?: string[];
   practicalNotes?: string[];
+  reviewStatus?: ReviewStatus;
+  lastSourceReview?: string;
+  contentVersion?: string;
+  evidenceNotes?: string[];
 }
 
 export interface Category {

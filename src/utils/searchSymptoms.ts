@@ -4,13 +4,13 @@ import { specialties } from "../data/specialties";
 import type { SymptomEntry } from "../types/symptom";
 import { getCategoryLabel } from "./getCategoryLabel";
 import { normalizeSearchTerm } from "./normalizeSearchTerm";
-import { expandSearchQuery } from "./searchSynonyms";
 
 interface SearchableSymptom extends SymptomEntry {
   causeTerms: string;
   categoryTerms: string;
   specialtyTerms: string;
   sourceTerms: string;
+  primaryNormalizedText: string;
   normalizedText: string;
 }
 
@@ -28,7 +28,8 @@ const enrichSymptom = (entry: SymptomEntry): SearchableSymptom => {
     ...entry.rareButImportantCauseIds
   ];
   const causeTerms = allCauseIds
-    .map((id) => causeTitleById.get(id) ?? id)
+    .map((id) => causeTitleById.get(id) ?? "")
+    .filter(Boolean)
     .join(" ");
   const categoryTerms = entry.piavCategories.map(getCategoryLabel).join(" ");
   const specialtyTerms = entry.specialties
@@ -37,17 +38,22 @@ const enrichSymptom = (entry: SymptomEntry): SearchableSymptom => {
   const sourceTerms = entry.sources
     .map((source) => `${source.title} ${source.type} ${source.url}`)
     .join(" ");
-  const normalizedText = normalizeSearchTerm(
+  const primaryNormalizedText = normalizeSearchTerm(
     [
       entry.title,
       entry.kind,
       entry.shortDescription,
       entry.synonyms.join(" "),
       entry.tags.join(" "),
+      causeTerms,
+      categoryTerms
+    ].join(" ")
+  );
+  const normalizedText = normalizeSearchTerm(
+    [
+      primaryNormalizedText,
       entry.redFlags.join(" "),
       entry.suggestedBasicWorkup.join(" "),
-      causeTerms,
-      categoryTerms,
       specialtyTerms,
       sourceTerms
     ].join(" ")
@@ -59,6 +65,7 @@ const enrichSymptom = (entry: SymptomEntry): SearchableSymptom => {
     categoryTerms,
     specialtyTerms,
     sourceTerms,
+    primaryNormalizedText,
     normalizedText
   };
 };
@@ -104,26 +111,27 @@ export const searchSymptoms = (entries: SymptomEntry[], query: string) => {
   const { fuse, items } = getSearchIndex(entries);
   const byId = new Map<string, SymptomEntry>();
 
-  expandSearchQuery(trimmed).forEach((queryVariant) => {
+  [trimmed, normalizeSearchTerm(trimmed)].forEach((queryVariant) => {
     const normalizedVariant = normalizeSearchTerm(queryVariant);
     if (!normalizedVariant) {
       return;
     }
 
     items.forEach((item) => {
-      if (item.normalizedText.includes(normalizedVariant)) {
+      if (item.primaryNormalizedText.includes(normalizedVariant)) {
         byId.set(item.id, item);
       }
     });
 
-    if (byId.size < 6) {
-      fuse.search(queryVariant).forEach((result) => {
-        if ((result.score ?? 1) <= 0.24) {
-          byId.set(result.item.id, result.item);
-        }
-      });
-    }
   });
+
+  if (normalizeSearchTerm(trimmed).length >= 4 && byId.size < 6) {
+    fuse.search(trimmed).slice(0, 6).forEach((result) => {
+      if ((result.score ?? 1) <= 0.24) {
+        byId.set(result.item.id, result.item);
+      }
+    });
+  }
 
   return Array.from(byId.values());
 };

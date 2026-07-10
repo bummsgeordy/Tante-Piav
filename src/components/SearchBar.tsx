@@ -1,4 +1,5 @@
 import { Search, X } from "lucide-react";
+import type { SearchSuggestion } from "../utils/searchSuggestions";
 
 interface SearchBarProps {
   query: string;
@@ -6,7 +7,7 @@ interface SearchBarProps {
   onSubmit: () => void;
   onSuggestionSelect: (suggestion: string) => void;
   resultCount?: number;
-  suggestions?: string[];
+  suggestions?: SearchSuggestion[];
 }
 
 export function SearchBar({
@@ -79,12 +80,15 @@ export function SearchBar({
         <div className="mt-1.5 flex flex-wrap gap-1.5">
           {suggestions.map((suggestion) => (
             <button
-              className="rounded-full border border-clinical-line bg-white px-2.5 py-1 text-xs font-medium text-clinical-text hover:border-clinical-accent hover:text-clinical-accent"
-              key={suggestion}
-              onClick={() => onSuggestionSelect(suggestion)}
+              className="inline-flex items-center gap-1.5 rounded-md border border-clinical-line bg-white px-2.5 py-1 text-left text-xs font-medium text-clinical-text hover:border-clinical-accent hover:text-clinical-accent"
+              key={`${suggestion.kind}-${suggestion.term}`}
+              onClick={() => onSuggestionSelect(suggestion.term)}
               type="button"
             >
-              {suggestion}
+              <span>{suggestion.term}</span>
+              <span className="text-[10px] font-semibold uppercase text-clinical-muted">
+                {suggestion.kind}
+              </span>
             </button>
           ))}
         </div>

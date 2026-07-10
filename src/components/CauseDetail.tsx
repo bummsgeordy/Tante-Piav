@@ -1,4 +1,4 @@
-import { ExternalLink } from "lucide-react";
+import { CircleCheck, Clock3, ExternalLink } from "lucide-react";
 import { causes } from "../data/causes";
 import type { Cause } from "../types/medical";
 import {
@@ -10,6 +10,8 @@ import {
 import { getLinkedSymptomsForCause } from "../utils/getLinkedSymptomsForCause";
 import { FrequencyBadge, RedFlagBadge, UrgencyBadge } from "./Badges";
 
+const causeById = new Map(causes.map((item) => [item.id, item]));
+
 interface CauseDetailProps {
   cause: Cause;
   onSelectCause: (cause: Cause) => void;
@@ -17,7 +19,7 @@ interface CauseDetailProps {
 
 export function CauseDetail({ cause, onSelectCause }: CauseDetailProps) {
   const related = (cause.relatedCauses ?? [])
-    .map((id) => causes.find((item) => item.id === id))
+    .map((id) => causeById.get(id))
     .filter((item): item is Cause => Boolean(item));
   const linkedSymptoms = getLinkedSymptomsForCause(cause);
 
@@ -25,8 +27,8 @@ export function CauseDetail({ cause, onSelectCause }: CauseDetailProps) {
     <section className="rounded-lg border border-clinical-line bg-white p-4 shadow-soft sm:p-5">
       <div className="flex flex-col gap-4">
         <div>
-          <p className="text-sm font-semibold text-clinical-accent">
-            {getCategoryLabel(cause.category)}
+          <p className="text-xs font-semibold uppercase text-clinical-accent">
+            Kurzüberblick · {getCategoryLabel(cause.category)}
           </p>
           <h2 className="mt-1 text-2xl font-bold text-clinical-ink">{cause.title}</h2>
           <p className="mt-2 max-w-3xl leading-7 text-clinical-muted">
@@ -57,12 +59,18 @@ export function CauseDetail({ cause, onSelectCause }: CauseDetailProps) {
           </dd>
         </div>
       </dl>
+      <p className="mt-2 text-xs leading-5 text-clinical-muted">
+        Häufigkeit und Dringlichkeit sind grobe, kontextabhängige Orientierungen und keine
+        patientenbezogene Risikoeinschätzung.
+      </p>
 
       <div className="mt-6 grid gap-5 lg:grid-cols-2">
         <DetailList title="Typische Beispiele" items={cause.examples} />
-        <DetailList title="Typische klinische Hinweise" items={cause.typicalClues} />
-        <DetailList danger title="Red Flags" items={cause.redFlags} />
-        <DetailList title="Verwandte Symptome" items={cause.relatedSymptoms} />
+        <DetailList title="Typische Hinweise" items={cause.typicalClues} />
+        <DetailList danger title="Nicht verpassen" items={cause.redFlags} />
+        {cause.practicalNotes?.length ? (
+          <DetailList title="Praktische Einordnung" items={cause.practicalNotes} />
+        ) : null}
       </div>
 
       <section className="mt-6">
@@ -97,15 +105,24 @@ export function CauseDetail({ cause, onSelectCause }: CauseDetailProps) {
         </section>
       ) : null}
 
-      <section className="mt-6">
-        <h3 className="text-base font-semibold text-clinical-ink">Quellen und Orientierung</h3>
+      <section className="mt-6 rounded-lg border border-clinical-line bg-clinical-surface p-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h3 className="text-base font-semibold text-clinical-ink">Quellen und Datenstand</h3>
+            <p className="mt-1 text-xs leading-5 text-clinical-muted">
+              Quellen redaktionell abgeglichen. Keine klinische Fachfreigabe und keine
+              individuelle Empfehlung.
+            </p>
+          </div>
+          <ReviewStatus cause={cause} />
+        </div>
         <div className="mt-2 grid gap-2">
           {cause.sources.map((source) => (
             <a
               className="inline-flex items-center gap-2 rounded-md border border-clinical-line px-3 py-2 text-sm font-medium text-clinical-accent hover:border-clinical-accent"
               href={source.url}
               key={`${source.title}-${source.url}`}
-              rel="noreferrer"
+              rel="noopener noreferrer"
               target="_blank"
             >
               {source.title}
@@ -134,6 +151,32 @@ export function CauseDetail({ cause, onSelectCause }: CauseDetailProps) {
       ) : null}
 
     </section>
+  );
+}
+
+function ReviewStatus({ cause }: { cause: Cause }) {
+  const isClinicianReviewed = cause.reviewStatus === "clinician-reviewed";
+  const date = cause.lastSourceReview
+    ? new Intl.DateTimeFormat("de-DE").format(new Date(`${cause.lastSourceReview}T00:00:00`))
+    : "nicht dokumentiert";
+
+  return (
+    <div
+      className={`inline-flex items-center gap-2 rounded-md border px-2.5 py-1.5 text-xs font-semibold ${
+        isClinicianReviewed
+          ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+          : "border-amber-200 bg-amber-50 text-amber-900"
+      }`}
+    >
+      {isClinicianReviewed ? (
+        <CircleCheck aria-hidden="true" size={15} />
+      ) : (
+        <Clock3 aria-hidden="true" size={15} />
+      )}
+      <span>
+        {isClinicianReviewed ? "Klinisch geprüft" : "Klinische Prüfung ausstehend"} · {date}
+      </span>
+    </div>
   );
 }
 

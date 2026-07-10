@@ -19,7 +19,7 @@ export function AttributionBox() {
         className="mt-3 inline-flex items-center gap-2 font-medium text-clinical-accent hover:text-clinical-accentDark"
         href="https://denkfabrikmedizin.de/"
         target="_blank"
-        rel="noreferrer"
+        rel="noopener noreferrer"
       >
         Denkfabrik Medizin besuchen
         <ExternalLink aria-hidden="true" size={16} />

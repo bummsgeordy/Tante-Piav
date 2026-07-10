@@ -22,7 +22,7 @@ export function Footer({ onNavigate }: FooterProps) {
             className="inline-flex items-center gap-2 text-slate-100 hover:text-white"
             href="https://denkfabrikmedizin.de/"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             Denkfabrik Medizin
             <ExternalLink aria-hidden="true" size={15} />
@@ -31,7 +31,7 @@ export function Footer({ onNavigate }: FooterProps) {
             className="inline-flex items-center gap-2 text-slate-100 hover:text-white"
             href="https://github.com/bummsgeordy/Tante-Piav"
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             Open Source auf GitHub
             <ExternalLink aria-hidden="true" size={15} />
